@@ -4,9 +4,9 @@
 	else if(typeof define === 'function' && define.amd)
 		define(["React"], factory);
 	else if(typeof exports === 'object')
-		exports["ReactMotionSlider"] = factory(require("React"));
+		exports["ReactMeasure"] = factory(require("React"));
 	else
-		root["ReactMotionSlider"] = factory(root["React"]);
+		root["ReactMeasure"] = factory(root["React"]);
 })(this, function(__WEBPACK_EXTERNAL_MODULE_2__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache

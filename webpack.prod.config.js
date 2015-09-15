@@ -11,7 +11,7 @@ var config = {
     publicPath: 'dist/',
     filename: 'react-measure.js',
     sourceMapFilename: 'react-measure.sourcemap.js',
-    library: 'ReactMotionSlider',
+    library: 'ReactMeasure',
     libraryTarget: 'umd'
   },
   module: {
