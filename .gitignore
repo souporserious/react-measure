@@ -1,0 +1,23 @@
+# Mac OSX Files
+.DS_Store
+.Trashes
+.Spotlight-V100
+.AppleDouble
+.LSOverride
+
+# Bower & Node Modules
+node_modules
+npm-debug.log
+app/bower_components
+
+# NPM module directory
+lib
+
+# General Files
+.sass-cache
+.hg
+.idea
+.svn
+.cache
+.project
+.tmp

@@ -1,0 +1,25 @@
+{
+  "name": "react-measure",
+  "version": "0.0.1",
+  "homepage": "https://github.com/souporserious/react-measure",
+  "authors": [
+    "Travis Arnold <ftntravis@gmail.com>"
+  ],
+  "description": "React component to compute measurements of a component.",
+  "main": ["./dist/react-measure.js"],
+  "keywords": [
+    "react",
+    "component",
+    "measure",
+    "measurements",
+    "dimensions"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
