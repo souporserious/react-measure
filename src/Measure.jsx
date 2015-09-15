@@ -36,7 +36,7 @@ function _debounce(fn, delay = 250) {
 class Measure extends Component {
   constructor(props) {
     super(props)
-    this.state = { height: 0 }
+    this.state = { height: null }
     this._node = null
     this._nodeCopy = null
     this._nodeParent = null
