@@ -82,7 +82,11 @@ class Measure extends Component {
       const copy = node.cloneNode(true);
       
       // give the node some context to measure off of
+      // height and overflow prevent scrollbars 
+      context.style.height = 0;
       context.style.position = 'relative';
+      context.style.overflow = 'hidden';
+      //copy.style.transform = 'translateY(-100%)';
       
       // remove name from all children inputs so they don't conflict with current ones
       const inputNodes = copy.querySelectorAll('input');
