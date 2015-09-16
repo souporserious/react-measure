@@ -1,3 +1,18 @@
-## React Measure 0.0.1
+## React Measure 0.0.2
 
-Compute measurements of a component.
+Compute measurements of React components.
+
+## Example Usage
+
+```javascript
+
+import Measure from 'react-measure';
+
+<Measure>
+  {({width, height, top, right, bottom, left}) =>
+    <div>
+      {/* do cool stuff with my dimensions */}
+    </div>
+  }
+</Measure>
+```

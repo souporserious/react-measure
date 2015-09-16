@@ -4,14 +4,14 @@ var TARGET = process.env.TARGET || null;
 
 var config = {
   entry: {
-    index: './src/index.js',
+    index: './src/react-measure.js',
   },
   output: {
     path: path.join(__dirname, 'dist'),
     publicPath: 'dist/',
     filename: 'react-measure.js',
     sourceMapFilename: 'react-measure.sourcemap.js',
-    library: 'ReactMeasure',
+    library: 'Measure',
     libraryTarget: 'umd'
   },
   module: {

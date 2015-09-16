@@ -1,6 +1,6 @@
 import React, { Component, Children, PropTypes } from 'react';
 import { Spring } from 'react-motion';
-import { Measure } from '../src/index';
+import Measure from '../src/react-measure';
 
 import './main.scss';
 
