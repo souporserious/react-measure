@@ -2,29 +2,31 @@ import React, { Component, Children, PropTypes } from 'react';
 import throttle from './throttle';
 import debounce from './debounce';
 
+let registeredComponents = [];
+
+// force rerender on window resize so we can grab dimensions again
+window.addEventListener('resize', () => {
+  registeredComponents.forEach(c => c._forceMeasure());
+});
+
 class Measure extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      width: null,
-      height: null,
-      top: null,
-      right: null,
-      bottom: null,
-      left: null
-    }
-    this._node = null
-    this._nodeCopy = null
-    this._nodeParent = null
-    this._copyAppended = false
-    this._debounceDelay = 350
-    this._forceMeasure = this._forceMeasure.bind(this)
+  state = {
+    width: null,
+    height: null,
+    top: null,
+    right: null,
+    bottom: null,
+    left: null
   }
+  _node = null
+  _nodeCopy = null
+  _nodeParent = null
+  _copyAppended = false
 
   componentWillMount() {
-    this._removeClone = debounce(this._removeClone, this._debounceDelay);
-    this._setMeasure = throttle(this._setMeasure, 300);
+    this._removeClone = debounce(this._removeClone, 300);
     this._forceMeasure = throttle(this._forceMeasure, 300);
+    this._setMeasure = throttle(this._setMeasure, 300);
   }
 
   componentDidMount() {
@@ -32,25 +34,28 @@ class Measure extends Component {
     this._parentNode = this._node.parentNode
     this.setState(this._measure(this._node));
 
-    // need to move into one event listener and delegate updates accordingly
-    window.addEventListener('resize', this._forceMeasure);
+    // store registered components
+    registeredComponents.push(this);
   }
 
   componentDidUpdate(prevProps, prevState) {
     const dimensions = this._measure(this._node);
 
-    // we can use JSON stringify to compare objects since they are simple structures to
-    // determine if we need to update our state with new dimensions or not
+    // we can use JSON stringify to compare objects since they are simple structures
+    // used to determine if we need to update our state with new dimensions or not
     if(JSON.stringify(prevState) !== JSON.stringify(dimensions)) {
       this._setMeasure(dimensions);
     }
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this._forceMeasure);
+    const pos = registeredComponents.indexOf(this);
+    if(pos > -1) {
+      registeredComponents.splice(pos, 1);
+    }
   }
 
-  _forceMeasure() {
+  _forceMeasure = () => {
     this.forceUpdate();
   }
 
