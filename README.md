@@ -1,4 +1,4 @@
-## React Measure 0.0.2
+## React Measure 0.0.3
 
 Compute measurements of React components.
 
