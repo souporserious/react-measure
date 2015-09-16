@@ -1,37 +1,6 @@
 import React, { Component, Children, PropTypes } from 'react';
-
-function _throttle(fn, threshhold = 250, scope) {
-  threshhold || (threshhold = 250);
-  let last,
-      deferTimer;
-  return function () {
-    let context = scope || this;
-    let now = +new Date,
-        args = arguments;
-    if(last && now < last + threshhold) {
-      // hold on to it
-      clearTimeout(deferTimer);
-      deferTimer = setTimeout(function () {
-        last = now;
-        fn.apply(context, args);
-      }, threshhold);
-    } else {
-      last = now;
-      fn.apply(context, args);
-    }
-  };
-}
-
-function _debounce(fn, delay = 250) {
-  let timer = null;
-  return function () {
-    const context = this, args = arguments;
-    clearTimeout(timer);
-    timer = setTimeout(function () {
-      fn.apply(context, args);
-    }, delay);
-  };
-}
+import throttle from './throttle';
+import debounce from './debounce';
 
 class Measure extends Component {
   constructor(props) {
@@ -53,9 +22,9 @@ class Measure extends Component {
   }
 
   componentWillMount() {
-    this._removeClone = _debounce(this._removeClone, this._debounceDelay);
-    this._setMeasure = _throttle(this._setMeasure, 300);
-    this._forceMeasure = _throttle(this._forceMeasure, 300);
+    this._removeClone = debounce(this._removeClone, this._debounceDelay);
+    this._setMeasure = throttle(this._setMeasure, 300);
+    this._forceMeasure = throttle(this._forceMeasure, 300);
   }
 
   componentDidMount() {
