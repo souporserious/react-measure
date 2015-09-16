@@ -193,7 +193,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        context.style.height = 0;
 	        context.style.position = 'relative';
 	        context.style.overflow = 'hidden';
-	        //copy.style.transform = 'translateY(-100%)';
 
 	        // remove name from all children inputs so they don't conflict with current ones
 	        var inputNodes = copy.querySelectorAll('input');
@@ -211,7 +210,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // set props to hide copy and get true dimensions
 	        copy.style.boxSizing = 'border-box';
 	        copy.style.height = 'auto';
-	        copy.style.width = '100%';
+	        copy.style.width = 'auto';
 	        copy.style.position = 'absolute';
 	        copy.style.visibility = 'hidden';
 
@@ -227,19 +226,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 
 	      // grab dimensions of node
-	      dimensions = this._nodeCopy.getBoundingClientRect();
+	      dimensions = {
+	        width: this._nodeCopy.offsetWidth,
+	        height: this._nodeCopy.offsetHeight,
+	        top: this._nodeCopy.offsetTop,
+	        left: this._nodeCopy.offsetLeft
+	      };
 
 	      // remove the copy after getting it's height
 	      this._removeClone();
 
-	      return {
-	        width: dimensions.width,
-	        height: dimensions.height,
-	        top: dimensions.top,
-	        right: dimensions.right,
-	        bottom: dimensions.bottom,
-	        left: dimensions.left
-	      };
+	      return dimensions;
 	    }
 	  }, {
 	    key: '_removeClone',

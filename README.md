@@ -1,4 +1,4 @@
-## React Measure 0.0.3
+## React Measure 0.0.4
 
 Compute measurements of React components.
 
@@ -9,7 +9,7 @@ Compute measurements of React components.
 import Measure from 'react-measure';
 
 <Measure>
-  {({width, height, top, right, bottom, left}) =>
+  {({width, height, top, left}) =>
     <div>
       {/* do cool stuff with my dimensions */}
     </div>
