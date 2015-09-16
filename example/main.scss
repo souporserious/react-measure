@@ -1,0 +1,44 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  padding: 24px;
+}
+
+.app {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.accordion__items {
+  padding: 0;
+  margin: 12px 0 0;
+  list-style: none;
+  border: 1px solid #CECFD0;
+  border-radius: 5px;
+}
+
+.accordion__item {
+  width: 100%;
+  padding: 12px;
+  cursor: pointer;
+  user-select: none;
+  
+  & + & {
+    border-top: 1px solid #CECFD0;
+  }
+}
+
+.accordion__item__title {
+  margin: 0;
+  font-size: 16px;
+}
+
+.accordion__item__content {
+  overflow: hidden;
+  
+  p {
+    margin: 12px 0 12px;
+  }
+}
