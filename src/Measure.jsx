@@ -75,7 +75,6 @@ class Measure extends Component {
       context.style.height = 0
       context.style.position = 'relative'
       context.style.overflow = 'hidden'
-      //copy.style.transform = 'translateY(-100%)';
 
       // remove name from all children inputs so they don't conflict with current ones
       const inputNodes = copy.querySelectorAll('input')
@@ -93,7 +92,7 @@ class Measure extends Component {
       // set props to hide copy and get true dimensions
       copy.style.boxSizing = 'border-box'
       copy.style.height = 'auto'
-      copy.style.width = '100%'
+      copy.style.width = 'auto'
       copy.style.position = 'absolute'
       copy.style.visibility = 'hidden'
 
@@ -109,19 +108,17 @@ class Measure extends Component {
     }
 
     // grab dimensions of node
-    dimensions = this._nodeCopy.getBoundingClientRect();
+    dimensions = {
+      width: this._nodeCopy.offsetWidth,
+      height: this._nodeCopy.offsetHeight,
+      top: this._nodeCopy.offsetTop,
+      left: this._nodeCopy.offsetLeft,
+    }
 
     // remove the copy after getting it's height
-    this._removeClone();
+    this._removeClone()
 
-    return {
-      width: dimensions.width,
-      height: dimensions.height,
-      top: dimensions.top,
-      right: dimensions.right,
-      bottom: dimensions.bottom,
-      left: dimensions.left
-    }
+    return dimensions
   }
 
   _removeClone() {
