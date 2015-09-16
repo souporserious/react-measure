@@ -8,10 +8,7 @@
 # Bower & Node Modules
 node_modules
 npm-debug.log
-app/bower_components
-
-# NPM module directory
-lib
+bower_components
 
 # General Files
 .sass-cache

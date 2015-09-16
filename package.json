@@ -1,8 +1,8 @@
 {
   "name": "react-measure",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Compute measurements of React components.",
-  "main": "lib/index.js",
+  "main": "lib/react-measure.js",
   "scripts": {
     "build": "npm run build:lib && NODE_ENV=production webpack --config webpack.prod.config.js",
     "build:lib": "babel src --out-dir lib --stage 0",
