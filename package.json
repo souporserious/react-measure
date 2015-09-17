@@ -1,6 +1,6 @@
 {
   "name": "react-measure",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Compute measurements of React components.",
   "main": "lib/react-measure.js",
   "scripts": {

@@ -1,21 +1,19 @@
-import React, { Component, Children, PropTypes } from 'react';
-import throttle from './throttle';
-import debounce from './debounce';
+import React, { Component, Children, PropTypes } from 'react'
+import throttle from './throttle'
+import debounce from './debounce'
 
-let registeredComponents = [];
+let registeredComponents = []
 
 // force rerender on window resize so we can grab dimensions again
 window.addEventListener('resize', () => {
-  registeredComponents.forEach(c => c._forceMeasure());
-});
+  registeredComponents.forEach(c => c._forceMeasure())
+})
 
 class Measure extends Component {
   state = {
     width: null,
     height: null,
     top: null,
-    right: null,
-    bottom: null,
     left: null
   }
   _node = null
@@ -24,43 +22,46 @@ class Measure extends Component {
   _copyAppended = false
 
   componentWillMount() {
-    this._removeClone = debounce(this._removeClone, 300);
-    this._forceMeasure = throttle(this._forceMeasure, 300);
-    this._setMeasure = throttle(this._setMeasure, 300);
+    this._removeClone = debounce(this._removeClone, 300)
+    this._forceMeasure = throttle(this._forceMeasure, 300)
+    this._setMeasure = throttle(this._setMeasure, 300)
   }
 
   componentDidMount() {
     this._node = React.findDOMNode(this)
     this._parentNode = this._node.parentNode
-    this.setState(this._measure(this._node));
+    this.setState(this._measure(this._node))
 
     // store registered components
-    registeredComponents.push(this);
+    registeredComponents.push(this)
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const dimensions = this._measure(this._node);
+    const dimensions = this._measure(this._node)
 
-    // we can use JSON stringify to compare objects since they are simple structures
-    // used to determine if we need to update our state with new dimensions or not
-    if(JSON.stringify(prevState) !== JSON.stringify(dimensions)) {
-      this._setMeasure(dimensions);
+    // determine if we need to update our state with new dimensions or not
+    if(prevState.width !== dimensions.width ||
+       prevState.height !== dimensions.height ||
+       prevState.top !== dimensions.top ||
+       prevState.left !== dimensions.left
+    ) {
+      this._setMeasure(dimensions)
     }
   }
 
   componentWillUnmount() {
-    const pos = registeredComponents.indexOf(this);
+    const pos = registeredComponents.indexOf(this)
     if(pos > -1) {
-      registeredComponents.splice(pos, 1);
+      registeredComponents.splice(pos, 1)
     }
   }
 
   _forceMeasure = () => {
-    this.forceUpdate();
+    this.forceUpdate()
   }
 
   _setMeasure(dimensions) {
-    this.setState(dimensions);
+    this.setState(dimensions)
   }
 
   _measure(node) {
@@ -91,8 +92,8 @@ class Measure extends Component {
 
       // set props to hide copy and get true dimensions
       copy.style.boxSizing = 'border-box'
-      copy.style.height = 'auto'
       copy.style.width = 'auto'
+      copy.style.height = 'auto'
       copy.style.position = 'absolute'
       copy.style.visibility = 'hidden'
 
@@ -128,8 +129,8 @@ class Measure extends Component {
   }
 
   render() {
-    return Children.only(this.props.children(this.state));
+    return Children.only(this.props.children(this.state))
   }
 }
 
-export default Measure;
+export default Measure

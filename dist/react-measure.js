@@ -122,8 +122,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      width: null,
 	      height: null,
 	      top: null,
-	      right: null,
-	      bottom: null,
 	      left: null
 	    };
 	    this._node = null;
@@ -160,9 +158,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function componentDidUpdate(prevProps, prevState) {
 	      var dimensions = this._measure(this._node);
 
-	      // we can use JSON stringify to compare objects since they are simple structures
-	      // used to determine if we need to update our state with new dimensions or not
-	      if (JSON.stringify(prevState) !== JSON.stringify(dimensions)) {
+	      // determine if we need to update our state with new dimensions or not
+	      if (prevState.width !== dimensions.width || prevState.height !== dimensions.height || prevState.top !== dimensions.top || prevState.left !== dimensions.left) {
 	        this._setMeasure(dimensions);
 	      }
 	    }
@@ -209,8 +206,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        // set props to hide copy and get true dimensions
 	        copy.style.boxSizing = 'border-box';
-	        copy.style.height = 'auto';
 	        copy.style.width = 'auto';
+	        copy.style.height = 'auto';
 	        copy.style.position = 'absolute';
 	        copy.style.visibility = 'hidden';
 
