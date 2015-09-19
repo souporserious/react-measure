@@ -1,4 +1,4 @@
-## React Measure 0.0.5
+## React Measure 0.0.6
 
 Compute measurements of React components.
 
@@ -8,7 +8,7 @@ Compute measurements of React components.
 
 import Measure from 'react-measure';
 
-<Measure>
+<Measure onChange={this._handleOnChange}>
   {({width, height, top, left}) =>
     <div>
       {/* do cool stuff with my dimensions */}

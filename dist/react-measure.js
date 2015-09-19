@@ -174,7 +174,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: '_setMeasure',
 	    value: function _setMeasure(dimensions) {
-	      this.setState(dimensions);
+	      var _this2 = this;
+
+	      this.setState(dimensions, function () {
+	        _this2.props.onChange(dimensions);
+	      });
 	    }
 	  }, {
 	    key: '_measure',
@@ -223,11 +227,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 
 	      // grab dimensions of node
+	      // we get the parent offsets since we wrapped the child
 	      dimensions = {
 	        width: this._nodeCopy.offsetWidth,
 	        height: this._nodeCopy.offsetHeight,
-	        top: this._nodeCopy.offsetTop,
-	        left: this._nodeCopy.offsetLeft
+	        top: this._nodeCopy.parentNode.offsetTop,
+	        left: this._nodeCopy.parentNode.offsetLeft
 	      };
 
 	      // remove the copy after getting it's height
@@ -247,6 +252,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function render() {
 	      return _react.Children.only(this.props.children(this.state));
 	    }
+	  }], [{
+	    key: 'defaultProps',
+	    value: {
+	      onChange: function onChange() {
+	        return null;
+	      }
+	    },
+	    enumerable: true
 	  }]);
 
 	  return Measure;

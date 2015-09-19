@@ -10,6 +10,10 @@ window.addEventListener('resize', () => {
 })
 
 class Measure extends Component {
+  static defaultProps = {
+    onChange: () => null
+  }
+
   state = {
     width: null,
     height: null,
@@ -61,7 +65,9 @@ class Measure extends Component {
   }
 
   _setMeasure(dimensions) {
-    this.setState(dimensions)
+    this.setState(dimensions, () => {
+      this.props.onChange(dimensions)
+    })
   }
 
   _measure(node) {
@@ -109,11 +115,12 @@ class Measure extends Component {
     }
 
     // grab dimensions of node
+    // we get the parent offsets since we wrapped the child
     dimensions = {
       width: this._nodeCopy.offsetWidth,
       height: this._nodeCopy.offsetHeight,
-      top: this._nodeCopy.offsetTop,
-      left: this._nodeCopy.offsetLeft,
+      top: this._nodeCopy.parentNode.offsetTop,
+      left: this._nodeCopy.parentNode.offsetLeft,
     }
 
     // remove the copy after getting it's height
