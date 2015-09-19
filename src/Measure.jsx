@@ -24,6 +24,7 @@ class Measure extends Component {
   _nodeCopy = null
   _nodeParent = null
   _copyAppended = false
+  _isMounted = false
 
   componentWillMount() {
     this._removeClone = debounce(this._removeClone, 300)
@@ -32,6 +33,7 @@ class Measure extends Component {
   }
 
   componentDidMount() {
+    this._isMounted = true
     this._node = React.findDOMNode(this)
     this._parentNode = this._node.parentNode
     this.setState(this._measure(this._node))
@@ -54,6 +56,8 @@ class Measure extends Component {
   }
 
   componentWillUnmount() {
+    this._isMounted = false
+
     const pos = registeredComponents.indexOf(this)
     if(pos > -1) {
       registeredComponents.splice(pos, 1)
@@ -65,9 +69,11 @@ class Measure extends Component {
   }
 
   _setMeasure(dimensions) {
-    this.setState(dimensions, () => {
-      this.props.onChange(dimensions)
-    })
+    if(this._isMounted) {
+      this.setState(dimensions, () => {
+        this.props.onChange(dimensions)
+      })
+    }
   }
 
   _measure(node) {

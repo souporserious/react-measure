@@ -128,6 +128,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this._nodeCopy = null;
 	    this._nodeParent = null;
 	    this._copyAppended = false;
+	    this._isMounted = false;
 
 	    this._forceMeasure = function () {
 	      _this.forceUpdate();
@@ -146,6 +147,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
+	      this._isMounted = true;
 	      this._node = _react2['default'].findDOMNode(this);
 	      this._parentNode = this._node.parentNode;
 	      this.setState(this._measure(this._node));
@@ -166,6 +168,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'componentWillUnmount',
 	    value: function componentWillUnmount() {
+	      this._isMounted = false;
+
 	      var pos = registeredComponents.indexOf(this);
 	      if (pos > -1) {
 	        registeredComponents.splice(pos, 1);
@@ -176,9 +180,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function _setMeasure(dimensions) {
 	      var _this2 = this;
 
-	      this.setState(dimensions, function () {
-	        _this2.props.onChange(dimensions);
-	      });
+	      if (this._isMounted) {
+	        this.setState(dimensions, function () {
+	          _this2.props.onChange(dimensions);
+	        });
+	      }
 	    }
 	  }, {
 	    key: '_measure',
