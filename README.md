@@ -1,6 +1,9 @@
-## React Measure 0.0.7
+## React Measure 0.0.8
 
 Compute measurements of React components.
+
+## Good to knows
+To help avoid layout thrashing, use the prop `blacklist` to ignore specific values and firing an update to check the DOM for changes.
 
 ## Example Usage
 
@@ -8,8 +11,8 @@ Compute measurements of React components.
 
 import Measure from 'react-measure';
 
-<Measure onChange={this._handleOnChange}>
-  {({width, height, top, left}) =>
+<Measure blacklist={['top', 'left']} onChange={this._handleOnChange}>
+  {({width, height, top, right, bottom, left}) =>
     <div>
       {/* do cool stuff with my dimensions */}
     </div>

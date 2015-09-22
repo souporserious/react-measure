@@ -11,6 +11,7 @@ window.addEventListener('resize', () => {
 
 class Measure extends Component {
   static defaultProps = {
+    blacklist: [],
     onChange: () => null
   }
 
@@ -18,8 +19,12 @@ class Measure extends Component {
     width: null,
     height: null,
     top: null,
-    left: null
+    right: null,
+    bottom: null,
+    left: null,
   }
+  _whitelist = ['width', 'height', 'top', 'right', 'bottom', 'left']
+  _properties = this._whitelist.filter(prop => this.props.blacklist.indexOf(prop) < 0)
   _node = null
   _nodeCopy = null
   _nodeParent = null
@@ -27,7 +32,7 @@ class Measure extends Component {
   _isMounted = false
 
   componentWillMount() {
-    this._removeClone = debounce(this._removeClone, 300)
+    this._removeClone = debounce(this._removeClone, 600)
     this._forceMeasure = throttle(this._forceMeasure, 300)
     this._setMeasure = throttle(this._setMeasure, 300)
   }
@@ -46,13 +51,12 @@ class Measure extends Component {
     const dimensions = this._measure(this._node)
 
     // determine if we need to update our state with new dimensions or not
-    if(prevState.width !== dimensions.width ||
-       prevState.height !== dimensions.height ||
-       prevState.top !== dimensions.top ||
-       prevState.left !== dimensions.left
-    ) {
-      this._setMeasure(dimensions)
-    }
+    this._properties.forEach(prop => {
+      if(prevState[prop] !== dimensions[prop]) {
+        this._setMeasure(dimensions)
+        return
+      }
+    })
   }
 
   componentWillUnmount() {
@@ -77,14 +81,12 @@ class Measure extends Component {
   }
 
   _measure(node) {
-    let dimensions
-
     if(!this._copyAppended) {
       const context = document.createElement('div')
       const copy = node.cloneNode(true)
 
       // give the node some context to measure off of
-      // height and overflow prevent scrollbars from copy
+      // height and overflow prevent scrollbars from node copy
       context.style.height = 0
       context.style.position = 'relative'
       context.style.overflow = 'hidden'
@@ -120,13 +122,15 @@ class Measure extends Component {
       this._nodeCopy = copy
     }
 
-    // grab dimensions of node
-    // we get the parent offsets since we wrapped the child
-    dimensions = {
-      width: this._nodeCopy.offsetWidth,
-      height: this._nodeCopy.offsetHeight,
-      top: this._nodeCopy.parentNode.offsetTop,
-      left: this._nodeCopy.parentNode.offsetLeft,
+    // grab dimensions of the node
+    const rect = this._nodeCopy.getBoundingClientRect();
+    const dimensions = {
+      width: rect.width,
+      height: rect.height,
+      top: rect.top,
+      right: rect.right,
+      bottom: rect.bottom,
+      left: rect.left,
     }
 
     // remove the copy after getting it's height

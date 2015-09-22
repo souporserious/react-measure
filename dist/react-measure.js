@@ -122,8 +122,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      width: null,
 	      height: null,
 	      top: null,
+	      right: null,
+	      bottom: null,
 	      left: null
 	    };
+	    this._whitelist = ['width', 'height', 'top', 'right', 'bottom', 'left'];
+	    this._properties = this._whitelist.filter(function (prop) {
+	      return _this.props.blacklist.indexOf(prop) < 0;
+	    });
 	    this._node = null;
 	    this._nodeCopy = null;
 	    this._nodeParent = null;
@@ -140,7 +146,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(Measure, [{
 	    key: 'componentWillMount',
 	    value: function componentWillMount() {
-	      this._removeClone = (0, _debounce2['default'])(this._removeClone, 300);
+	      this._removeClone = (0, _debounce2['default'])(this._removeClone, 600);
 	      this._forceMeasure = (0, _throttle2['default'])(this._forceMeasure, 300);
 	      this._setMeasure = (0, _throttle2['default'])(this._setMeasure, 300);
 	    }
@@ -158,12 +164,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'componentDidUpdate',
 	    value: function componentDidUpdate(prevProps, prevState) {
+	      var _this2 = this;
+
 	      var dimensions = this._measure(this._node);
 
 	      // determine if we need to update our state with new dimensions or not
-	      if (prevState.width !== dimensions.width || prevState.height !== dimensions.height || prevState.top !== dimensions.top || prevState.left !== dimensions.left) {
-	        this._setMeasure(dimensions);
-	      }
+	      this._properties.forEach(function (prop) {
+	        if (prevState[prop] !== dimensions[prop]) {
+	          _this2._setMeasure(dimensions);
+	          return;
+	        }
+	      });
 	    }
 	  }, {
 	    key: 'componentWillUnmount',
@@ -178,25 +189,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: '_setMeasure',
 	    value: function _setMeasure(dimensions) {
-	      var _this2 = this;
+	      var _this3 = this;
 
 	      if (this._isMounted) {
 	        this.setState(dimensions, function () {
-	          _this2.props.onChange(dimensions);
+	          _this3.props.onChange(dimensions);
 	        });
 	      }
 	    }
 	  }, {
 	    key: '_measure',
 	    value: function _measure(node) {
-	      var dimensions = undefined;
-
 	      if (!this._copyAppended) {
 	        var context = document.createElement('div');
 	        var copy = node.cloneNode(true);
 
 	        // give the node some context to measure off of
-	        // height and overflow prevent scrollbars from copy
+	        // height and overflow prevent scrollbars from node copy
 	        context.style.height = 0;
 	        context.style.position = 'relative';
 	        context.style.overflow = 'hidden';
@@ -232,13 +241,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this._nodeCopy = copy;
 	      }
 
-	      // grab dimensions of node
-	      // we get the parent offsets since we wrapped the child
-	      dimensions = {
-	        width: this._nodeCopy.offsetWidth,
-	        height: this._nodeCopy.offsetHeight,
-	        top: this._nodeCopy.parentNode.offsetTop,
-	        left: this._nodeCopy.parentNode.offsetLeft
+	      // grab dimensions of the node
+	      var rect = this._nodeCopy.getBoundingClientRect();
+	      var dimensions = {
+	        width: rect.width,
+	        height: rect.height,
+	        top: rect.top,
+	        right: rect.right,
+	        bottom: rect.bottom,
+	        left: rect.left
 	      };
 
 	      // remove the copy after getting it's height
@@ -261,6 +272,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }], [{
 	    key: 'defaultProps',
 	    value: {
+	      blacklist: [],
 	      onChange: function onChange() {
 	        return null;
 	      }

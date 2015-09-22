@@ -20,7 +20,7 @@ class Accordion extends Component {
             onClick={this._handleClick.bind(this, item)}
           >
             <h2 className="accordion__item__title">{item.title}</h2>
-            <Measure>
+            <Measure blacklist={['top', 'right', 'bottom', 'left', 'width']}>
               {({height}) =>
                 <Spring
                   endValue={{
