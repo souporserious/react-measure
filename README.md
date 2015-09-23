@@ -1,4 +1,4 @@
-## React Measure 0.1.0
+## React Measure 0.1.1
 
 Compute measurements of React components.
 
@@ -60,7 +60,14 @@ run dev mode
 open your browser and visit: `http://localhost:8080/`
 
 ## CHANGELOG
-### 0.0.1
+### 0.1.1
+Set width/height to auto on clone no matter what to get a true dimension
+
+Append clone directly after original instead of the end of its parent
+
+Portal now gets destroyed after measurements have been calculated
+
+### 0.1.0
 Rewritten to be more React friendly
 
 Measure component no longer accepts a child function, instead get dimensions by setting state in onChange callback

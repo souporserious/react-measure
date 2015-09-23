@@ -98,21 +98,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _MeasureChild2 = _interopRequireDefault(_MeasureChild);
 
 	var Measure = (function (_Component) {
-	  function Measure(props) {
+	  function Measure() {
 	    var _this = this;
 
 	    _classCallCheck(this, Measure);
 
-	    _get(Object.getPrototypeOf(Measure.prototype), 'constructor', this).call(this, props);
+	    _get(Object.getPrototypeOf(Measure.prototype), 'constructor', this).apply(this, arguments);
 
 	    this._whitelist = this.props.whitelist || ['width', 'height', 'top', 'right', 'bottom', 'left'];
 	    this._properties = this._whitelist.filter(function (prop) {
 	      return _this.props.blacklist.indexOf(prop) < 0;
 	    });
-	    this._portal = document.createElement('div');
+	    this._portal = null;
 	    this._lastDimensions = {};
 
-	    this._copyMounted = function (dimensions) {
+	    this._cloneMounted = function (dimensions) {
 	      // determine if we need to update our callback with new dimensions or not
 	      _this._properties.forEach(function (prop) {
 	        if (dimensions[prop] !== _this._lastDimensions[prop]) {
@@ -126,12 +126,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	      });
 
-	      // remove component since we no longer need it
+	      // remove component and portal since we no longer need it
 	      _react2['default'].unmountComponentAtNode(_this._portal);
+	      _this._destroyPortal();
 	    };
-
-	    // set styles to hide portal from view
-	    this._portal.style.cssText = '\n      height: 0;\n      position: relative;\n      overflow: hidden;\n    ';
 	  }
 
 	  _inherits(Measure, _Component);
@@ -139,11 +137,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(Measure, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      var node = _react2['default'].findDOMNode(this);
-
-	      // append portal next to this component
-	      node.parentNode.appendChild(this._portal);
-
+	      this._node = _react2['default'].findDOMNode(this);
 	      this._cloneComponent();
 	    }
 	  }, {
@@ -152,11 +146,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this._cloneComponent();
 	    }
 	  }, {
+	    key: '_createPortal',
+	    value: function _createPortal() {
+	      var portal = document.createElement('div');
+
+	      // set styles to hide portal from view
+	      portal.style.cssText = '\n      height: 0;\n      position: relative;\n      overflow: hidden;\n    ';
+
+	      this._portal = portal;
+
+	      // append portal next to this component
+	      this._node.parentNode.insertBefore(this._portal, this._node.nextSibling);
+	    }
+	  }, {
+	    key: '_destroyPortal',
+	    value: function _destroyPortal() {
+	      this._portal.parentNode.removeChild(this._portal);
+	    }
+	  }, {
 	    key: '_cloneComponent',
 	    value: function _cloneComponent() {
-	      var onMount = this._copyMounted;
+	      var onMount = this._cloneMounted;
 	      var clone = (0, _react.cloneElement)(this.props.children);
 	      var child = _react2['default'].createElement(_MeasureChild2['default'], { onMount: onMount }, clone);
+
+	      // create a portal to append clone to
+	      this._createPortal();
 
 	      // render clone to the portal
 	      _react2['default'].render(child, this._portal);
@@ -235,16 +250,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function componentDidMount() {
 	      var node = _react2['default'].findDOMNode(this);
 
-	      // if width/height was set to 0, set it to auto to get a true calculation
-	      if (node.style.width === '0px') {
-	        node.style.width = 'auto';
-	      }
-
-	      if (node.style.height === '0px') {
-	        node.style.height = 'auto';
-	      }
+	      // set width/height to auto to get a true calculation
+	      node.style.width = 'auto';
+	      node.style.height = 'auto';
 
 	      // move node exactly on top of it's clone to calculate proper position
+	      // this also overrides any transform already set, so something like scale
+	      // won't affect the calculation, could be bad to do this,
+	      // but we'll see what happens
 	      node.style.transform = 'translateY(-100%)';
 	      node.style.WebkitTransform = 'translateY(-100%)';
 
