@@ -93,183 +93,88 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _throttle = __webpack_require__(3);
+	var _MeasureChild = __webpack_require__(3);
 
-	var _throttle2 = _interopRequireDefault(_throttle);
-
-	var _debounce = __webpack_require__(4);
-
-	var _debounce2 = _interopRequireDefault(_debounce);
-
-	var registeredComponents = [];
-
-	// force rerender on window resize so we can grab dimensions again
-	window.addEventListener('resize', function () {
-	  registeredComponents.forEach(function (c) {
-	    return c._forceMeasure();
-	  });
-	});
+	var _MeasureChild2 = _interopRequireDefault(_MeasureChild);
 
 	var Measure = (function (_Component) {
-	  function Measure() {
+	  function Measure(props) {
 	    var _this = this;
 
 	    _classCallCheck(this, Measure);
 
-	    _get(Object.getPrototypeOf(Measure.prototype), 'constructor', this).apply(this, arguments);
+	    _get(Object.getPrototypeOf(Measure.prototype), 'constructor', this).call(this, props);
 
-	    this.state = {
-	      width: null,
-	      height: null,
-	      top: null,
-	      right: null,
-	      bottom: null,
-	      left: null
-	    };
-	    this._whitelist = ['width', 'height', 'top', 'right', 'bottom', 'left'];
+	    this._whitelist = this.props.whitelist || ['width', 'height', 'top', 'right', 'bottom', 'left'];
 	    this._properties = this._whitelist.filter(function (prop) {
 	      return _this.props.blacklist.indexOf(prop) < 0;
 	    });
-	    this._node = null;
-	    this._nodeCopy = null;
-	    this._nodeParent = null;
-	    this._copyAppended = false;
-	    this._isMounted = false;
+	    this._portal = document.createElement('div');
+	    this._lastDimensions = {};
 
-	    this._forceMeasure = function () {
-	      _this.forceUpdate();
+	    this._copyMounted = function (dimensions) {
+	      // determine if we need to update our callback with new dimensions or not
+	      _this._properties.forEach(function (prop) {
+	        if (dimensions[prop] !== _this._lastDimensions[prop]) {
+	          _this.props.onChange(dimensions);
+
+	          // store last dimensions to compare changes
+	          _this._lastDimensions = dimensions;
+
+	          // we don't need to look any further, bail out
+	          return;
+	        }
+	      });
+
+	      // remove component since we no longer need it
+	      _react2['default'].unmountComponentAtNode(_this._portal);
 	    };
+
+	    // set styles to hide portal from view
+	    this._portal.style.cssText = '\n      height: 0;\n      position: relative;\n      overflow: hidden;\n    ';
 	  }
 
 	  _inherits(Measure, _Component);
 
 	  _createClass(Measure, [{
-	    key: 'componentWillMount',
-	    value: function componentWillMount() {
-	      this._removeClone = (0, _debounce2['default'])(this._removeClone, 600);
-	      this._forceMeasure = (0, _throttle2['default'])(this._forceMeasure, 300);
-	      this._setMeasure = (0, _throttle2['default'])(this._setMeasure, 300);
-	    }
-	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      this._isMounted = true;
-	      this._node = _react2['default'].findDOMNode(this);
-	      this._parentNode = this._node.parentNode;
-	      this.setState(this._measure(this._node));
+	      var node = _react2['default'].findDOMNode(this);
 
-	      // store registered components
-	      registeredComponents.push(this);
+	      // append portal next to this component
+	      node.parentNode.appendChild(this._portal);
+
+	      this._cloneComponent();
 	    }
 	  }, {
 	    key: 'componentDidUpdate',
-	    value: function componentDidUpdate(prevProps, prevState) {
-	      var _this2 = this;
-
-	      var dimensions = this._measure(this._node);
-
-	      // determine if we need to update our state with new dimensions or not
-	      this._properties.forEach(function (prop) {
-	        if (prevState[prop] !== dimensions[prop]) {
-	          _this2._setMeasure(dimensions);
-	          return;
-	        }
-	      });
+	    value: function componentDidUpdate() {
+	      this._cloneComponent();
 	    }
 	  }, {
-	    key: 'componentWillUnmount',
-	    value: function componentWillUnmount() {
-	      this._isMounted = false;
+	    key: '_cloneComponent',
+	    value: function _cloneComponent() {
+	      var onMount = this._copyMounted;
+	      var clone = (0, _react.cloneElement)(this.props.children);
+	      var child = _react2['default'].createElement(_MeasureChild2['default'], { onMount: onMount }, clone);
 
-	      var pos = registeredComponents.indexOf(this);
-	      if (pos > -1) {
-	        registeredComponents.splice(pos, 1);
-	      }
-	    }
-	  }, {
-	    key: '_setMeasure',
-	    value: function _setMeasure(dimensions) {
-	      var _this3 = this;
-
-	      if (this._isMounted) {
-	        this.setState(dimensions, function () {
-	          _this3.props.onChange(dimensions);
-	        });
-	      }
-	    }
-	  }, {
-	    key: '_measure',
-	    value: function _measure(node) {
-	      if (!this._copyAppended) {
-	        var context = document.createElement('div');
-	        var copy = node.cloneNode(true);
-
-	        // give the node some context to measure off of
-	        // height and overflow prevent scrollbars from node copy
-	        context.style.height = 0;
-	        context.style.position = 'relative';
-	        context.style.overflow = 'hidden';
-
-	        // remove name from all children inputs so they don't conflict with current ones
-	        var inputNodes = copy.querySelectorAll('input');
-	        for (var i = inputNodes.length; i--;) {
-	          inputNodes[i].setAttribute('name', '');
-	        }
-
-	        // remove copy and children react id's so it doesn't conflict with current ones
-	        var reactNodes = copy.querySelectorAll('[data-reactid]');
-	        copy.setAttribute('data-reactid', '');
-	        for (var j = reactNodes.length; j--;) {
-	          reactNodes[j].setAttribute('data-reactid', '');
-	        }
-
-	        // set props to hide copy and get true dimensions
-	        copy.style.boxSizing = 'border-box';
-	        copy.style.width = 'auto';
-	        copy.style.height = 'auto';
-	        copy.style.position = 'absolute';
-	        copy.style.visibility = 'hidden';
-
-	        // append copy to context
-	        context.appendChild(copy);
-
-	        // append context to DOM so we can measure
-	        this._parentNode.appendChild(context);
-	        this._copyAppended = true;
-
-	        // store node so we can calculate on it and remove it later
-	        this._nodeCopy = copy;
-	      }
-
-	      // grab dimensions of the node
-	      var rect = this._nodeCopy.getBoundingClientRect();
-	      var dimensions = {
-	        width: rect.width,
-	        height: rect.height,
-	        top: rect.top,
-	        right: rect.right,
-	        bottom: rect.bottom,
-	        left: rect.left
-	      };
-
-	      // remove the copy after getting it's height
-	      this._removeClone();
-
-	      return dimensions;
-	    }
-	  }, {
-	    key: '_removeClone',
-	    value: function _removeClone() {
-	      // we remove the parentNode because we added it earlier to measure it in the correct context
-	      this._parentNode.removeChild(this._nodeCopy.parentNode);
-	      this._copyAppended = false;
+	      // render clone to the portal
+	      _react2['default'].render(child, this._portal);
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      return _react.Children.only(this.props.children(this.state));
+	      return _react.Children.only(this.props.children);
 	    }
 	  }], [{
+	    key: 'propTypes',
+	    value: {
+	      whitelist: _react.PropTypes.array,
+	      blacklist: _react.PropTypes.array,
+	      onChange: _react.PropTypes.func
+	    },
+	    enumerable: true
+	  }, {
 	    key: 'defaultProps',
 	    value: {
 	      blacklist: [],
@@ -294,67 +199,80 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 3 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
-	Object.defineProperty(exports, "__esModule", {
+	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
-	exports["default"] = _throttle;
 
-	function _throttle(fn, threshhold, scope) {
-	  if (threshhold === undefined) threshhold = 250;
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-	  threshhold || (threshhold = 250);
-	  var last = undefined,
-	      deferTimer = undefined;
-	  return function () {
-	    var context = scope || this;
-	    var now = +new Date(),
-	        args = arguments;
-	    if (last && now < last + threshhold) {
-	      // hold on to it
-	      clearTimeout(deferTimer);
-	      deferTimer = setTimeout(function () {
-	        last = now;
-	        fn.apply(context, args);
-	      }, threshhold);
-	    } else {
-	      last = now;
-	      fn.apply(context, args);
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var MeasureChild = (function (_Component) {
+	  function MeasureChild() {
+	    _classCallCheck(this, MeasureChild);
+
+	    _get(Object.getPrototypeOf(MeasureChild.prototype), 'constructor', this).apply(this, arguments);
+	  }
+
+	  _inherits(MeasureChild, _Component);
+
+	  _createClass(MeasureChild, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var node = _react2['default'].findDOMNode(this);
+
+	      // if width/height was set to 0, set it to auto to get a true calculation
+	      if (node.style.width === '0px') {
+	        node.style.width = 'auto';
+	      }
+
+	      if (node.style.height === '0px') {
+	        node.style.height = 'auto';
+	      }
+
+	      // move node exactly on top of it's clone to calculate proper position
+	      node.style.transform = 'translateY(-100%)';
+	      node.style.WebkitTransform = 'translateY(-100%)';
+
+	      var rect = node.getBoundingClientRect();
+	      var dimensions = {
+	        width: rect.width,
+	        height: rect.height,
+	        top: rect.top,
+	        right: rect.right,
+	        bottom: rect.bottom,
+	        left: rect.left
+	      };
+
+	      // fire a callback to let Measure know our dimensions
+	      this.props.onMount(dimensions);
 	    }
-	  };
-	}
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return this.props.children;
+	    }
+	  }]);
 
-	module.exports = exports["default"];
+	  return MeasureChild;
+	})(_react.Component);
 
-/***/ },
-/* 4 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports["default"] = _debounce;
-
-	function _debounce(fn) {
-	  var delay = arguments[1] === undefined ? 250 : arguments[1];
-
-	  var timer = null;
-	  return function () {
-	    var context = this,
-	        args = arguments;
-	    clearTimeout(timer);
-	    timer = setTimeout(function () {
-	      fn.apply(context, args);
-	    }, delay);
-	  };
-	}
-
-	module.exports = exports["default"];
+	exports['default'] = MeasureChild;
+	module.exports = exports['default'];
 
 /***/ }
 /******/ ])
