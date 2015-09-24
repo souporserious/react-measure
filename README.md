@@ -8,14 +8,14 @@ Compute measurements of React components.
 
 `bower install react-measure --save`
 
-## Example Usage using ES6 & Babel Stage 0
+## Example using ES6 & Babel Stage 0
 
 ```javascript
 import Measure from 'react-measure';
 
 class ItemToMeasure extends Component {
   state = {
-    measurements: {}
+    dimensions: {}
   }
 
   render() {
@@ -25,10 +25,10 @@ class ItemToMeasure extends Component {
       <Measure
         whitelist={['width', 'height']}
         blacklist={['top', 'left']}
-        onChange={m => this.setState({measurements: m})}
+        onChange={d => this.setState({dimensions: d})}
       >
         <div>
-          I can do cool things with my measurements now :D
+          I can do cool things with my dimensions now :D
         </div>
       </Measure>
     )
