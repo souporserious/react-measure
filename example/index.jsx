@@ -13,7 +13,10 @@ class AccordionContent extends Component {
     const { item, active } = this.props;
 
     return(
-      <Measure onChange={dimensions => this.setState({height: dimensions.height})}>
+      <Measure
+        clone={true}
+        onChange={dimensions => this.setState({height: dimensions.height})}
+      >
         <Spring
           endValue={{
             val: {
