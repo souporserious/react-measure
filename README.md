@@ -64,6 +64,8 @@ open your browser and visit: `http://localhost:8080/`
 ### 0.1.2
 Clone prop now exposed to allow optional cloning of component
 
+Defaults to false which could potentially break components relying on cloned calculations
+
 ### 0.1.1
 Set width/height to auto on clone no matter what to get a true dimension
 
