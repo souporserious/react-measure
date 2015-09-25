@@ -97,6 +97,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _MeasureChild2 = _interopRequireDefault(_MeasureChild);
 
+	var _getNodeDimensions = __webpack_require__(4);
+
+	var _getNodeDimensions2 = _interopRequireDefault(_getNodeDimensions);
+
 	var Measure = (function (_Component) {
 	  function Measure() {
 	    var _this = this;
@@ -113,22 +117,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this._lastDimensions = {};
 
 	    this._cloneMounted = function (dimensions) {
-	      // determine if we need to update our callback with new dimensions or not
-	      _this._properties.forEach(function (prop) {
-	        if (dimensions[prop] !== _this._lastDimensions[prop]) {
-	          _this.props.onChange(dimensions);
-
-	          // store last dimensions to compare changes
-	          _this._lastDimensions = dimensions;
-
-	          // we don't need to look any further, bail out
-	          return;
-	        }
-	      });
+	      _this._update(dimensions);
 
 	      // remove component and portal since we no longer need it
 	      _react2['default'].unmountComponentAtNode(_this._portal);
-	      _this._destroyPortal();
+	      _this._closePortal();
 	    };
 	  }
 
@@ -138,16 +131,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
 	      this._node = _react2['default'].findDOMNode(this);
-	      this._cloneComponent();
+
+	      if (this.props.clone) {
+	        this._cloneComponent();
+	      } else {
+	        this._update((0, _getNodeDimensions2['default'])(this._node));
+	      }
 	    }
 	  }, {
 	    key: 'componentDidUpdate',
 	    value: function componentDidUpdate() {
-	      this._cloneComponent();
+	      // we check for parent node because we we're getting some weird issues
+	      // with React Motion specifically and it causing an error on unmount
+	      // because parent would return null, might be a bigger problem to look into
+	      if (this.props.clone && this._node.parentNode) {
+	        this._cloneComponent();
+	      } else {
+	        this._update((0, _getNodeDimensions2['default'])(this._node));
+	      }
 	    }
 	  }, {
-	    key: '_createPortal',
-	    value: function _createPortal() {
+	    key: '_openPortal',
+	    value: function _openPortal() {
 	      var portal = document.createElement('div');
 
 	      // set styles to hide portal from view
@@ -156,11 +161,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this._portal = portal;
 
 	      // append portal next to this component
-	      this._node.parentNode.insertBefore(this._portal, this._node.nextSibling);
+	      this._node.parentNode.insertBefore(portal, this._node.nextSibling);
 	    }
 	  }, {
-	    key: '_destroyPortal',
-	    value: function _destroyPortal() {
+	    key: '_closePortal',
+	    value: function _closePortal() {
 	      this._portal.parentNode.removeChild(this._portal);
 	    }
 	  }, {
@@ -171,10 +176,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var child = _react2['default'].createElement(_MeasureChild2['default'], { onMount: onMount }, clone);
 
 	      // create a portal to append clone to
-	      this._createPortal();
+	      this._openPortal();
 
 	      // render clone to the portal
 	      _react2['default'].render(child, this._portal);
+	    }
+	  }, {
+	    key: '_update',
+	    value: function _update(dimensions) {
+	      var _this2 = this;
+
+	      // determine if we need to update our callback with new dimensions or not
+	      this._properties.forEach(function (prop) {
+	        if (dimensions[prop] !== _this2._lastDimensions[prop]) {
+	          _this2.props.onChange(dimensions);
+
+	          // store last dimensions to compare changes
+	          _this2._lastDimensions = dimensions;
+
+	          // we don't need to look any further, bail out
+	          return;
+	        }
+	      });
 	    }
 	  }, {
 	    key: 'render',
@@ -184,6 +207,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }], [{
 	    key: 'propTypes',
 	    value: {
+	      clone: _react.PropTypes.bool,
 	      whitelist: _react.PropTypes.array,
 	      blacklist: _react.PropTypes.array,
 	      onChange: _react.PropTypes.func
@@ -192,6 +216,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'defaultProps',
 	    value: {
+	      clone: false,
 	      blacklist: [],
 	      onChange: function onChange() {
 	        return null;
@@ -236,6 +261,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _getNodeDimensions = __webpack_require__(4);
+
+	var _getNodeDimensions2 = _interopRequireDefault(_getNodeDimensions);
+
 	var MeasureChild = (function (_Component) {
 	  function MeasureChild() {
 	    _classCallCheck(this, MeasureChild);
@@ -250,29 +279,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function componentDidMount() {
 	      var node = _react2['default'].findDOMNode(this);
 
-	      // set width/height to auto to get a true calculation
-	      node.style.width = 'auto';
-	      node.style.height = 'auto';
-
-	      // move node exactly on top of it's clone to calculate proper position
-	      // this also overrides any transform already set, so something like scale
-	      // won't affect the calculation, could be bad to do this,
-	      // but we'll see what happens
-	      node.style.transform = 'translateY(-100%)';
-	      node.style.WebkitTransform = 'translateY(-100%)';
-
-	      var rect = node.getBoundingClientRect();
-	      var dimensions = {
-	        width: rect.width,
-	        height: rect.height,
-	        top: rect.top,
-	        right: rect.right,
-	        bottom: rect.bottom,
-	        left: rect.left
-	      };
-
 	      // fire a callback to let Measure know our dimensions
-	      this.props.onMount(dimensions);
+	      this.props.onMount((0, _getNodeDimensions2['default'])(node, true));
 	    }
 	  }, {
 	    key: 'render',
@@ -285,6 +293,47 @@ return /******/ (function(modules) { // webpackBootstrap
 	})(_react.Component);
 
 	exports['default'] = MeasureChild;
+	module.exports = exports['default'];
+
+/***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	exports['default'] = getNodeDimensions;
+
+	function getNodeDimensions(node) {
+	  var clone = arguments[1] === undefined ? false : arguments[1];
+
+	  if (clone) {
+	    // set width/height to auto to get a true calculation
+	    node.style.width = 'auto';
+	    node.style.height = 'auto';
+
+	    // move node exactly on top of it's clone to calculate proper position
+	    // this also overrides any transform already set, so something like scale
+	    // won't affect the calculation, could be bad to do this,
+	    // but we'll see what happens
+	    node.style.transform = 'translateY(-100%)';
+	    node.style.WebkitTransform = 'translateY(-100%)';
+	  }
+
+	  var rect = node.getBoundingClientRect();
+
+	  return {
+	    width: rect.width,
+	    height: rect.height,
+	    top: rect.top,
+	    right: rect.right,
+	    bottom: rect.bottom,
+	    left: rect.left
+	  };
+	}
+
 	module.exports = exports['default'];
 
 /***/ }

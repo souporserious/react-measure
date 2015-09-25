@@ -1,4 +1,4 @@
-## React Measure 0.1.1
+## React Measure 0.1.2
 
 Compute measurements of React components.
 
@@ -23,6 +23,7 @@ class ItemToMeasure extends Component {
 
     return(
       <Measure
+        clone={true}
         whitelist={['width', 'height']}
         blacklist={['top', 'left']}
         onChange={d => this.setState({dimensions: d})}
@@ -60,6 +61,9 @@ run dev mode
 open your browser and visit: `http://localhost:8080/`
 
 ## CHANGELOG
+### 0.1.2
+Clone prop now exposed to allow optional cloning of component
+
 ### 0.1.1
 Set width/height to auto on clone no matter what to get a true dimension
 
