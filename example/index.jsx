@@ -1,8 +1,77 @@
-import React, { Component, Children, PropTypes } from 'react';
-import { Spring } from 'react-motion';
-import Measure from '../src/react-measure';
+import React, { Component, Children, PropTypes } from 'react'
+import { Spring } from 'react-motion'
+import Measure from '../src/react-measure'
+import Slideable from './Slideable'
 
 import './main.scss';
+
+class SlideableDemo extends Component {
+  constructor() {
+    super();
+    this._handleToggle = this._handleToggle.bind(this);
+    this.state = {toggle: true}
+  }
+  
+  _handleToggle() {
+    this.setState({toggle: !this.state.toggle});
+  }
+
+  render() {
+    return(
+      <div>
+        <button onClick={this._handleToggle}>Toggle</button>
+        <Slideable
+          toggle={this.state.toggle}
+          style={{
+            background: '#b4da55'
+          }}
+        >
+          <div
+            style={{
+              padding: '32px 28px'
+            }}
+          >
+            <h3>Sam L Jackson</h3>
+            <p>Look, just because I don't be givin' no man a foot massage don't make it right for Marsellus to throw Antwone into a glass motherfuckin' house, fuckin' up the way the nigger talks. Motherfucker do that shit to me, he better paralyze my ass, 'cause I'll kill the motherfucker, know what I'm sayin'?</p>
+          </div>
+        </Slideable>
+      
+        <Slideable
+          forceAutoHeight={true}
+          toggle={!this.state.toggle}
+          style={{
+            background: '#DA8355'
+          }}
+        >
+          <div
+            style={{
+              padding: '6px 28px'
+            }}
+          >
+            <h3>Sam L Jackson</h3>
+            <p>Look, just because I don't be givin' no man a foot massage don't make it right for Marsellus to throw Antwone into a glass motherfuckin' house, fuckin' up the way the nigger talks. Motherfucker do that shit to me, he better paralyze my ass, 'cause I'll kill the motherfucker, know what I'm sayin'?</p>
+            <Slideable
+              toggle={!this.state.toggle}
+              style={{
+                background: '#DA5555'
+              }}
+            >
+              <div
+                style={{
+                  padding: '6px 28px'
+                }}
+              >
+                <h3>Sam L Jackson</h3>
+                <p>Look, just because I don't be givin' no man a foot massage don't make it right for Marsellus to throw Antwone into a glass motherfuckin' house, fuckin' up the way the nigger talks. Motherfucker do that shit to me, he better paralyze my ass, 'cause I'll kill the motherfucker, know what I'm sayin'?</p>
+              </div>
+            </Slideable>
+          </div>
+        </Slideable>
+      </div>
+    );
+  }
+}
+
 
 class AccordionContent extends Component {
   state = {
@@ -101,6 +170,7 @@ class App extends Component {
           active={active}
           onClick={this._handleAccordionClick}
         />
+        <SlideableDemo />
       </div>
     );
   }

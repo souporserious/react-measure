@@ -5,12 +5,14 @@ import getNodeDimensions from './get-node-dimensions'
 class Measure extends Component {
   static propTypes = {
     clone: PropTypes.bool,
+    forceAutoHeight: PropTypes.bool,
     whitelist: PropTypes.array,
     blacklist: PropTypes.array,
     onChange: PropTypes.func
   }
   static defaultProps = {
     clone: false,
+    forceAutoHeight: false,
     blacklist: [],
     onChange: () => null
   }
@@ -57,21 +59,22 @@ class Measure extends Component {
   }
 
   _closePortal() {
-    this._portal.parentNode.removeChild(this._portal);
+    React.unmountComponentAtNode(this._portal)
+    this._portal.parentNode.removeChild(this._portal)
   }
 
   _cloneMounted = (dimensions) => {
     this._update(dimensions)
 
-    // remove component and portal since we no longer need it
-    React.unmountComponentAtNode(this._portal)
+    // remove portal since we no longer need it
     this._closePortal()
   }
 
   _cloneComponent() {
+    const { forceAutoHeight } = this.props
     const onMount = this._cloneMounted
     const clone = cloneElement(this.props.children)
-    const child = React.createElement(MeasureChild, {onMount}, clone)
+    const child = React.createElement(MeasureChild, {onMount, forceAutoHeight}, clone)
 
     // create a portal to append clone to
     this._openPortal()

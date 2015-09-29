@@ -1,4 +1,4 @@
-## React Measure 0.1.2
+## React Measure 0.1.3
 
 Compute measurements of React components.
 
@@ -8,7 +8,7 @@ Compute measurements of React components.
 
 `bower install react-measure --save`
 
-## Example using ES6 & Babel Stage 0
+## Example Usage
 
 ```javascript
 import Measure from 'react-measure';
@@ -24,6 +24,7 @@ class ItemToMeasure extends Component {
     return(
       <Measure
         clone={true}
+        forceAutoHeight={true}
         whitelist={['width', 'height']}
         blacklist={['top', 'left']}
         onChange={d => this.setState({dimensions: d})}
@@ -61,6 +62,9 @@ run dev mode
 open your browser and visit: `http://localhost:8080/`
 
 ## CHANGELOG
+### 0.1.3
+Added `forceAutoHeight` prop to help with proper height calculation when children heights are animating
+
 ### 0.1.2
 Clone prop now exposed to allow optional cloning of component
 
