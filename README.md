@@ -1,4 +1,4 @@
-## React Measure 0.1.3
+## React Measure 0.2.0
 
 Compute measurements of React components.
 
@@ -62,6 +62,9 @@ run dev mode
 open your browser and visit: `http://localhost:8080/`
 
 ## CHANGELOG
+### 0.2.0
+Upgraded to React 0.14.0
+
 ### 0.1.3
 Added `forceAutoHeight` prop to help with proper height calculation when children heights are animating
 
