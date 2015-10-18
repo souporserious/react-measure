@@ -1,11 +1,14 @@
-import React, { Component, Children, PropTypes, cloneElement } from 'react'
-import MeasureChild from './MeasureChild'
+import React, { Component, Children, PropTypes, createElement, cloneElement } from 'react'
+import ReactDOM from 'react-dom'
+import shallowCompare from 'react/lib/shallowCompare'
+import MeasureClone from './MeasureClone'
 import getNodeDimensions from './get-node-dimensions'
 
 class Measure extends Component {
   static propTypes = {
     clone: PropTypes.bool,
     forceAutoHeight: PropTypes.bool,
+    collection: PropTypes.bool,
     whitelist: PropTypes.array,
     blacklist: PropTypes.array,
     onChange: PropTypes.func
@@ -13,6 +16,7 @@ class Measure extends Component {
   static defaultProps = {
     clone: false,
     forceAutoHeight: false,
+    collection: false,
     blacklist: [],
     onChange: () => null
   }
@@ -22,13 +26,17 @@ class Measure extends Component {
   _lastDimensions = {}
 
   componentDidMount() {
-    this._node = React.findDOMNode(this)
+    this._node = ReactDOM.findDOMNode(this)
 
     if(this.props.clone) {
       this._cloneComponent()
     } else {
       this._update(getNodeDimensions(this._node))
     }
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return shallowCompare(this, nextProps, nextState)
   }
 
   componentDidUpdate() {
@@ -52,6 +60,7 @@ class Measure extends Component {
       overflow: hidden;
     `
 
+    // store portal for later use
     this._portal = portal
 
     // append portal next to this component
@@ -59,43 +68,70 @@ class Measure extends Component {
   }
 
   _closePortal() {
-    React.unmountComponentAtNode(this._portal)
-    this._portal.parentNode.removeChild(this._portal)
+    if(this._portal) {
+      ReactDOM.unmountComponentAtNode(this._portal)
+      this._portal.parentNode.removeChild(this._portal)
+    }
+    this._portal = null
   }
 
   _cloneMounted = (dimensions) => {
     this._update(dimensions)
-
-    // remove portal since we no longer need it
-    this._closePortal()
   }
 
   _cloneComponent() {
-    const { forceAutoHeight } = this.props
+    const { children, collection, forceAutoHeight } = this.props
     const onMount = this._cloneMounted
-    const clone = cloneElement(this.props.children)
-    const child = React.createElement(MeasureChild, {onMount, forceAutoHeight}, clone)
+    const clone = cloneElement(children)
+    const child = createElement(MeasureClone, {collection, forceAutoHeight, onMount}, clone)
 
     // create a portal to append clone to
     this._openPortal()
 
     // render clone to the portal
-    React.render(child, this._portal)
+    ReactDOM.unstable_renderSubtreeIntoContainer(this, child, this._portal, () => {
+      // remove portal after mount since we no longer need it
+      this._closePortal()
+    })
   }
 
   _update(dimensions) {
-    // determine if we need to update our callback with new dimensions or not
-    this._properties.forEach(prop => {
-      if(dimensions[prop] !== this._lastDimensions[prop]) {
-        this.props.onChange(dimensions)
+    if(this.props.collection) {
+      Object.keys(dimensions).forEach(key => {
+        let childDimensions = dimensions[key]
+        let hasChanged = false
 
-        // store last dimensions to compare changes
-        this._lastDimensions = dimensions
+        this._properties.forEach(prop => {
+          if(childDimensions[prop] !== this._lastDimensions[prop]) {
+            hasChanged = true
+            return
+          }
+        })
 
-        // we don't need to look any further, bail out
-        return
-      }
-    })
+        if(hasChanged) {
+          this.props.onChange(dimensions)
+
+          // store last dimensions to compare changes
+          this._lastDimensions = dimensions
+
+          // we don't need to look any further, bail out
+          return
+        }
+      })
+    } else {
+      // determine if we need to update our callback with new dimensions or not
+      this._properties.forEach(prop => {
+        if(dimensions[prop] !== this._lastDimensions[prop]) {
+          this.props.onChange(dimensions)
+
+          // store last dimensions to compare changes
+          this._lastDimensions = dimensions
+
+          // we don't need to look any further, bail out
+          return
+        }
+      })
+    }
   }
 
   render() {

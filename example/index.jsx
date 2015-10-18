@@ -1,81 +1,18 @@
 import React, { Component, Children, PropTypes } from 'react'
-import { Spring } from 'react-motion'
+import ReactDOM from 'react-dom'
+import shallowCompare from 'react/lib/shallowCompare'
+import { Motion, spring } from 'react-motion'
 import Measure from '../src/react-measure'
-import Slideable from './Slideable'
 
-import './main.scss';
-
-class SlideableDemo extends Component {
-  constructor() {
-    super();
-    this._handleToggle = this._handleToggle.bind(this);
-    this.state = {toggle: true}
-  }
-  
-  _handleToggle() {
-    this.setState({toggle: !this.state.toggle});
-  }
-
-  render() {
-    return(
-      <div>
-        <button onClick={this._handleToggle}>Toggle</button>
-        <Slideable
-          toggle={this.state.toggle}
-          style={{
-            background: '#b4da55'
-          }}
-        >
-          <div
-            style={{
-              padding: '32px 28px'
-            }}
-          >
-            <h3>Sam L Jackson</h3>
-            <p>Look, just because I don't be givin' no man a foot massage don't make it right for Marsellus to throw Antwone into a glass motherfuckin' house, fuckin' up the way the nigger talks. Motherfucker do that shit to me, he better paralyze my ass, 'cause I'll kill the motherfucker, know what I'm sayin'?</p>
-          </div>
-        </Slideable>
-      
-        <Slideable
-          forceAutoHeight={true}
-          toggle={!this.state.toggle}
-          style={{
-            background: '#DA8355'
-          }}
-        >
-          <div
-            style={{
-              padding: '6px 28px'
-            }}
-          >
-            <h3>Sam L Jackson</h3>
-            <p>Look, just because I don't be givin' no man a foot massage don't make it right for Marsellus to throw Antwone into a glass motherfuckin' house, fuckin' up the way the nigger talks. Motherfucker do that shit to me, he better paralyze my ass, 'cause I'll kill the motherfucker, know what I'm sayin'?</p>
-            <Slideable
-              toggle={!this.state.toggle}
-              style={{
-                background: '#DA5555'
-              }}
-            >
-              <div
-                style={{
-                  padding: '6px 28px'
-                }}
-              >
-                <h3>Sam L Jackson</h3>
-                <p>Look, just because I don't be givin' no man a foot massage don't make it right for Marsellus to throw Antwone into a glass motherfuckin' house, fuckin' up the way the nigger talks. Motherfucker do that shit to me, he better paralyze my ass, 'cause I'll kill the motherfucker, know what I'm sayin'?</p>
-              </div>
-            </Slideable>
-          </div>
-        </Slideable>
-      </div>
-    );
-  }
-}
-
+import './main.scss'
 
 class AccordionContent extends Component {
   state = {
     height: 0
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return shallowCompare(this, nextProps, nextState)
   }
 
   render() {
@@ -84,18 +21,18 @@ class AccordionContent extends Component {
     return(
       <Measure
         clone={true}
-        onChange={dimensions => this.setState({height: dimensions.height})}
+        onChange={dimensions => {
+          this.setState({height: dimensions.height})
+        }}
       >
-        <Spring
-          endValue={{
-            val: {
-              height: active === item.id ? this.state.height : 0,
-              opacity: active === item.id ? 1 : 0,
-              scale: active === item.id ? 1 : 0.95
-            }
+        <Motion
+          style={{
+            height: spring(active === item.id ? this.state.height : 0),
+            opacity: spring(active === item.id ? 1 : 0),
+            scale: spring(active === item.id ? 1 : 0.95)
           }}
         >
-          {({val: {height, opacity, scale}}) =>
+          {({height, opacity, scale}) =>
             <div
               className="accordion__item__content"
               style={{height, opacity, transform: `scale(${scale})`}}
@@ -103,25 +40,35 @@ class AccordionContent extends Component {
               {item.contents.map((content, i) => <p key={i}>{content}</p>)}
             </div>
           }
-        </Spring>
+        </Motion>
       </Measure>
     )
   }
 }
 
-class Accordion extends Component {  
+// measure a collection of nodes and return an object with id => dimensions
+// should copy collection and append the whole collection next to itself or maybe
+// at the end of the DOM. Running into issues where we append items next to each
+// other and things like flex box mess up our measurements
+
+class Accordion extends Component {
+  state = {
+    childDimensions: {}
+  }
+
   _handleClick(item) {
-    this.props.onClick(item);
+    this.props.onClick(item)
   }
   
   render() {
-    const { items, active } = this.props;
+    const { items, active } = this.props
 
     return(
       <ul className="accordion__items">
         {items.map(item =>
           <li
-            className="accordion__item" key={item.id}
+            key={item.id}
+            className="accordion__item"
             onClick={this._handleClick.bind(this, item)}
           >
             <h2 className="accordion__item__title">{item.title}</h2>
@@ -170,10 +117,9 @@ class App extends Component {
           active={active}
           onClick={this._handleAccordionClick}
         />
-        <SlideableDemo />
       </div>
     );
   }
 }
 
-React.render(<App />, document.getElementById('app'));
+ReactDOM.render(<App />, document.getElementById('app'));

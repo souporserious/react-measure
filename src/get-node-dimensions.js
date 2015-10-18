@@ -3,7 +3,7 @@ export default function getNodeDimensions(node, clone = false) {
     // set width/height to auto to get a true calculation
     node.style.width = 'auto'
     node.style.height = 'auto'
-
+    
     // move node exactly on top of it's clone to calculate proper position
     // this also overrides any transform already set, so something like scale
     // won't affect the calculation, could be bad to do this,

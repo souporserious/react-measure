@@ -24,7 +24,9 @@ var config = {
     extensions: ['', '.js', '.jsx']
   },
   externals: {
-    'react': 'React'
+    'react': 'React',
+    'react-dom': 'ReactDOM',
+    'react/lib/shallowCompare': 'shallowCompare'
   },
 };
 
@@ -36,7 +38,7 @@ if(TARGET === 'minify') {
       warnings: false
     },
     mangle: {
-      except: ['React', 'Measure']
+      except: ['React', 'ReactDOM', 'Measure']
     }
   }));
 }

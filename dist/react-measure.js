@@ -1,13 +1,13 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("React"));
+		module.exports = factory(require("React"), require("ReactDOM"), require("shallowCompare"));
 	else if(typeof define === 'function' && define.amd)
-		define(["React"], factory);
+		define(["React", "ReactDOM", "shallowCompare"], factory);
 	else if(typeof exports === 'object')
-		exports["Measure"] = factory(require("React"));
+		exports["Measure"] = factory(require("React"), require("ReactDOM"), require("shallowCompare"));
 	else
-		root["Measure"] = factory(root["React"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_2__) {
+		root["Measure"] = factory(root["React"], root["ReactDOM"], root["shallowCompare"]);
+})(this, function(__WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_4__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -93,11 +93,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _MeasureChild = __webpack_require__(3);
+	var _reactDom = __webpack_require__(3);
 
-	var _MeasureChild2 = _interopRequireDefault(_MeasureChild);
+	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _getNodeDimensions = __webpack_require__(4);
+	var _reactLibShallowCompare = __webpack_require__(4);
+
+	var _reactLibShallowCompare2 = _interopRequireDefault(_reactLibShallowCompare);
+
+	var _MeasureClone = __webpack_require__(5);
+
+	var _MeasureClone2 = _interopRequireDefault(_MeasureClone);
+
+	var _getNodeDimensions = __webpack_require__(6);
 
 	var _getNodeDimensions2 = _interopRequireDefault(_getNodeDimensions);
 
@@ -118,9 +126,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    this._cloneMounted = function (dimensions) {
 	      _this._update(dimensions);
-
-	      // remove portal since we no longer need it
-	      _this._closePortal();
 	    };
 	  }
 
@@ -129,13 +134,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(Measure, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      this._node = _react2['default'].findDOMNode(this);
+	      this._node = _reactDom2['default'].findDOMNode(this);
 
 	      if (this.props.clone) {
 	        this._cloneComponent();
 	      } else {
 	        this._update((0, _getNodeDimensions2['default'])(this._node));
 	      }
+	    }
+	  }, {
+	    key: 'shouldComponentUpdate',
+	    value: function shouldComponentUpdate(nextProps, nextState) {
+	      return (0, _reactLibShallowCompare2['default'])(this, nextProps, nextState);
 	    }
 	  }, {
 	    key: 'componentDidUpdate',
@@ -157,6 +167,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // set styles to hide portal from view
 	      portal.style.cssText = '\n      height: 0;\n      position: relative;\n      overflow: hidden;\n    ';
 
+	      // store portal for later use
 	      this._portal = portal;
 
 	      // append portal next to this component
@@ -165,41 +176,76 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: '_closePortal',
 	    value: function _closePortal() {
-	      _react2['default'].unmountComponentAtNode(this._portal);
-	      this._portal.parentNode.removeChild(this._portal);
+	      if (this._portal) {
+	        _reactDom2['default'].unmountComponentAtNode(this._portal);
+	        this._portal.parentNode.removeChild(this._portal);
+	      }
+	      this._portal = null;
 	    }
 	  }, {
 	    key: '_cloneComponent',
 	    value: function _cloneComponent() {
-	      var forceAutoHeight = this.props.forceAutoHeight;
+	      var _this2 = this;
+
+	      var _props = this.props;
+	      var children = _props.children;
+	      var collection = _props.collection;
+	      var forceAutoHeight = _props.forceAutoHeight;
 
 	      var onMount = this._cloneMounted;
-	      var clone = (0, _react.cloneElement)(this.props.children);
-	      var child = _react2['default'].createElement(_MeasureChild2['default'], { onMount: onMount, forceAutoHeight: forceAutoHeight }, clone);
+	      var clone = (0, _react.cloneElement)(children);
+	      var child = (0, _react.createElement)(_MeasureClone2['default'], { collection: collection, forceAutoHeight: forceAutoHeight, onMount: onMount }, clone);
 
 	      // create a portal to append clone to
 	      this._openPortal();
 
 	      // render clone to the portal
-	      _react2['default'].render(child, this._portal);
+	      _reactDom2['default'].unstable_renderSubtreeIntoContainer(this, child, this._portal, function () {
+	        // remove portal after mount since we no longer need it
+	        _this2._closePortal();
+	      });
 	    }
 	  }, {
 	    key: '_update',
 	    value: function _update(dimensions) {
-	      var _this2 = this;
+	      var _this3 = this;
 
-	      // determine if we need to update our callback with new dimensions or not
-	      this._properties.forEach(function (prop) {
-	        if (dimensions[prop] !== _this2._lastDimensions[prop]) {
-	          _this2.props.onChange(dimensions);
+	      if (this.props.collection) {
+	        Object.keys(dimensions).forEach(function (key) {
+	          var childDimensions = dimensions[key];
+	          var hasChanged = false;
 
-	          // store last dimensions to compare changes
-	          _this2._lastDimensions = dimensions;
+	          _this3._properties.forEach(function (prop) {
+	            if (childDimensions[prop] !== _this3._lastDimensions[prop]) {
+	              hasChanged = true;
+	              return;
+	            }
+	          });
 
-	          // we don't need to look any further, bail out
-	          return;
-	        }
-	      });
+	          if (hasChanged) {
+	            _this3.props.onChange(dimensions);
+
+	            // store last dimensions to compare changes
+	            _this3._lastDimensions = dimensions;
+
+	            // we don't need to look any further, bail out
+	            return;
+	          }
+	        });
+	      } else {
+	        // determine if we need to update our callback with new dimensions or not
+	        this._properties.forEach(function (prop) {
+	          if (dimensions[prop] !== _this3._lastDimensions[prop]) {
+	            _this3.props.onChange(dimensions);
+
+	            // store last dimensions to compare changes
+	            _this3._lastDimensions = dimensions;
+
+	            // we don't need to look any further, bail out
+	            return;
+	          }
+	        });
+	      }
 	    }
 	  }, {
 	    key: 'render',
@@ -211,6 +257,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: {
 	      clone: _react.PropTypes.bool,
 	      forceAutoHeight: _react.PropTypes.bool,
+	      collection: _react.PropTypes.bool,
 	      whitelist: _react.PropTypes.array,
 	      blacklist: _react.PropTypes.array,
 	      onChange: _react.PropTypes.func
@@ -221,6 +268,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: {
 	      clone: false,
 	      forceAutoHeight: false,
+	      collection: false,
 	      blacklist: [],
 	      onChange: function onChange() {
 	        return null;
@@ -243,6 +291,18 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 3 */
+/***/ function(module, exports) {
+
+	module.exports = __WEBPACK_EXTERNAL_MODULE_3__;
+
+/***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+	module.exports = __WEBPACK_EXTERNAL_MODULE_4__;
+
+/***/ },
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -265,34 +325,74 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _getNodeDimensions = __webpack_require__(4);
+	var _reactDom = __webpack_require__(3);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	var _reactLibShallowCompare = __webpack_require__(4);
+
+	var _reactLibShallowCompare2 = _interopRequireDefault(_reactLibShallowCompare);
+
+	var _getNodeDimensions = __webpack_require__(6);
 
 	var _getNodeDimensions2 = _interopRequireDefault(_getNodeDimensions);
 
-	var MeasureChild = (function (_Component) {
-	  function MeasureChild() {
-	    _classCallCheck(this, MeasureChild);
+	var MeasureClone = (function (_Component) {
+	  function MeasureClone() {
+	    _classCallCheck(this, MeasureClone);
 
-	    _get(Object.getPrototypeOf(MeasureChild.prototype), 'constructor', this).apply(this, arguments);
+	    _get(Object.getPrototypeOf(MeasureClone.prototype), 'constructor', this).apply(this, arguments);
 	  }
 
-	  _inherits(MeasureChild, _Component);
+	  _inherits(MeasureClone, _Component);
 
-	  _createClass(MeasureChild, [{
+	  _createClass(MeasureClone, [{
+	    key: 'shouldComponentUpdate',
+	    value: function shouldComponentUpdate(nextProps, nextState) {
+	      return (0, _reactLibShallowCompare2['default'])(this, nextProps, nextState);
+	    }
+	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      var node = _react2['default'].findDOMNode(this);
+	      var _this = this;
 
-	      if (this.props.forceAutoHeight) {
-	        var family = node.getElementsByTagName('*');
+	      var node = _reactDom2['default'].findDOMNode(this);
+	      var dimensions = {};
 
-	        for (var i = family.length; i--;) {
-	          family[i].style.height = 'auto';
+	      if (this.props.collection) {
+	        (function () {
+	          var currChild = _react.Children.only(_this.props.children);
+	          var currChildren = currChild.props.children;
+	          var nodeChildren = node.children;
+
+	          _react.Children.forEach(currChildren, function (child, i) {
+	            var childnode = nodeChildren[i];
+
+	            if (_this.props.forceAutoHeight) {
+	              var family = childnode.getElementsByTagName('*');
+
+	              for (var _i = family.length; _i--;) {
+	                family[_i].style.height = 'auto';
+	              }
+	            }
+
+	            dimensions[child.key] = (0, _getNodeDimensions2['default'])(childnode, true);
+	          });
+	        })();
+	      } else {
+	        if (this.props.forceAutoHeight) {
+	          var family = node.getElementsByTagName('*');
+
+	          for (var i = family.length; i--;) {
+	            family[i].style.height = 'auto';
+	          }
 	        }
+
+	        dimensions = (0, _getNodeDimensions2['default'])(node, true);
 	      }
 
 	      // fire a callback to let Measure know our dimensions
-	      this.props.onMount((0, _getNodeDimensions2['default'])(node, true));
+	      this.props.onMount(dimensions);
 	    }
 	  }, {
 	    key: 'render',
@@ -301,14 +401,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }]);
 
-	  return MeasureChild;
+	  return MeasureClone;
 	})(_react.Component);
 
-	exports['default'] = MeasureChild;
+	exports['default'] = MeasureClone;
 	module.exports = exports['default'];
 
 /***/ },
-/* 4 */
+/* 6 */
 /***/ function(module, exports) {
 
 	'use strict';
