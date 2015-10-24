@@ -4,7 +4,6 @@
 
 body {
   padding: 24px;
-  height: 2000px
 }
 
 .app {
@@ -42,4 +41,33 @@ body {
   p {
     margin: 12px 0 12px;
   }
+}
+
+// Todo Styles
+.todo {
+  background: #b4da55;
+  color: #6D8630;
+  overflow: hidden;
+  position: relative;
+}
+
+.todo__inner {
+  padding: 12px 16px 12px 12px;
+}
+
+.todo__delete {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+input, button {
+  padding: 8px 12px;
+  border: 1px solid #6D8630;
+}
+
+button {
+  background: none;
 }

@@ -87,7 +87,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var _react = __webpack_require__(2);
 
@@ -110,6 +110,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _getNodeDimensions2 = _interopRequireDefault(_getNodeDimensions);
 
 	var Measure = (function (_Component) {
+	  _inherits(Measure, _Component);
+
 	  function Measure() {
 	    var _this = this;
 
@@ -128,8 +130,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      _this._update(dimensions);
 	    };
 	  }
-
-	  _inherits(Measure, _Component);
 
 	  _createClass(Measure, [{
 	    key: 'componentDidMount',
@@ -319,7 +319,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var _react = __webpack_require__(2);
 
@@ -338,13 +338,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _getNodeDimensions2 = _interopRequireDefault(_getNodeDimensions);
 
 	var MeasureClone = (function (_Component) {
+	  _inherits(MeasureClone, _Component);
+
 	  function MeasureClone() {
 	    _classCallCheck(this, MeasureClone);
 
 	    _get(Object.getPrototypeOf(MeasureClone.prototype), 'constructor', this).apply(this, arguments);
 	  }
-
-	  _inherits(MeasureClone, _Component);
 
 	  _createClass(MeasureClone, [{
 	    key: 'shouldComponentUpdate',
@@ -419,7 +419,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports['default'] = getNodeDimensions;
 
 	function getNodeDimensions(node) {
-	  var clone = arguments[1] === undefined ? false : arguments[1];
+	  var clone = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
 
 	  if (clone) {
 	    // set width/height to auto to get a true calculation

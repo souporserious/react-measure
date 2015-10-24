@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import shallowCompare from 'react/lib/shallowCompare'
 import { Motion, spring } from 'react-motion'
 import Measure from '../src/react-measure'
+import Todos from './Todos'
 
 import './main.scss'
 
@@ -117,9 +118,11 @@ class App extends Component {
           active={active}
           onClick={this._handleAccordionClick}
         />
+        <Todos />
       </div>
     );
   }
 }
+
 
 ReactDOM.render(<App />, document.getElementById('app'));

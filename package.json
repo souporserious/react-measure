@@ -29,7 +29,7 @@
     "url": "https://github.com/souporserious/react-measure/issues"
   },
   "homepage": "https://github.com/souporserious/react-measure",
-  "dependencies": {
+  "peerDependencies": {
     "react": "^0.14.0",
     "react-dom": "^0.14.0"
   },
