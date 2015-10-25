@@ -1,4 +1,4 @@
-## React Measure 0.2.0
+## React Measure 0.3.0
 
 Compute measurements of React components.
 
@@ -64,6 +64,19 @@ run dev mode
 open your browser and visit: `http://localhost:8080/`
 
 ## CHANGELOG
+### 0.3.0
+Rebuilt from the ground up
+
+No more cloning of elements!
+
+Optimized to touch the DOM as least as possible
+
+`clone`, `forceAutoHeight`, `collection` props removed
+
+`config` prop added, accepts a [MutationObserver](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver#MutationObserverInit) configuration
+
+`accurate` prop added, use to get an accurate measurement, only height supported right now
+
 ### 0.2.0
 Upgraded to React 0.14.0
 

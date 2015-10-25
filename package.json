@@ -1,6 +1,6 @@
 {
   "name": "react-measure",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Compute measurements of React components.",
   "main": "lib/react-measure.js",
   "scripts": {
@@ -31,8 +31,7 @@
   "homepage": "https://github.com/souporserious/react-measure",
   "peerDependencies": {
     "react": "^0.14.0",
-    "react-dom": "^0.14.0",
-    "mutation-observer": "^1.0.2"
+    "react-dom": "^0.14.0"
   },
   "devDependencies": {
     "autoprefixer-loader": "^2.0.0",
