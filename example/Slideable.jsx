@@ -24,6 +24,39 @@ class Slideable extends Component {
     return shallowCompare(this, nextProps, nextState)
   }
 
+  _shouldMeasure = (mutations) => {
+    if (mutations) {
+      const { target, attributeName } = mutations[0]
+
+      // check if the target is a child of this node
+      if (this._node !== target) {
+        const isSliding = target.getAttribute('data-sliding')
+
+        // if it has finished sliding then we need to query for height
+        return isSliding === 'false'
+
+      // if this node and is a mutation from data-sliding, don't update
+      } else if (attributeName === 'data-sliding') {
+        return false
+      }
+    }
+    return true
+  }
+
+  _onMeasure = ({height}, mutations) => {
+    if (mutations) {
+      const { target } = mutations[0]
+      const isSliding = target.getAttribute('data-sliding')
+
+      // set height if this was a child and has finished sliding
+      if (this._node !== target && isSliding === 'false') {
+        this.setState({height, instant: true})
+      }
+    } else {
+      this.setState({height})
+    }
+  }
+
   render() {
     const { show, children } = this.props
     const child = React.Children.only(children)
@@ -39,25 +72,8 @@ class Slideable extends Component {
           attributeFilter: ['data-sliding']
         }}
         accurate
-        onMeasure={({height}, mutations) => {
-          if (mutations) {
-            const { target } = mutations[0]
-
-            // check if the target is a child of this node
-            if (this._node !== target) {
-              const isSliding = target.getAttribute('data-sliding')
-
-              // if it has finished sliding then we need to query the new height
-              if (isSliding === 'false') {
-                this.setState({height, instant: true})
-              }
-            }
-          } else {
-            this.setState({height})
-          }
-        }}
-        // handle the checks above here to prevent measuring when we don't need to
-        //shouldMeasure={() => !this._isAnimating}
+        shouldMeasure={this._shouldMeasure}
+        onMeasure={this._onMeasure}
       >
         <Motion
           defaultStyle={{height: 0}}
