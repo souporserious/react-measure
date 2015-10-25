@@ -7,7 +7,7 @@ import './main.scss'
 
 class AccordionContent extends Component {
   state = {
-    content: false
+    showContent: false
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -16,27 +16,31 @@ class AccordionContent extends Component {
 
   render() {
     const { item, style } = this.props
-    const { content } = this.state
+    const { showContent } = this.state
 
     return(
       <div
         className="accordion__item__content"
         style={style}
+        data-sliding={this.props['data-sliding']}
       >
         {item.contents.map((content, i) => <p key={i}>{content}</p>)}
-        <div style={{padding: 0.1}}>
+        <div>
           <button
             onClick={e => {
               e.stopPropagation()
-              this.setState({content: !this.state.content})
+              this.setState({showContent: !this.state.showContent})
             }}
           >
             Toggle Extra Content
           </button>
-          {
-            content &&
-            <p>Just another paragraph to test out height animations.</p>
-          }
+          <Slideable
+            show={showContent}
+          >
+            <div style={{background: 'red'}}>
+              <p style={{margin: 0, padding: 12}}>Just another paragraph to test out height animations.</p>
+            </div>
+          </Slideable>
         </div>
       </div>
     )
@@ -60,7 +64,9 @@ class Accordion extends Component {
             onClick={this._handleClick.bind(this, item)}
           >
             <h2 className="accordion__item__title">{item.title}</h2>
-            <Slideable show={active === item.id}>
+            <Slideable
+              show={active === item.id}
+            >
               <AccordionContent item={item} active={active} />
             </Slideable>
           </li>
