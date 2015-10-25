@@ -6,6 +6,11 @@ body {
   padding: 24px;
 }
 
+button {
+  outline: 0;
+  cursor: pointer;
+}
+
 .app {
   max-width: 500px;
   margin: 0 auto;

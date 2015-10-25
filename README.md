@@ -40,6 +40,9 @@ To help avoid layout thrashing, use the prop `blacklist` to ignore specific valu
 
 **Margins from hell.** If your element is not calculating width or height properly it could be due to a margin hanging outside of its container. To get a true measurement, make sure to not have any hanging margins, in some cases a padding of 1px added to the container will fix this. See the stack overflow answers [here](http://stackoverflow.com/questions/19718634/how-to-disable-margin-collapsing) for more tricks .
 
+## Browser Support
+All modern browsers supported. IE 9 & 10 support with a MutationObserver polyfill. I recommend this [one](https://github.com/megawac/MutationObserver.js)
+
 ## Run Example
 
 clone repo

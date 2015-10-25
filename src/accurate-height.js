@@ -15,7 +15,7 @@ export default function getHeight(el) {
   const { marginTop } = getStyle(firstChild)
   const { marginBottom } = getStyle(lastChild)
 
-  const offsetDiff = lastChild.offsetTop - firstChild.offsetTop
+  const offsetDiff = (lastChild.offsetTop - firstChild.offsetTop)
 
   return (offsetDiff + lastChild.offsetHeight) + parseInt(marginTop) + parseInt(marginBottom)
 }

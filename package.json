@@ -31,7 +31,8 @@
   "homepage": "https://github.com/souporserious/react-measure",
   "peerDependencies": {
     "react": "^0.14.0",
-    "react-dom": "^0.14.0"
+    "react-dom": "^0.14.0",
+    "mutation-observer": "^1.0.2"
   },
   "devDependencies": {
     "autoprefixer-loader": "^2.0.0",

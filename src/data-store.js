@@ -1,6 +1,6 @@
 // inspired by https://github.com/julianshapiro/velocity/blob/master/velocity.js
-const cache = {}
 const expando = 'react-measure' + (new Date().getTime())
+const cache = {}
 let uuid = 0
 
 export default function dataStore(node, key, value) {
