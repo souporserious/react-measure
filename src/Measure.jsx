@@ -3,26 +3,29 @@ import ReactDOM from 'react-dom'
 import shallowCompare from 'react/lib/shallowCompare'
 import getNodeDimensions from './get-node-dimensions'
 
+// TODO:
+// handle prop change on MutationObserver config, should disconnect and reconnect with new config
+// handle prop change for whitelist/blacklist
+
 class Measure extends Component {
   static propTypes = {
     config: PropTypes.object,
     accurate: PropTypes.bool,
     whitelist: PropTypes.array,
     blacklist: PropTypes.array,
-    onChange: PropTypes.func
+    onMeasure: PropTypes.func,
+    shouldMeasure: PropTypes.func
   }
 
   static defaultProps = {
     config: {
-      childList: true,
-      attributes: false,
-      characterData: false,
-      subtree: true
+      childList: true
     },
     accurate: false,
     whitelist: ['width', 'height', 'top', 'right', 'bottom', 'left'],
     blacklist: [],
-    onChange: () => null
+    onMeasure: () => null,
+    shouldMeasure: () => true
   }
 
   _whitelist = this.props.whitelist
@@ -51,12 +54,14 @@ class Measure extends Component {
   }
 
   getDimensions = (mutations = null) => {
+    if(!this.props.shouldMeasure(mutations)) return
+
     const dimensions = getNodeDimensions(this._node, this.props.accurate)
 
     // determine if we need to update our callback with new dimensions or not
     this._properties.some(prop => {
       if(dimensions[prop] !== this._lastDimensions[prop]) {
-        this.props.onChange(dimensions, mutations)
+        this.props.onMeasure(dimensions, mutations)
 
         // store last dimensions to compare changes
         this._lastDimensions = dimensions
