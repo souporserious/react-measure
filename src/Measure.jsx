@@ -13,8 +13,8 @@ class Measure extends Component {
     accurate: PropTypes.bool,
     whitelist: PropTypes.array,
     blacklist: PropTypes.array,
-    onMeasure: PropTypes.func,
-    shouldMeasure: PropTypes.func
+    shouldMeasure: PropTypes.func,
+    onMeasure: PropTypes.func
   }
 
   static defaultProps = {
@@ -24,8 +24,8 @@ class Measure extends Component {
     accurate: false,
     whitelist: ['width', 'height', 'top', 'right', 'bottom', 'left'],
     blacklist: [],
-    onMeasure: () => null,
-    shouldMeasure: () => true
+    shouldMeasure: () => true,
+    onMeasure: () => null
   }
 
   _whitelist = this.props.whitelist
