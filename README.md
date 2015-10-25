@@ -19,14 +19,11 @@ class ItemToMeasure extends Component {
   }
 
   render() {
-    const { width, height, top, right, bottom, left } = this.state.dimensions;
+    const { width, height } = this.state.dimensions
 
     return(
       <Measure
-        clone={true}
-        forceAutoHeight={true}
         whitelist={['width', 'height']}
-        blacklist={['top', 'left']}
         onChange={d => this.setState({dimensions: d})}
       >
         <div>
@@ -40,6 +37,8 @@ class ItemToMeasure extends Component {
 
 ## Good to knows
 To help avoid layout thrashing, use the prop `blacklist` to ignore specific values and stop firing a render to check the DOM for changes. Likewise you can use `whitelist` to choose only the ones you need to check.
+
+**Margins from hell.** If your element is not calculating width or height properly it could be due to a margin hanging outside of its container. To get a true measurement, make sure to not have any hanging margins, in some cases a padding of 1px added to the container will fix this. See the stack overflow answers [here](http://stackoverflow.com/questions/19718634/how-to-disable-margin-collapsing) for more tricks .
 
 ## Run Example
 

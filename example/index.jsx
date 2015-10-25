@@ -1,15 +1,13 @@
 import React, { Component, Children, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import shallowCompare from 'react/lib/shallowCompare'
-import { Motion, spring } from 'react-motion'
-import Measure from '../src/react-measure'
-import Todos from './Todos'
+import Slideable from './Slideable'
 
 import './main.scss'
 
 class AccordionContent extends Component {
   state = {
-    height: 0
+    content: false
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -17,46 +15,35 @@ class AccordionContent extends Component {
   }
 
   render() {
-    const { item, active } = this.props;
+    const { item, style } = this.props
+    const { content } = this.state
 
     return(
-      <Measure
-        clone={true}
-        onChange={dimensions => {
-          this.setState({height: dimensions.height})
-        }}
+      <div
+        className="accordion__item__content"
+        style={style}
       >
-        <Motion
-          style={{
-            height: spring(active === item.id ? this.state.height : 0),
-            opacity: spring(active === item.id ? 1 : 0),
-            scale: spring(active === item.id ? 1 : 0.95)
-          }}
-        >
-          {({height, opacity, scale}) =>
-            <div
-              className="accordion__item__content"
-              style={{height, opacity, transform: `scale(${scale})`}}
-            >
-              {item.contents.map((content, i) => <p key={i}>{content}</p>)}
-            </div>
+        {item.contents.map((content, i) => <p key={i}>{content}</p>)}
+        <div style={{padding: 0.1}}>
+          <button
+            onClick={e => {
+              e.stopPropagation()
+              this.setState({content: !this.state.content})
+            }}
+          >
+            Toggle Extra Content
+          </button>
+          {
+            content &&
+            <p>Just another paragraph to test out height animations.</p>
           }
-        </Motion>
-      </Measure>
+        </div>
+      </div>
     )
   }
 }
 
-// measure a collection of nodes and return an object with id => dimensions
-// should copy collection and append the whole collection next to itself or maybe
-// at the end of the DOM. Running into issues where we append items next to each
-// other and things like flex box mess up our measurements
-
 class Accordion extends Component {
-  state = {
-    childDimensions: {}
-  }
-
   _handleClick(item) {
     this.props.onClick(item)
   }
@@ -73,7 +60,9 @@ class Accordion extends Component {
             onClick={this._handleClick.bind(this, item)}
           >
             <h2 className="accordion__item__title">{item.title}</h2>
-            <AccordionContent item={item} active={active} />
+            <Slideable show={active === item.id}>
+              <AccordionContent item={item} active={active} />
+            </Slideable>
           </li>
         )}
       </ul>
@@ -118,7 +107,6 @@ class App extends Component {
           active={active}
           onClick={this._handleAccordionClick}
         />
-        <Todos />
       </div>
     );
   }
