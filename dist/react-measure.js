@@ -81,7 +81,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-	var _get = function get(_x2, _x3, _x4) { var _again = true; _function: while (_again) { var object = _x2, property = _x3, receiver = _x4; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x2 = parent; _x3 = property; _x4 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -101,7 +101,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _reactLibShallowCompare2 = _interopRequireDefault(_reactLibShallowCompare);
 
-	var _getNodeDimensions = __webpack_require__(5);
+	var _diffConfig = __webpack_require__(5);
+
+	var _diffConfig2 = _interopRequireDefault(_diffConfig);
+
+	var _getNodeDimensions = __webpack_require__(6);
 
 	var _getNodeDimensions2 = _interopRequireDefault(_getNodeDimensions);
 
@@ -115,23 +119,26 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    _get(Object.getPrototypeOf(Measure.prototype), 'constructor', this).apply(this, arguments);
 
-	    this._whitelist = this.props.whitelist;
-	    this._properties = this._whitelist.filter(function (prop) {
-	      return _this.props.blacklist.indexOf(prop) < 0;
-	    });
 	    this._observer = null;
 	    this._node = null;
+	    this._properties = this._getProperties(this.props);
 	    this._lastDimensions = {};
 
-	    this.getDimensions = function () {
-	      var mutations = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
+	    this.getDimensions = function (mutations) {
+	      var shouldMeasure = _this.props.shouldMeasure(mutations);
+
+	      // bail out if we shouldn't measure
+	      if (!shouldMeasure) return;
 
 	      var dimensions = (0, _getNodeDimensions2['default'])(_this._node, _this.props.accurate);
 
 	      // determine if we need to update our callback with new dimensions or not
 	      _this._properties.some(function (prop) {
 	        if (dimensions[prop] !== _this._lastDimensions[prop]) {
-	          _this.props.onChange(dimensions, mutations);
+	          // if we've found a dimension that has changed, update our callback
+	          // we also allow shouldMeasure to return any values so the end user
+	          // doesn't have to recalculate anything
+	          _this.props.onMeasure(dimensions, mutations, shouldMeasure);
 
 	          // store last dimensions to compare changes
 	          _this._lastDimensions = dimensions;
@@ -141,10 +148,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	      });
 	    };
-
-	    this._onMutation = function (mutations) {
-	      _this.getDimensions(mutations);
-	    };
 	  }
 
 	  _createClass(Measure, [{
@@ -153,11 +156,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this._node = _reactDom2['default'].findDOMNode(this);
 
 	      // set up mutation observer
-	      this._observer = new MutationObserver(this._onMutation);
-	      this._observer.observe(this._node, this.props.config);
+	      this._connectObserver(this.props.config);
 
 	      // fire callback for first render
 	      this.getDimensions();
+	    }
+	  }, {
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(_ref) {
+	      var config = _ref.config;
+	      var whitelist = _ref.whitelist;
+	      var blacklist = _ref.blacklist;
+
+	      // disconnect the old observer and reconnect with new config if changed
+	      if ((0, _diffConfig2['default'])(this.props.config, config)) {
+	        console.log('buttjoe');
+	        this._disconnectObserver();
+	        this._connectObserver(config);
+	      }
+
+	      // we store the properties ourselves so we need to update them if the
+	      // whitelist or blacklist props have changed
+	      if (this.props.whitelist !== whitelist || this.props.blacklist !== blacklist) {
+	        this._properties = this._getProperties({ whitelist: whitelist, blacklist: blacklist });
+	      }
 	    }
 	  }, {
 	    key: 'shouldComponentUpdate',
@@ -167,7 +189,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'componentWillUnmount',
 	    value: function componentWillUnmount() {
+	      this._disconnectObserver();
+	    }
+	  }, {
+	    key: '_connectObserver',
+	    value: function _connectObserver(config) {
+	      this._observer = new MutationObserver(this.getDimensions);
+	      this._observer.observe(this._node, config);
+	    }
+	  }, {
+	    key: '_disconnectObserver',
+	    value: function _disconnectObserver() {
 	      this._observer.disconnect();
+	    }
+	  }, {
+	    key: '_getProperties',
+	    value: function _getProperties(_ref2) {
+	      var whitelist = _ref2.whitelist;
+	      var blacklist = _ref2.blacklist;
+
+	      return whitelist.filter(function (prop) {
+	        return blacklist.indexOf(prop) < 0;
+	      });
 	    }
 	  }, {
 	    key: 'render',
@@ -181,22 +224,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	      accurate: _react.PropTypes.bool,
 	      whitelist: _react.PropTypes.array,
 	      blacklist: _react.PropTypes.array,
-	      onChange: _react.PropTypes.func
+	      shouldMeasure: _react.PropTypes.func,
+	      onMeasure: _react.PropTypes.func
 	    },
 	    enumerable: true
 	  }, {
 	    key: 'defaultProps',
 	    value: {
 	      config: {
-	        childList: true,
-	        attributes: false,
-	        characterData: false,
-	        subtree: true
+	        childList: true
 	      },
 	      accurate: false,
 	      whitelist: ['width', 'height', 'top', 'right', 'bottom', 'left'],
 	      blacklist: [],
-	      onChange: function onChange() {
+	      shouldMeasure: function shouldMeasure() {
+	        return true;
+	      },
+	      onMeasure: function onMeasure() {
 	        return null;
 	      }
 	    },
@@ -229,6 +273,43 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 5 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	exports['default'] = diffConfig;
+	var CONFIG_SHAPE = ['childList', 'attributes', 'characterData', 'subtree', 'attributeOldValue', 'characterDataOldValue', 'attributeFilter'];
+
+	function diffConfig(prev, next) {
+	  for (var i = 7; i--;) {
+	    var config = CONFIG_SHAPE[i];
+	    var prevConfig = prev[config];
+	    var nextConfig = next[config];
+
+	    // if equal continue to the next
+	    if (prevConfig === nextConfig) {
+	      continue;
+	    }
+
+	    var prevUndefined = typeof prevConfig === 'undefined';
+	    var nextUndefined = typeof nextConfig === 'undefined';
+
+	    // if attributeFilter, we know it needs to be a simple array,
+	    // so comparing lengths should be enough to know if it has changed
+	    if (prevUndefined && !nextUndefined || !prevUndefined && nextUndefined || config === 'attributeFilter' && prevConfig.length !== nextConfig.length) {
+	      return true;
+	    }
+	  }
+	  return false;
+	}
+
+	module.exports = exports['default'];
+
+/***/ },
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -240,7 +321,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _accurateHeight = __webpack_require__(6);
+	var _accurateHeight = __webpack_require__(7);
 
 	var _accurateHeight2 = _interopRequireDefault(_accurateHeight);
 
@@ -262,7 +343,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -270,11 +351,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
-	exports['default'] = getHeight;
+	exports['default'] = accurateHeight;
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _dataStore = __webpack_require__(7);
+	var _dataStore = __webpack_require__(8);
 
 	var _dataStore2 = _interopRequireDefault(_dataStore);
 
@@ -282,11 +363,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return (0, _dataStore2['default'])(node, 'style') || (0, _dataStore2['default'])(node, 'style', getComputedStyle(node));
 	}
 
-	function getHeight(el) {
-	  var children = el.children;
+	// inspired by http://stackoverflow.com/a/8235013/1461204
+
+	function accurateHeight(node) {
+	  var children = node.children;
+
+	  var amount = children.length;
+
+	  if (amount === 0) {
+	    return node.offsetHeight;
+	  }
 
 	  var firstChild = children[0];
-	  var lastChild = children[children.length - 1];
+	  var lastChild = children[amount - 1];
 
 	  var _getStyle = getStyle(firstChild);
 
@@ -304,7 +393,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports) {
 
 	// inspired by https://github.com/julianshapiro/velocity/blob/master/velocity.js

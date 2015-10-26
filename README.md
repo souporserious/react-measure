@@ -1,4 +1,4 @@
-## React Measure 0.3.0
+## React Measure 0.3.1
 
 Compute measurements of React components.
 
@@ -64,6 +64,15 @@ run dev mode
 open your browser and visit: `http://localhost:8080/`
 
 ## CHANGELOG
+### 0.3.1
+Renamed `onChange` prop to `onMeasure`
+
+Added `shouldMeasure` prop, similar to componentShouldUpdate. It determines whether or not the `onMeasure` callback will fire, useful for perf and not performing measurements if you don't need to.
+
+Fixed updating of `config` prop to disconnect and reconnect a new MutationObserver with the new configuration
+
+Fixed updaing of `whitelist` & `blacklist` props to use new values
+
 ### 0.3.0
 Rebuilt from the ground up
 
