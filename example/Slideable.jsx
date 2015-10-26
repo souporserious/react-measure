@@ -10,10 +10,6 @@ class Slideable extends Component {
   }
   _isAnimating = false
 
-  componentDidMount() {
-    this._node = ReactDOM.findDOMNode(this)
-  }
-
   componentDidUpdate() {
     if(this.state.instant && !this._isAnimating) {
       this.setState({instant: false})
@@ -28,12 +24,20 @@ class Slideable extends Component {
     if (mutations) {
       const { target, attributeName } = mutations[0]
 
+      // if the mutation happened to this component we need
+      // to update the children so they will stop animating
+      if(this._node === target) {
+        
+      }
+
       // check if the target is a child of this node
       if (this._node !== target) {
         const isSliding = target.getAttribute('data-sliding')
 
         // if it has finished sliding then we need to query for height
-        return isSliding === 'false'
+        if(isSliding === 'false') {
+          return { target, isSliding }
+        }
 
       // if this node and is a mutation from data-sliding, don't update
       } else if (attributeName === 'data-sliding') {
@@ -43,7 +47,7 @@ class Slideable extends Component {
     return true
   }
 
-  _onMeasure = ({height}, mutations) => {
+  _onMeasure = ({height}, mutations, data) => {
     if (mutations) {
       const { target } = mutations[0]
       const isSliding = target.getAttribute('data-sliding')
@@ -61,7 +65,7 @@ class Slideable extends Component {
     const { show, children } = this.props
     const child = React.Children.only(children)
     const { style } = child.props
-    const rmHeight = (show ? this.state.height : 0)
+    const rmHeight = show ? this.state.height : 0
 
     return(
       <Measure
@@ -72,6 +76,7 @@ class Slideable extends Component {
           attributeFilter: ['data-sliding']
         }}
         accurate
+        whitelist={['height']}
         shouldMeasure={this._shouldMeasure}
         onMeasure={this._onMeasure}
       >
@@ -103,6 +108,7 @@ class Slideable extends Component {
               React.cloneElement(
                 React.Children.only(children),
                 {
+                  ref: c => this._node = c,
                   style: {
                     ...rmStyle,
                     ...style
