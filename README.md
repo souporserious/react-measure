@@ -1,6 +1,6 @@
 ## React Measure 0.3.1
 
-Compute measurements of React components.
+Compute measurements of React components. Uses a [MutationObserver](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver#MutationObserverInit) to detect changes of an element and return the new measurements after that mutation.
 
 ## Install
 
@@ -19,12 +19,23 @@ class ItemToMeasure extends Component {
   }
 
   render() {
-    const { width, height } = this.state.dimensions
+    const { height } = this.state.dimensions
 
     return(
       <Measure
-        whitelist={['width', 'height']}
-        onChange={d => this.setState({dimensions: d})}
+        whitelist={['height']}
+        shouldMeasure={(mutations) => {
+          // don't update unless we have mutations available
+          if(mutations) {
+            return mutations[0].target
+          } else {
+            return false
+          }
+        }}
+        // notice how target gets passed into onMeasure now
+        onMeasure={(dimensions, mutations, target) => {
+          this.setState({dimensions})
+        }}
       >
         <div>
           I can do cool things with my dimensions now :D
@@ -34,6 +45,32 @@ class ItemToMeasure extends Component {
   }
 }
 ```
+
+## Props
+
+#### `config`: PropTypes.object
+
+Accepts a [MutationObserver configuration](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver#MutationObserverInit).
+
+#### `accurate`: PropTypes.bool
+
+Tries to give the most accurate measure. Currently only works with height. Measures the content rather than the actual box of the element.
+
+#### `whitelist`: PropTypes.array
+
+Provide a list of properties to fire a callback for. Accepts any of the following properties `['width', 'height', 'top', 'right', 'bottom', 'left']`
+
+#### `blacklist`: PropTypes.array
+
+Like above, but will not fire a callback for the specified properties.
+
+#### `shouldMeasure`: PropTypes.func
+
+Determines whether or not a measurement should occur. Return `true`, `false` or a value you want returned in `onMeasure`.
+
+#### `onMeasure`: PropTypes.func
+
+Callback when the component has been mutated. Receives `dimensions`, `mutations`, and anything passed to `shouldMeasure`.
 
 ## Good to knows
 To help avoid layout thrashing, use the prop `blacklist` to ignore specific values and stop firing a render to check the DOM for changes. Likewise you can use `whitelist` to choose only the ones you need to check.
@@ -62,49 +99,3 @@ run dev mode
 `npm run dev`
 
 open your browser and visit: `http://localhost:8080/`
-
-## CHANGELOG
-### 0.3.1
-Renamed `onChange` prop to `onMeasure`
-
-Added `shouldMeasure` prop, similar to componentShouldUpdate. It determines whether or not the `onMeasure` callback will fire, useful for perf and not performing measurements if you don't need to.
-
-Fixed updating of `config` prop to disconnect and reconnect a new MutationObserver with the new configuration
-
-Fixed updaing of `whitelist` & `blacklist` props to use new values
-
-### 0.3.0
-Rebuilt from the ground up
-
-No more cloning of elements!
-
-Optimized to touch the DOM as least as possible
-
-`clone`, `forceAutoHeight`, `collection` props removed
-
-`config` prop added, accepts a [MutationObserver](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver#MutationObserverInit) configuration
-
-`accurate` prop added, use to get an accurate measurement, only height supported right now
-
-### 0.2.0
-Upgraded to React 0.14.0
-
-### 0.1.3
-Added `forceAutoHeight` prop to help with proper height calculation when children heights are animating
-
-### 0.1.2
-Clone prop now exposed to allow optional cloning of component
-
-Defaults to false which could potentially break components relying on cloned calculations
-
-### 0.1.1
-Set width/height to auto on clone no matter what to get a true dimension
-
-Append clone directly after original instead of the end of its parent
-
-Portal now gets destroyed after measurements have been calculated
-
-### 0.1.0
-Rewritten to be more React friendly
-
-Measure component no longer accepts a child function, instead get dimensions by setting state in onChange callback
