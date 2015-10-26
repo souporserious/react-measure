@@ -1,7 +1,7 @@
 import React, { Component, Children, PropTypes, createElement, cloneElement } from 'react'
 import ReactDOM from 'react-dom'
 import shallowCompare from 'react/lib/shallowCompare'
-import isEqual from 'lodash.isequal'
+import diffConfig from './diff-config'
 import getNodeDimensions from './get-node-dimensions'
 
 class Measure extends Component {
@@ -42,7 +42,8 @@ class Measure extends Component {
 
   componentWillReceiveProps({config, whitelist, blacklist}) {
     // disconnect the old observer and reconnect with new config if changed
-    if (!isEqual(this.props.config, config)) {
+    if (diffConfig(this.props.config, config)) {
+      console.log('buttjoe')
       this._disconnectObserver()
       this._connectObserver(config)
     }
