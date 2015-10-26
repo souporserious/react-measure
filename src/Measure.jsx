@@ -1,11 +1,8 @@
 import React, { Component, Children, PropTypes, createElement, cloneElement } from 'react'
 import ReactDOM from 'react-dom'
 import shallowCompare from 'react/lib/shallowCompare'
+import isEqual from 'lodash.isequal'
 import getNodeDimensions from './get-node-dimensions'
-
-// TODO:
-// handle prop change on MutationObserver config, should disconnect and reconnect with new config
-// handle prop change for whitelist/blacklist
 
 class Measure extends Component {
   static propTypes = {
@@ -28,21 +25,34 @@ class Measure extends Component {
     onMeasure: () => null
   }
 
-  _whitelist = this.props.whitelist
-  _properties = this._whitelist.filter(prop => this.props.blacklist.indexOf(prop) < 0)
   _observer = null
   _node = null
+  _properties = this._getProperties(this.props)
   _lastDimensions = {}
 
   componentDidMount() {
     this._node = ReactDOM.findDOMNode(this)
 
     // set up mutation observer
-    this._observer = new MutationObserver(this._onMutation)
-    this._observer.observe(this._node, this.props.config)
+    this._connectObserver(this.props.config)
 
     // fire callback for first render
     this.getDimensions()
+  }
+
+  componentWillReceiveProps({config, whitelist, blacklist}) {
+    // disconnect the old observer and reconnect with new config if changed
+    if (!isEqual(this.props.config, config)) {
+      this._disconnectObserver()
+      this._connectObserver(config)
+    }
+
+    // we store the properties ourselves so we need to update them if the
+    // whitelist or blacklist props have changed
+    if (this.props.whitelist !== whitelist ||
+        this.props.blacklist !== blacklist) {
+      this._properties = this._getProperties({whitelist, blacklist})
+    }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -50,18 +60,24 @@ class Measure extends Component {
   }
 
   componentWillUnmount() {
-    this._observer.disconnect()
+    this._disconnectObserver()
   }
 
-  getDimensions = (mutations = null) => {
-    if(!this.props.shouldMeasure(mutations)) return
+  getDimensions = (mutations) => {
+    const shouldMeasure = this.props.shouldMeasure(mutations)
+
+    // bail out if we shouldn't measure
+    if(!shouldMeasure) return
 
     const dimensions = getNodeDimensions(this._node, this.props.accurate)
 
     // determine if we need to update our callback with new dimensions or not
     this._properties.some(prop => {
       if(dimensions[prop] !== this._lastDimensions[prop]) {
-        this.props.onMeasure(dimensions, mutations)
+        // if we've found a dimension that has changed, update our callback
+        // we also allow shouldMeasure to return any values so the end user
+        // doesn't have to recalculate anything
+        this.props.onMeasure(dimensions, mutations, shouldMeasure)
 
         // store last dimensions to compare changes
         this._lastDimensions = dimensions
@@ -72,8 +88,17 @@ class Measure extends Component {
     })
   }
 
-  _onMutation = (mutations) => {
-    this.getDimensions(mutations)
+  _connectObserver(config) {
+    this._observer = new MutationObserver(this.getDimensions)
+    this._observer.observe(this._node, config)
+  }
+
+  _disconnectObserver() {
+    this._observer.disconnect()
+  }
+
+  _getProperties({whitelist, blacklist}) {
+    return whitelist.filter(prop => blacklist.indexOf(prop) < 0)
   }
 
   render() {
