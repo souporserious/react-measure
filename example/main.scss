@@ -76,3 +76,17 @@ input, button {
 button {
   background: none;
 }
+
+.measure-example {
+  header,
+  main {
+    display: flex;
+  }
+}
+
+.paragraphs {
+  flex: 1;
+}
+.paragraphs-measurements {
+  flex: 1;
+}

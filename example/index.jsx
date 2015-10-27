@@ -1,6 +1,7 @@
 import React, { Component, Children, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import shallowCompare from 'react/lib/shallowCompare'
+import Measure from '../src/react-measure'
 import Slideable from './Slideable'
 
 import './main.scss'
@@ -76,6 +77,100 @@ class Accordion extends Component {
   }
 }
 
+class Paragraph extends Component {
+  render() {
+    return(
+      <div>
+        <p>The path of the righteous man is beset on all sides by the iniquities of the selfish and the tyranny of evil men. Blessed is he who, in the name of charity and good will, shepherds the weak through the valley of darkness, for he is truly his brother's keeper and the finder of lost children. And I will strike down upon thee with great vengeance and furious anger those who would attempt to poison and destroy My brothers. And you will know My name is the Lord when I lay My vengeance upon thee. </p>
+      </div>
+    )
+  }
+}
+
+class Paragraphs extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      count: 0,
+      toggleFlex: false,
+      dimensions: {}
+    }
+  }
+  
+  _renderParagraphs() {
+    const { count } = this.state
+    let paragraphs = []
+    
+    for(let i = 0; i < count; i++) {
+      paragraphs.push(<Paragraph key={i} />)
+    }
+    
+    return paragraphs
+  }
+  
+  _renderDimensions() {
+    const { dimensions } = this.state
+    
+    return(
+      Object.keys(dimensions).map((dimension, i) =>
+        <li key={i}>{dimension}: {dimensions[dimension]}</li>
+      )
+    )
+  }
+
+  render() {
+    const { count, toggleFlex } = this.state
+
+    return(
+      <div className="measure-example">
+        <header>
+          <button
+            onClick={() =>
+              this.setState({count: count + 1})
+            }
+          >
+            Add Paragraph
+          </button>
+          <button
+            onClick={() =>
+              this.setState({toggleFlex: !toggleFlex})
+            }
+          >
+            Toggle Flex
+          </button>
+        </header>
+        <main>
+          <Measure
+            config={{
+              childList: true,
+              attributes: true
+            }}
+            onMeasure={(dimensions) => {
+              this.setState({dimensions})
+            }}
+          >
+            <div
+              className="paragraphs"
+              style={{
+                flex: toggleFlex ? 1.5 : 1,
+                padding: 12,
+                background: 'red'
+              }}
+            >
+              {this._renderParagraphs()}
+            </div>
+          </Measure>
+          <ul
+            className="paragraphs-measurements"
+          >
+            {this._renderDimensions()}
+          </ul>
+        </main>
+      </div>
+    )
+  }
+}
+
 class App extends Component {
   state = {
     items: [
@@ -93,7 +188,14 @@ class App extends Component {
         contents: ['Three common ways for a prospective owner to acquire a dog is from pet shops, private owners, or shelters.', 'A pet shop may be the most convenient way to buy a dog. Buying a dog from a private owner allows you to assess the pedigree and upbringing of your dog before choosing to take it home. Lastly, finding your dog from a shelter, helps give a good home to a dog who may not find one so readily.']
       }
     ],
-    active: 1
+    active: 1,
+    cool: false
+  }
+
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({cool: true})
+    }, 1200)
   }
   
   _handleAccordionClick = ({id}) => {
@@ -113,10 +215,10 @@ class App extends Component {
           active={active}
           onClick={this._handleAccordionClick}
         />
+        {this.state.cool && <Paragraphs />}
       </div>
     );
   }
 }
-
 
 ReactDOM.render(<App />, document.getElementById('app'));

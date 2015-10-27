@@ -1,4 +1,9 @@
 ## CHANGELOG
+### 0.3.2
+Patch to fix `shallowCompare` so bower works.
+
+Added a resize handler to measure component changes on window resize.
+
 ### 0.3.1
 Renamed `onChange` prop to `onMeasure`
 

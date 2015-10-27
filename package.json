@@ -1,6 +1,6 @@
 {
   "name": "react-measure",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Compute measurements of React components.",
   "main": "lib/react-measure.js",
   "scripts": {
@@ -34,6 +34,7 @@
     "react-dom": "^0.14.0"
   },
   "dependencies": {
+    "lodash.debounce": "^3.1.1",
     "react-addons-shallow-compare": "^0.14.0"
   },
   "devDependencies": {
