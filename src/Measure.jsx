@@ -1,8 +1,11 @@
 import React, { Component, Children, PropTypes, createElement, cloneElement } from 'react'
 import ReactDOM from 'react-dom'
 import shallowCompare from 'react-addons-shallow-compare'
+import ResizeHandler from './Resize-Handler'
 import diffConfig from './diff-config'
 import getNodeDimensions from './get-node-dimensions'
+
+const resizeHandler = new ResizeHandler()
 
 class Measure extends Component {
   static propTypes = {
@@ -38,6 +41,9 @@ class Measure extends Component {
 
     // fire callback for first render
     this.getDimensions()
+
+    // add component to resize handler to detect changes on resize
+    resizeHandler.add(this)
   }
 
   componentWillReceiveProps({config, whitelist, blacklist}) {
@@ -61,6 +67,7 @@ class Measure extends Component {
 
   componentWillUnmount() {
     this._disconnectObserver()
+    resizeHandler.remove(this)
   }
 
   getDimensions = (mutations) => {
