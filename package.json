@@ -33,6 +33,9 @@
     "react": "^0.14.0",
     "react-dom": "^0.14.0"
   },
+  "dependencies": {
+    "react-addons-shallow-compare": "^0.14.0"
+  },
   "devDependencies": {
     "autoprefixer-loader": "^2.0.0",
     "babel": "^5.8.23",

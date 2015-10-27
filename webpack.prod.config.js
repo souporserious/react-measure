@@ -25,8 +25,7 @@ var config = {
   },
   externals: {
     'react': 'React',
-    'react-dom': 'ReactDOM',
-    'react/lib/shallowCompare': 'shallowCompare'
+    'react-dom': 'ReactDOM'
   },
 };
 
