@@ -24,7 +24,7 @@ class ResizeHandler {
 
   update() {
     for (let i = this._queue.length; i--;) {
-      this._queue[i].getDimensions()
+      this._queue[i]._measure()
     }
   }
 }
