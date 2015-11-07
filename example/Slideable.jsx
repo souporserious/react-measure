@@ -30,7 +30,7 @@ class Store {
   }
 
   add(slideable) {
-    
+
   }
 
   remove() {
@@ -53,7 +53,7 @@ class Slideable extends Component {
     // if we're toggling "show", measure and set state
     // so we can animate from an accurate measurement
     if(this.props.show !== show) {
-      const { height } = this.refs['measure'].getDimensions(true)
+      const { height } = this.refs['measure'].getDimensions()
       this.setState({height})
     }
   }
