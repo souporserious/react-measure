@@ -1,4 +1,5 @@
 import dataStore from './data-store'
+import getCloneHeight from './get-clone-height'
 
 function getStyle(node) {
   return(
@@ -12,8 +13,9 @@ export default function accurateHeight(node) {
   const { children } = node
   const amount = children.length
 
-  if(amount === 0) {
-    return node.offsetHeight
+  // if no children present on the node we need to clone to get a true height
+  if (amount === 0) {
+    return getCloneHeight(node)
   }
 
   const firstChild = children[0]
@@ -24,5 +26,9 @@ export default function accurateHeight(node) {
 
   const offsetDiff = (lastChild.offsetTop - firstChild.offsetTop)
 
-  return (offsetDiff + lastChild.offsetHeight) + parseInt(marginTop) + parseInt(marginBottom)
+  return (
+    parseInt(marginTop) +
+    (offsetDiff + lastChild.offsetHeight) +
+    parseInt(marginBottom)
+  )
 }
