@@ -1,4 +1,11 @@
 ## CHANGELOG
+### 0.3.3
+Added public method `getDimensions`
+
+Clone nodes without any children
+
+Fixed calculating measurements on resize
+
 ### 0.3.2
 Patch to fix `shallowCompare` so bower works.
 

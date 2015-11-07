@@ -81,7 +81,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	var _get = function get(_x3, _x4, _x5) { var _again = true; _function: while (_again) { var object = _x3, property = _x4, receiver = _x5; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x3 = parent; _x4 = property; _x5 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -130,13 +130,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this._properties = this._getProperties(this.props);
 	    this._lastDimensions = {};
 
-	    this.getDimensions = function (mutations) {
+	    this._measure = function (mutations) {
 	      var shouldMeasure = _this.props.shouldMeasure(mutations);
 
 	      // bail out if we shouldn't measure
 	      if (!shouldMeasure) return;
 
-	      var dimensions = (0, _getNodeDimensions2['default'])(_this._node, _this.props.accurate);
+	      var dimensions = _this.getDimensions(_this._node, _this.props.accurate);
 
 	      // determine if we need to update our callback with new dimensions or not
 	      _this._properties.some(function (prop) {
@@ -164,8 +164,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // set up mutation observer
 	      this._connectObserver(this.props.config);
 
-	      // fire callback for first render
-	      this.getDimensions();
+	      // measure on first render
+	      this._measure(null);
 
 	      // add component to resize handler to detect changes on resize
 	      resizeHandler.add(this);
@@ -201,9 +201,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	      resizeHandler.remove(this);
 	    }
 	  }, {
+	    key: 'getDimensions',
+	    value: function getDimensions() {
+	      var node = arguments.length <= 0 || arguments[0] === undefined ? this._node : arguments[0];
+	      var accurate = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
+
+	      return (0, _getNodeDimensions2['default'])(node, accurate);
+	    }
+	  }, {
 	    key: '_connectObserver',
 	    value: function _connectObserver(config) {
-	      this._observer = new MutationObserver(this.getDimensions);
+	      this._observer = new MutationObserver(this._measure);
 	      this._observer.observe(this._node, config);
 	    }
 	  }, {
@@ -241,7 +249,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'defaultProps',
 	    value: {
 	      config: {
-	        childList: true
+	        childList: true,
+	        attributes: true
 	      },
 	      accurate: false,
 	      whitelist: ['width', 'height', 'top', 'right', 'bottom', 'left'],
@@ -417,7 +426,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'update',
 	    value: function update() {
 	      for (var i = this._queue.length; i--;) {
-	        this._queue[i].getDimensions();
+	        this._queue[i]._measure();
 	      }
 	    }
 	  }]);
@@ -896,6 +905,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _dataStore2 = _interopRequireDefault(_dataStore);
 
+	var _getCloneHeight = __webpack_require__(14);
+
+	var _getCloneHeight2 = _interopRequireDefault(_getCloneHeight);
+
 	function getStyle(node) {
 	  return (0, _dataStore2['default'])(node, 'style') || (0, _dataStore2['default'])(node, 'style', getComputedStyle(node));
 	}
@@ -907,8 +920,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  var amount = children.length;
 
+	  // if no children present on the node we need to clone to get a true height
 	  if (amount === 0) {
-	    return node.offsetHeight;
+	    return (0, _getCloneHeight2['default'])(node);
 	  }
 
 	  var firstChild = children[0];
@@ -924,7 +938,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  var offsetDiff = lastChild.offsetTop - firstChild.offsetTop;
 
-	  return offsetDiff + lastChild.offsetHeight + parseInt(marginTop) + parseInt(marginBottom);
+	  return parseInt(marginTop) + (offsetDiff + lastChild.offsetHeight) + parseInt(marginBottom);
 	}
 
 	module.exports = exports['default'];
@@ -964,6 +978,58 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    return value;
 	  }
+	}
+
+	module.exports = exports['default'];
+
+/***/ },
+/* 14 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	exports['default'] = getCloneHeight;
+
+	function getCloneHeight(node) {
+	  var parentNode = node.parentNode;
+
+	  var context = document.createElement('div');
+	  var clone = node.cloneNode(true);
+	  var height = 0;
+
+	  // give the node some context to measure off of
+	  // height and overflow prevent scrollbars from node copy
+	  context.style.height = 0;
+	  context.style.position = 'relative';
+	  context.style.overflow = 'hidden';
+
+	  // clean up any attributes that might cause a conflict
+	  clone.setAttribute('id', '');
+	  clone.setAttribute('name', '');
+	  clone.setAttribute('data-reactid', '');
+
+	  // set props to hide copy and get a true height calculation
+	  clone.style.boxSizing = 'border-box';
+	  clone.style.height = 'auto';
+	  clone.style.position = 'absolute';
+	  clone.style.visibility = 'hidden';
+
+	  // append copy to context
+	  context.appendChild(clone);
+
+	  // append context to DOM so we can measure
+	  parentNode.appendChild(context);
+
+	  // get height
+	  height = clone.scrollHeight;
+
+	  // destroy clone
+	  parentNode.removeChild(context);
+
+	  return height;
 	}
 
 	module.exports = exports['default'];
