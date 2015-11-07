@@ -25,7 +25,6 @@ class AccordionContent extends Component {
         style={style}
         data-sliding={this.props['data-sliding']}
       >
-        {item.contents.map((content, i) => <p key={i}>{content}</p>)}
         <div>
           <button
             onClick={e => {
@@ -35,14 +34,14 @@ class AccordionContent extends Component {
           >
             Toggle Extra Content
           </button>
-          <Slideable
-            show={showContent}
-          >
+          <Slideable show={showContent}>
             <div style={{background: 'red'}}>
               <p style={{margin: 0, padding: 12}}>Just another paragraph to test out height animations.</p>
+              <p style={{margin: 0, marginTop: 12, padding: 12}}>Just another paragraph to test out height animations.</p>
             </div>
           </Slideable>
         </div>
+        {item.contents.map((content, i) => <p key={i}>{content}</p>)}
       </div>
     )
   }
@@ -141,10 +140,6 @@ class Paragraphs extends Component {
         </header>
         <main>
           <Measure
-            config={{
-              childList: true,
-              attributes: true
-            }}
             onMeasure={(dimensions) => {
               this.setState({dimensions})
             }}
@@ -152,7 +147,7 @@ class Paragraphs extends Component {
             <div
               className="paragraphs"
               style={{
-                flex: toggleFlex ? 1.5 : 1,
+                flex: toggleFlex ? 2 : 1,
                 padding: 12,
                 background: 'red'
               }}
@@ -188,14 +183,7 @@ class App extends Component {
         contents: ['Three common ways for a prospective owner to acquire a dog is from pet shops, private owners, or shelters.', 'A pet shop may be the most convenient way to buy a dog. Buying a dog from a private owner allows you to assess the pedigree and upbringing of your dog before choosing to take it home. Lastly, finding your dog from a shelter, helps give a good home to a dog who may not find one so readily.']
       }
     ],
-    active: 1,
-    cool: false
-  }
-
-  componentDidMount() {
-    setTimeout(() => {
-      this.setState({cool: true})
-    }, 1200)
+    active: 1
   }
   
   _handleAccordionClick = ({id}) => {
@@ -215,7 +203,7 @@ class App extends Component {
           active={active}
           onClick={this._handleAccordionClick}
         />
-        {this.state.cool && <Paragraphs />}
+        <Paragraphs />
       </div>
     );
   }
