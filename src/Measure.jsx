@@ -19,7 +19,8 @@ class Measure extends Component {
 
   static defaultProps = {
     config: {
-      childList: true
+      childList: true,
+      attributes: true
     },
     accurate: false,
     whitelist: ['width', 'height', 'top', 'right', 'bottom', 'left'],
@@ -39,8 +40,8 @@ class Measure extends Component {
     // set up mutation observer
     this._connectObserver(this.props.config)
 
-    // fire callback for first render
-    this.getDimensions()
+    // measure on first render
+    this._measure(null)
 
     // add component to resize handler to detect changes on resize
     resizeHandler.add(this)
@@ -70,13 +71,17 @@ class Measure extends Component {
     resizeHandler.remove(this)
   }
 
-  getDimensions = (mutations) => {
+  getDimensions(node = this._node, accurate = true) {
+    return getNodeDimensions(node, accurate)
+  }
+
+  _measure = (mutations) => {
     const shouldMeasure = this.props.shouldMeasure(mutations)
 
     // bail out if we shouldn't measure
     if(!shouldMeasure) return
 
-    const dimensions = getNodeDimensions(this._node, this.props.accurate)
+    const dimensions = this.getDimensions(this._node, this.props.accurate)
 
     // determine if we need to update our callback with new dimensions or not
     this._properties.some(prop => {
@@ -96,7 +101,7 @@ class Measure extends Component {
   }
 
   _connectObserver(config) {
-    this._observer = new MutationObserver(this.getDimensions)
+    this._observer = new MutationObserver(this._measure)
     this._observer.observe(this._node, config)
   }
 
