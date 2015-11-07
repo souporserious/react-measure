@@ -29,13 +29,11 @@
     "url": "https://github.com/souporserious/react-measure/issues"
   },
   "homepage": "https://github.com/souporserious/react-measure",
-  "peerDependencies": {
-    "react": "^0.14.0",
-    "react-dom": "^0.14.0"
-  },
   "dependencies": {
-    "lodash.debounce": "^3.1.1",
-    "react-addons-shallow-compare": "^0.14.0"
+    "react": "^0.14.0",
+    "react-dom": "^0.14.0",
+    "react-addons-shallow-compare": "^0.14.0",
+    "lodash.debounce": "^3.1.1"
   },
   "devDependencies": {
     "autoprefixer-loader": "^2.0.0",
