@@ -4,11 +4,15 @@ class ResizeHandler {
   constructor() {
     this._queue = []
     this.update = debounce(this.update.bind(this), 150)
-    window.addEventListener('resize', this.update)
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', this.update)
+    }
   }
 
   destroy() {
-    window.removeEventListener('resize', this.update)
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('resize', this.update)
+    }
   }
 
   add(component) {
