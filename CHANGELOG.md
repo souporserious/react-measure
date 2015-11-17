@@ -1,4 +1,8 @@
 ## CHANGELOG
+### 0.3.4
+
+Fix server-side rendering
+
 ### 0.3.3
 Added public method `getDimensions`
 

@@ -401,13 +401,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    this._queue = [];
 	    this.update = (0, _lodashDebounce2['default'])(this.update.bind(this), 150);
-	    window.addEventListener('resize', this.update);
+	    if (typeof window !== 'undefined') {
+	      window.addEventListener('resize', this.update);
+	    }
 	  }
 
 	  _createClass(ResizeHandler, [{
 	    key: 'destroy',
 	    value: function destroy() {
-	      window.removeEventListener('resize', this.update);
+	      if (typeof window !== 'undefined') {
+	        window.removeEventListener('resize', this.update);
+	      }
 	    }
 	  }, {
 	    key: 'add',

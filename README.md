@@ -1,4 +1,4 @@
-## React Measure 0.3.3
+## React Measure 0.3.4
 
 Compute measurements of React components. Uses a [MutationObserver](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver#MutationObserverInit) to detect changes of an element and return the new measurements after that mutation.
 
