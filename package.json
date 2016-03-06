@@ -47,5 +47,9 @@
     "style-loader": "^0.12.3",
     "webpack": "^1.9.12",
     "webpack-dev-server": "^1.9.0"
+  },
+  "peerDependencies": {
+    "react": ">0.13.0",
+    "react-dom": ">0.13.0"  
   }
 }
