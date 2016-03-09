@@ -51,7 +51,7 @@ class Accordion extends Component {
   _handleClick(item) {
     this.props.onClick(item)
   }
-  
+
   render() {
     const { items, active } = this.props
 
@@ -95,21 +95,21 @@ class Paragraphs extends Component {
       dimensions: {}
     }
   }
-  
+
   _renderParagraphs() {
     const { count } = this.state
     let paragraphs = []
-    
+
     for(let i = 0; i < count; i++) {
       paragraphs.push(<Paragraph key={i} />)
     }
-    
+
     return paragraphs
   }
-  
+
   _renderDimensions() {
     const { dimensions } = this.state
-    
+
     return(
       Object.keys(dimensions).map((dimension, i) =>
         <li key={i}>{dimension}: {dimensions[dimension]}</li>
@@ -183,20 +183,30 @@ class App extends Component {
         contents: ['Three common ways for a prospective owner to acquire a dog is from pet shops, private owners, or shelters.', 'A pet shop may be the most convenient way to buy a dog. Buying a dog from a private owner allows you to assess the pedigree and upbringing of your dog before choosing to take it home. Lastly, finding your dog from a shelter, helps give a good home to a dog who may not find one so readily.']
       }
     ],
-    active: 1
+    active: 1,
+    showSVG: false
   }
-  
+
   _handleAccordionClick = ({id}) => {
     const active = (id === this.state.active) ? null : id;
     this.setState({active});
   }
-  
+
   render() {
-    const { items, active } = this.state;
+    const { items, active, showSVG } = this.state;
     const currentSelected = active === null ? 'Nothing selected' : items[active].title;
 
     return(
       <div className="app">
+        <div>
+          <div onClick={() => this.setState({showSVG: !showSVG})}>Toggle SVG</div>
+          <Slideable show={showSVG}>
+            <svg width="36px" height="36px" viewBox="0 0 36 36">
+              <circle fill="#373D3F" cx="18" cy="18" r="18"/>
+          	 <polygon fill="#CDD7DB" points="14,11 26,18 14,25"/>
+            </svg>
+          </Slideable>
+        </div>
         <strong>Current Selected:</strong> {currentSelected}
         <Accordion
           items={items}
