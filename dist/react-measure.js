@@ -97,19 +97,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _reactAddonsShallowCompare = __webpack_require__(4);
-
-	var _reactAddonsShallowCompare2 = _interopRequireDefault(_reactAddonsShallowCompare);
-
-	var _ResizeHandler = __webpack_require__(7);
+	var _ResizeHandler = __webpack_require__(4);
 
 	var _ResizeHandler2 = _interopRequireDefault(_ResizeHandler);
 
-	var _diffConfig = __webpack_require__(10);
+	var _diffConfig = __webpack_require__(7);
 
 	var _diffConfig2 = _interopRequireDefault(_diffConfig);
 
-	var _getNodeDimensions = __webpack_require__(11);
+	var _getNodeDimensions = __webpack_require__(8);
 
 	var _getNodeDimensions2 = _interopRequireDefault(_getNodeDimensions);
 
@@ -188,11 +184,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (this.props.whitelist !== whitelist || this.props.blacklist !== blacklist) {
 	        this._properties = this._getProperties({ whitelist: whitelist, blacklist: blacklist });
 	      }
-	    }
-	  }, {
-	    key: 'shouldComponentUpdate',
-	    value: function shouldComponentUpdate(nextProps, nextState) {
-	      return (0, _reactAddonsShallowCompare2['default'])(this, nextProps, nextState);
 	    }
 	  }, {
 	    key: 'componentWillUnmount',
@@ -289,98 +280,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	module.exports = __webpack_require__(5);
-
-/***/ },
-/* 5 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Copyright 2013-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	* @providesModule shallowCompare
-	*/
-
-	'use strict';
-
-	var shallowEqual = __webpack_require__(6);
-
-	/**
-	 * Does a shallow comparison for props and state.
-	 * See ReactComponentWithPureRenderMixin
-	 */
-	function shallowCompare(instance, nextProps, nextState) {
-	  return !shallowEqual(instance.props, nextProps) || !shallowEqual(instance.state, nextState);
-	}
-
-	module.exports = shallowCompare;
-
-/***/ },
-/* 6 */
-/***/ function(module, exports) {
-
-	/**
-	 * Copyright 2013-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule shallowEqual
-	 * @typechecks
-	 * 
-	 */
-
-	'use strict';
-
-	var hasOwnProperty = Object.prototype.hasOwnProperty;
-
-	/**
-	 * Performs equality by iterating through keys on an object and returning false
-	 * when any key has values which are not strictly equal between the arguments.
-	 * Returns true when the values of all keys are strictly equal.
-	 */
-	function shallowEqual(objA, objB) {
-	  if (objA === objB) {
-	    return true;
-	  }
-
-	  if (typeof objA !== 'object' || objA === null || typeof objB !== 'object' || objB === null) {
-	    return false;
-	  }
-
-	  var keysA = Object.keys(objA);
-	  var keysB = Object.keys(objB);
-
-	  if (keysA.length !== keysB.length) {
-	    return false;
-	  }
-
-	  // Test for A's keys different from B.
-	  var bHasOwnProperty = hasOwnProperty.bind(objB);
-	  for (var i = 0; i < keysA.length; i++) {
-	    if (!bHasOwnProperty(keysA[i]) || objA[keysA[i]] !== objB[keysA[i]]) {
-	      return false;
-	    }
-	  }
-
-	  return true;
-	}
-
-	module.exports = shallowEqual;
-
-/***/ },
-/* 7 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
@@ -391,7 +290,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var _lodashDebounce = __webpack_require__(8);
+	var _lodashDebounce = __webpack_require__(5);
 
 	var _lodashDebounce2 = _interopRequireDefault(_lodashDebounce);
 
@@ -442,7 +341,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 8 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -455,7 +354,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	'use strict';
 
-	var getNative = __webpack_require__(9);
+	var getNative = __webpack_require__(6);
 
 	/** Used as the `TypeError` message for "Functions" methods. */
 	var FUNC_ERROR_TEXT = 'Expected a function';
@@ -681,7 +580,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = debounce;
 
 /***/ },
-/* 9 */
+/* 6 */
 /***/ function(module, exports) {
 
 	/**
@@ -822,7 +721,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getNative;
 
 /***/ },
-/* 10 */
+/* 7 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -859,7 +758,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 11 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -871,7 +770,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _accurateHeight = __webpack_require__(12);
+	var _accurateHeight = __webpack_require__(9);
 
 	var _accurateHeight2 = _interopRequireDefault(_accurateHeight);
 
@@ -893,7 +792,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 12 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -905,11 +804,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _dataStore = __webpack_require__(13);
+	var _dataStore = __webpack_require__(10);
 
 	var _dataStore2 = _interopRequireDefault(_dataStore);
 
-	var _getCloneHeight = __webpack_require__(14);
+	var _getCloneHeight = __webpack_require__(11);
 
 	var _getCloneHeight2 = _interopRequireDefault(_getCloneHeight);
 
@@ -922,15 +821,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	function accurateHeight(node) {
 	  var children = node.children;
 
-	  var amount = children.length;
-
-	  // if no children present on the node we need to clone to get a true height
-	  if (amount === 0) {
+	  // if no children present on the node or an SVG element
+	  // we need to clone it to get a true height
+	  if (!children || children && children.length === 0 || node instanceof SVGElement) {
 	    return (0, _getCloneHeight2['default'])(node);
 	  }
 
 	  var firstChild = children[0];
-	  var lastChild = children[amount - 1];
+	  var lastChild = children[children.length - 1];
 
 	  var _getStyle = getStyle(firstChild);
 
@@ -948,7 +846,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 13 */
+/* 10 */
 /***/ function(module, exports) {
 
 	// inspired by https://github.com/julianshapiro/velocity/blob/master/velocity.js
@@ -987,7 +885,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 14 */
+/* 11 */
 /***/ function(module, exports) {
 
 	'use strict';

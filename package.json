@@ -1,6 +1,6 @@
 {
   "name": "react-measure",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "description": "Compute measurements of React components.",
   "main": "lib/react-measure.js",
   "scripts": {
@@ -30,7 +30,6 @@
   },
   "homepage": "https://github.com/souporserious/react-measure",
   "dependencies": {
-    "react-addons-shallow-compare": "^0.14.0",
     "lodash.debounce": "^3.1.1"
   },
   "devDependencies": {
@@ -42,6 +41,7 @@
     "http-server": "^0.8.0",
     "node-libs-browser": "^0.5.2",
     "node-sass": "^3.2.0",
+    "react-addons-shallow-compare": "^0.14.0",
     "react-motion": "^0.3.1",
     "sass-loader": "^1.0.2",
     "style-loader": "^0.12.3",
@@ -50,6 +50,6 @@
   },
   "peerDependencies": {
     "react": ">0.13.0",
-    "react-dom": ">0.13.0"  
+    "react-dom": ">0.13.0"
   }
 }
