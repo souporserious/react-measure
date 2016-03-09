@@ -1,6 +1,5 @@
 import React, { Component, Children, PropTypes, createElement, cloneElement } from 'react'
 import ReactDOM from 'react-dom'
-import shallowCompare from 'react-addons-shallow-compare'
 import ResizeHandler from './Resize-Handler'
 import diffConfig from './diff-config'
 import getNodeDimensions from './get-node-dimensions'
@@ -60,10 +59,6 @@ class Measure extends Component {
         this.props.blacklist !== blacklist) {
       this._properties = this._getProperties({whitelist, blacklist})
     }
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return shallowCompare(this, nextProps, nextState)
   }
 
   componentWillUnmount() {
