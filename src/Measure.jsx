@@ -74,13 +74,13 @@ class Measure extends Component {
     const shouldMeasure = this.props.shouldMeasure(mutations)
 
     // bail out if we shouldn't measure
-    if(!shouldMeasure) return
+    if (!shouldMeasure) return
 
     const dimensions = this.getDimensions(this._node, this.props.accurate)
 
     // determine if we need to update our callback with new dimensions or not
     this._properties.some(prop => {
-      if(dimensions[prop] !== this._lastDimensions[prop]) {
+      if (dimensions[prop] !== this._lastDimensions[prop]) {
         // if we've found a dimension that has changed, update our callback
         // we also allow shouldMeasure to return any values so the end user
         // doesn't have to recalculate anything
