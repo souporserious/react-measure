@@ -42,7 +42,7 @@
     "node-libs-browser": "^0.5.2",
     "node-sass": "^3.2.0",
     "react-addons-shallow-compare": "^0.14.0",
-    "react-motion": "^0.3.1",
+    "react-motion": "^0.4.2",
     "sass-loader": "^1.0.2",
     "style-loader": "^0.12.3",
     "webpack": "^1.9.12",

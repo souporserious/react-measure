@@ -1,6 +1,4 @@
-import React, { Component, PropTypes, createElement } from 'react'
-import ReactDOM from 'react-dom'
-import shallowCompare from 'react-addons-shallow-compare'
+import React, { Component, PropTypes, Children, cloneElement } from 'react'
 import { Motion, spring, presets } from 'react-motion'
 import Measure from '../src/react-measure'
 
@@ -13,60 +11,66 @@ const stopParentSlideables = (el) => {
     el = el.parentNode
 
     const slideable = el.getAttribute('data-slideable')
-    
+
     if (slideable && slideable !== 'stop') {
       el.setAttribute('data-slideable', 'stop')
     }
   }
 }
 
-class Store {
-  constructor() {
-    this.slideables = {}
+// class Store {
+//   constructor() {
+//     this.slideables = {}
+//   }
+//
+//   getSlideables() {
+//     return this.slideables
+//   }
+//
+//   add(slideable) {
+//
+//   }
+//
+//   remove() {
+//
+//   }
+//
+//   onChange() {
+//
+//   }
+// }
+
+class Slide extends Component {
+  static propTypes = {
+    children: PropTypes.node.isRequired,
+    show: PropTypes.bool.isRequired,
+    springConfig: React.PropTypes.objectOf(React.PropTypes.number)
   }
 
-  getSlideables() {
-    return this.slideables
+  static defaultProps = {
+    springConfig: presets.noWobble
   }
 
-  add(slideable) {
-
-  }
-
-  remove() {
-
-  }
-
-  onChange() {
-
-  }
-}
-
-class Slideable extends Component {
   state = {
     height: -1,
     instant: false
   }
-  _isAnimating = false
+  _measureComponent = null
 
-  componentWillReceiveProps({show}) {
+  componentWillReceiveProps(nextProps) {
     // if we're toggling "show", measure and set state
     // so we can animate from an accurate measurement
-    if(this.props.show !== show) {
-      const { height } = this.refs['measure'].getDimensions()
-      this.setState({height})
+    if (this.props.show !== nextProps.show) {
+      const { height } = this._measureComponent.getDimensions()
+      this.setState({ height })
     }
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return shallowCompare(this, nextProps, nextState)
   }
 
   componentDidUpdate() {
     const { stopped, instant } = this.state
 
-    if(instant) {
-      this.setState({instant: false})
+    if (instant) {
+      this.setState({ instant: false })
     }
   }
 
@@ -74,13 +78,13 @@ class Slideable extends Component {
   _shouldMeasure = (mutations) => {
     // we need to build a set of rules
     // the last triggered Slideable always takes precedence over any others
-    // 
+    //
     // it needs to notify any parents as well as children that it is animating
     // reasons why include
     // 1. if a parent is in the middle of animating it needs to notify that parent to stop
     // we can change a data attribute on it and it will recieve the notification
     // to stop
-    // 
+    //
     // Mock API
     // call methods by changing data attributes
     // data-slideable={['measure', 'stop', 'animateTo', 'animateFrom']}
@@ -88,7 +92,7 @@ class Slideable extends Component {
     // [stop] - stop animating and set height to 'auto'
     // [animateTo] - animate to the last known value it has
     // [animateFrom] - animate from the last known value it has
-    
+
     // maybe we have a needsMeasure state? We need to measure when the show prop
     // has changed so something like
     // show prop changes ->
@@ -115,15 +119,15 @@ class Slideable extends Component {
 
     // stop all parent slideables
     stopParentSlideables(target)
-    
+
     // if the mutation happened to this component we need
     // to update the children so they will stop animating
-    if (this._node === target && isSliding) {
+    if (this._measureComponent === target && isSliding) {
       return true
     }
 
     // check if the target is a child of this node
-    if (this._node !== target) {
+    if (this._measureComponent !== target) {
       const isSliding = target.getAttribute('data-sliding')
 
       // if it has finished sliding then we need to query for height
@@ -142,10 +146,10 @@ class Slideable extends Component {
     this.setState({height})
     //const { target, attributeName } = mutations[0]
     //const isSliding = target.getAttribute('data-sliding')
-    
+
     // if (attributeName === 'data-slideable') {
     //   const slideable = target.getAttribute('data-slideable')
-      
+
     //   // stop slideables if that's what we wanted
     //   if (slideable === 'stop') {
     //     this.stop()
@@ -174,18 +178,17 @@ class Slideable extends Component {
   // stops a Slideable if in the middle of animating and moves to its value
   // instantly, good way to prime the slideable height without animating to it
   stop() {
-    this.setState({instant: true})
+    this.setState({ instant: true })
   }
 
   render() {
-    const { show, children } = this.props
+    const { show, rmConfig, children } = this.props
     const { instant } = this.state
-    const child = React.Children.only(children)
-    const { style } = child.props
+    const child = Children.only(children)
+    const childStyles = child.props.style
     const rmHeight = show ? this.state.height : 0
-    const rmConfig = presets.noWobble//[60, 22]
 
-    return(
+    return (
       <Measure
         ref="measure"
         config={{
@@ -200,39 +203,34 @@ class Slideable extends Component {
         onMeasure={this._onMeasure}
       >
         <Motion
-          defaultStyle={{height: 0}}
           style={{
             height: instant ? rmHeight : spring(rmHeight, rmConfig)
           }}
         >
-          {({height}) => {
+          {({ height }) => {
             const destHeight = parseFloat(this.state.height).toFixed(2)
             const currHeight = parseFloat(height).toFixed(2)
-            let rmStyle = {}
+            let rmStyles = {}
 
+            // only animate when necessary
+            // don't always apply style values so height works responsively
             if (destHeight !== currHeight && !instant) {
-              rmStyle = {
+              rmStyles = {
                 height,
                 overflow: 'hidden'
               }
             }
 
-            if (destHeight === currHeight || height === 0) {
-              this._isAnimating = false
-            } else {
-              this._isAnimating = true
-            }
-
             return(
-              React.cloneElement(
-                React.Children.only(children),
+              cloneElement(
+                child,
                 {
-                  ref: c => this._node = ReactDOM.findDOMNode(c),
+                  ref: c => this._measureComponent = c,
                   style: {
-                    ...rmStyle,
-                    ...style
+                    ...rmStyles,
+                    ...childStyles
                   },
-                  'data-sliding': this._isAnimating,
+                  'data-sliding': !(destHeight === currHeight || height === 0),
                   'data-slideable': true
                 }
               )
@@ -244,4 +242,4 @@ class Slideable extends Component {
   }
 }
 
-export default Slideable
+export default Slide
