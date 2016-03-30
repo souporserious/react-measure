@@ -8,7 +8,8 @@ import './main.scss'
 
 class AccordionContent extends Component {
   state = {
-    showContent: false
+    showChildSlideable: false,
+    showChildContent: false
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -17,7 +18,7 @@ class AccordionContent extends Component {
 
   render() {
     const { item, style } = this.props
-    const { showContent } = this.state
+    const { showChildSlideable, showChildContent } = this.state
 
     return(
       <div
@@ -25,22 +26,34 @@ class AccordionContent extends Component {
         style={style}
         data-sliding={this.props['data-sliding']}
       >
-        <div>
-          <button
-            onClick={e => {
-              e.stopPropagation()
-              this.setState({showContent: !this.state.showContent})
-            }}
-          >
-            Toggle Extra Content
-          </button>
-          <Slideable show={showContent}>
-            <div style={{background: 'red'}}>
-              <p style={{margin: 0, padding: 12}}>Just another paragraph to test out height animations.</p>
-              <p style={{margin: 0, marginTop: 12, padding: 12}}>Just another paragraph to test out height animations.</p>
-            </div>
-          </Slideable>
-        </div>
+        <button
+          onClick={e => {
+            e.stopPropagation()
+            this.setState({showChildSlideable: !showChildSlideable})
+          }}
+        >
+          Toggle Child Slideable
+        </button>
+        <Slideable show={showChildSlideable}>
+          <div style={{background: 'red'}}>
+            <p style={{margin: 0, padding: 12}}>Just another paragraph to test out height animations.</p>
+            <p style={{margin: 0, marginTop: 12, padding: 12}}>Just another paragraph to test out height animations.</p>
+          </div>
+        </Slideable>
+        <button
+          onClick={e => {
+            e.stopPropagation()
+            this.setState({showChildContent: !showChildContent})
+          }}
+        >
+          Toggle Child Content
+        </button>
+        { showChildContent &&
+          <div style={{background: 'orange'}}>
+            <p style={{margin: 0, padding: 12}}>Just another paragraph to test out height animations.</p>
+            <p style={{margin: 0, marginTop: 12, padding: 12}}>Just another paragraph to test out height animations.</p>
+          </div>
+        }
         {item.contents.map((content, i) => <p key={i}>{content}</p>)}
       </div>
     )

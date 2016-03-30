@@ -1,4 +1,5 @@
 import React, { Component, PropTypes, Children, cloneElement } from 'react'
+import { findDOMNode } from 'react-dom'
 import { Motion, spring, presets } from 'react-motion'
 import Measure from '../src/react-measure'
 
@@ -52,10 +53,11 @@ class Slide extends Component {
   }
 
   state = {
-    height: -1,
-    instant: false
+    height: -1
   }
+  _instant = false
   _measureComponent = null
+  _isAnimating = null
 
   componentWillReceiveProps(nextProps) {
     // if we're toggling "show", measure and set state
@@ -67,15 +69,26 @@ class Slide extends Component {
   }
 
   componentDidUpdate() {
-    const { stopped, instant } = this.state
-
-    if (instant) {
-      this.setState({ instant: false })
+    if (this._instant) {
+      this._instant = false
+      this.forceUpdate()
     }
   }
 
   // check if any children are animating
   _shouldMeasure = (mutations) => {
+    if (mutations) {
+      const { target, attributeName } = mutations[0]
+      // console.log('node', this._node)
+      // console.log('target', target)
+
+      if (this._node !== target) {
+        //this._node.setAttribute('data-sliding', true)
+      }
+    }
+
+    return true
+
     // we need to build a set of rules
     // the last triggered Slideable always takes precedence over any others
     //
@@ -104,47 +117,48 @@ class Slide extends Component {
     // go to whatever value I was at that moment in time
 
     // we need to measure at least once before we receive a mutation
-    if (!mutations) return true
-
-    // we may need to go through each mutation for instance if 3 slideables
-    // are all triggered at once how do we handle that
-    const { target, attributeName } = mutations[0]
-    const slideable = target.getAttribute('data-slideable')
-    const isSliding = target.getAttribute('data-sliding')
-
-    // stop slideables if that's what we wanted
-    if(slideable === 'stop') {
-      this.stop()
-    }
-
-    // stop all parent slideables
-    stopParentSlideables(target)
-
-    // if the mutation happened to this component we need
-    // to update the children so they will stop animating
-    if (this._measureComponent === target && isSliding) {
-      return true
-    }
-
-    // check if the target is a child of this node
-    if (this._measureComponent !== target) {
-      const isSliding = target.getAttribute('data-sliding')
-
-      // if it has finished sliding then we need to query for height
-      if(isSliding === 'false') {
-        return { target, isSliding }
-      }
-
-    // if this node and is a mutation from data-sliding, don't update
-    } else if (attributeName === 'data-sliding') {
-      return false
-    }
+    // if (!mutations) return true
+    //
+    // // we may need to go through each mutation for instance if 3 slideables
+    // // are all triggered at once how do we handle that
+    // const { target, attributeName } = mutations[0]
+    // const slideable = target.getAttribute('data-slideable')
+    // const isSliding = target.getAttribute('data-sliding')
+    //
+    // // stop slideables if that's what we wanted
+    // // if (slideable === 'stop') {
+    // //   this.stop()
+    // // }
+    //
+    // // stop all parent slideables
+    // // stopParentSlideables(target)
+    //
+    // // if the mutation happened to this component we need
+    // // to update the children so they will stop animating
+    // if (this._measureComponent === target && isSliding) {
+    //   return true
+    // }
+    //
+    // // check if the target is a child of this node
+    // if (this._node !== target) {
+    //   const isSliding = target.getAttribute('data-sliding')
+    //
+    //   // if it has finished sliding then we need to query for height
+    //   if(isSliding === 'false') {
+    //     return { target, isSliding }
+    //   }
+    //
+    // // if this node and is a mutation from data-sliding, don't update
+    // } else if (attributeName === 'data-sliding') {
+    //   return false
+    // }
   }
 
-  _onMeasure = ({height}, mutations, data) => {
-    //if (!mutations) return this.setState({height})
-    this.setState({height})
-    //const { target, attributeName } = mutations[0]
+  _onMeasure = ({ height }, mutations, data) => {
+    this._instant = !this._isAnimating
+
+    this.setState({ height })
+
     //const isSliding = target.getAttribute('data-sliding')
 
     // if (attributeName === 'data-slideable') {
@@ -175,22 +189,22 @@ class Slide extends Component {
     // }
   }
 
-  // stops a Slideable if in the middle of animating and moves to its value
-  // instantly, good way to prime the slideable height without animating to it
+  // stops a Slideable if in the middle of animating and moves to its value instantly
+  // good way to prime the slideable height without animating to it
   stop() {
-    this.setState({ instant: true })
+    this._instant = true
+    this.forceUpdate()
   }
 
   render() {
     const { show, rmConfig, children } = this.props
-    const { instant } = this.state
     const child = Children.only(children)
     const childStyles = child.props.style
     const rmHeight = show ? this.state.height : 0
 
     return (
       <Measure
-        ref="measure"
+        ref={c => this._measureComponent = c}
         config={{
           childList: true,
           subtree: true,
@@ -203,8 +217,9 @@ class Slide extends Component {
         onMeasure={this._onMeasure}
       >
         <Motion
+          defaultStyle={{ height: 0 }}
           style={{
-            height: instant ? rmHeight : spring(rmHeight, rmConfig)
+            height: this._instant ? rmHeight : spring(rmHeight, rmConfig)
           }}
         >
           {({ height }) => {
@@ -214,23 +229,25 @@ class Slide extends Component {
 
             // only animate when necessary
             // don't always apply style values so height works responsively
-            if (destHeight !== currHeight && !instant) {
+            if (destHeight !== currHeight && !this._instant) {
               rmStyles = {
                 height,
                 overflow: 'hidden'
               }
             }
 
+            this._isAnimating = !(destHeight === currHeight || height === 0)
+
             return(
               cloneElement(
                 child,
                 {
-                  ref: c => this._measureComponent = c,
+                  ref: c => this._node = findDOMNode(c),
                   style: {
                     ...rmStyles,
                     ...childStyles
                   },
-                  'data-sliding': !(destHeight === currHeight || height === 0),
+                  'data-sliding': this._isAnimating,
                   'data-slideable': true
                 }
               )
