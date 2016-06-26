@@ -123,7 +123,7 @@ class Paragraphs extends Component {
   _renderDimensions() {
     const { dimensions } = this.state
 
-    return(
+    return (
       Object.keys(dimensions).map((dimension, i) =>
         <li key={i}>{dimension}: {dimensions[dimension]}</li>
       )
@@ -179,6 +179,26 @@ class Paragraphs extends Component {
   }
 }
 
+class AnimatingChild extends Component {
+  render() {
+    const { animate } = this.props
+    return (
+      <Measure>
+        {dimensions =>
+          <div className={`square ${animate ? 'animate' : ''}`}>
+            <strong>
+              {animate ? 'Click to stop animating' : 'Click to animate'}
+            </strong>
+            {Object.keys(dimensions).map((dimension, i) =>
+              <div key={i}>{dimension}: {dimensions[dimension]}</div>
+            )}
+          </div>
+        }
+      </Measure>
+    )
+  }
+}
+
 class App extends Component {
   state = {
     items: [
@@ -206,7 +226,7 @@ class App extends Component {
   }
 
   render() {
-    const { items, active, showSVG } = this.state;
+    const { items, active, showSVG, animate } = this.state
     const currentSelected = active === null ? 'Nothing selected' : items[active].title;
 
     return(
@@ -214,6 +234,12 @@ class App extends Component {
         <div>
           <div onClick={() => this.setState({showSVG: !showSVG})}>Toggle SVG</div>
           <Slideable show={showSVG}>
+            <svg width="36px" height="36px" viewBox="0 0 36 36">
+              <circle fill="#373D3F" cx="18" cy="18" r="18"/>
+          	 <polygon fill="#CDD7DB" points="14,11 26,18 14,25"/>
+            </svg>
+          </Slideable>
+          <Slideable show={!showSVG}>
             <svg width="36px" height="36px" viewBox="0 0 36 36">
               <circle fill="#373D3F" cx="18" cy="18" r="18"/>
           	 <polygon fill="#CDD7DB" points="14,11 26,18 14,25"/>
@@ -227,9 +253,12 @@ class App extends Component {
           onClick={this._handleAccordionClick}
         />
         <Paragraphs />
+        <div onClick={() => this.setState({ animate: !animate })}>
+          <AnimatingChild animate={animate}/>
+        </div>
       </div>
-    );
+    )
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('app'));
+ReactDOM.render(<App />, document.getElementById('app'))

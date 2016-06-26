@@ -1,7 +1,8 @@
-export default function getCloneHeight(node) {
+export default function getCloneDimensions(node) {
   const { parentNode } = node
   const context = document.createElement('div')
   const clone = node.cloneNode(true)
+  let width = 0
   let height = 0
 
   // give the node some context to measure off of
@@ -13,7 +14,6 @@ export default function getCloneHeight(node) {
   // clean up any attributes that might cause a conflict
   clone.setAttribute('id', '')
   clone.setAttribute('name', '')
-  clone.setAttribute('data-reactid', '')
 
   // set props to hide copy and get a true height calculation
   clone.style.boxSizing = 'border-box'
@@ -27,11 +27,12 @@ export default function getCloneHeight(node) {
   // append context to DOM so we can measure
   parentNode.appendChild(context)
 
-  // get height
+  // get accurate width and height
+  width = clone.scrollWidth
   height = clone.scrollHeight
 
   // destroy clone
   parentNode.removeChild(context)
 
-  return height
+  return { width, height }
 }

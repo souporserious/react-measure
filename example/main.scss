@@ -29,7 +29,7 @@ button {
   padding: 12px;
   cursor: pointer;
   user-select: none;
-  
+
   & + & {
     border-top: 1px solid #CECFD0;
   }
@@ -42,7 +42,7 @@ button {
 
 .accordion__item__content {
   overflow: hidden;
-  
+
   p {
     margin: 12px 0 12px;
   }
@@ -89,4 +89,26 @@ button {
 }
 .paragraphs-measurements {
   flex: 1;
+}
+
+// CSS Animation
+.square {
+  width: 50%;
+  height: 300px;
+  background: orange;
+}
+
+.animate {
+  animation: animateInOut 1000ms infinite;
+}
+
+@keyframes animateInOut {
+  0%, 100% {
+    width: 50%;
+    height: 300px;
+  }
+  50% {
+    width: 100%;
+    height: 600px;
+  }
 }

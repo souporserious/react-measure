@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/souporserious/react-measure",
   "dependencies": {
-    "lodash.debounce": "^3.1.1"
+    "element-resize-detector": "^1.1.4"
   },
   "devDependencies": {
     "autoprefixer-loader": "^2.0.0",
