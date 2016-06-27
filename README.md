@@ -1,6 +1,6 @@
 ## React Measure
 
-Compute measurements of React components. Uses a [MutationObserver](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver#MutationObserverInit) to detect changes of an element and return the new measurements after that mutation.
+Compute measurements of React components. Uses [element-resize-detector](https://github.com/wnr/element-resize-detector) to detect changes of an element and return the new dimensions.
 
 ## Install
 
@@ -8,7 +8,7 @@ Compute measurements of React components. Uses a [MutationObserver](https://deve
 
 `bower install react-measure --save`
 
-## Example Usage
+## Example Usage w/ state
 
 ```javascript
 import Measure from 'react-measure';
@@ -20,20 +20,10 @@ class ItemToMeasure extends Component {
 
   render() {
     const { height } = this.state.dimensions
-
-    return(
+    return (
       <Measure
         whitelist={['height']}
-        shouldMeasure={(mutations) => {
-          // don't update unless we have mutations available
-          if(mutations) {
-            return mutations[0].target
-          } else {
-            return false
-          }
-        }}
-        // notice how target gets passed into onMeasure now
-        onMeasure={(dimensions, mutations, target) => {
+        onMeasure={(dimensions) => {
           this.setState({dimensions})
         }}
       >
@@ -46,15 +36,33 @@ class ItemToMeasure extends Component {
 }
 ```
 
+## Example Usage w/ child function
+
+```javascript
+import Measure from 'react-measure';
+
+class ItemToMeasure extends Component {
+  render() {
+    return (
+      <Measure>
+        {dimensions =>
+          <div>
+            {Object.keys(dimensions).map((dimension, i) =>
+              <div key={i}>{dimension}: {dimensions[dimension]}</div>
+            )}
+          </div>
+        }
+      </Measure>
+    )
+  }
+}
+```
+
 ## Props
-
-#### `config`: PropTypes.object
-
-Accepts a [MutationObserver configuration](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver#MutationObserverInit).
 
 #### `accurate`: PropTypes.bool
 
-Tries to give the most accurate measure. Currently only works with height. Measures the content rather than the actual box of the element.
+Tries to give the most accurate measure by cloning the element and measuring it. Use if you your item is hidden or you want know to find out what height/width you need to get to.
 
 #### `whitelist`: PropTypes.array
 
@@ -64,21 +72,18 @@ Provide a list of properties to fire a callback for. Accepts any of the followin
 
 Like above, but will not fire a callback for the specified properties.
 
-#### `shouldMeasure`: PropTypes.func
+#### `shouldMeasure`: PropTypes.bool
 
-Determines whether or not a measurement should occur. Return `true`, `false` or a value you want returned in `onMeasure`.
+Determines whether or not a measurement should occur. Useful if you only need to measure in certain cases.
 
 #### `onMeasure`: PropTypes.func
 
-Callback when the component has been mutated. Receives `dimensions`, `mutations`, and anything passed to `shouldMeasure`.
+Callback when the component has been mutated. Receives the new `dimensions` of your component.
 
 ## Good to knows
 To help avoid layout thrashing, use the prop `blacklist` to ignore specific values and stop firing a render to check the DOM for changes. Likewise you can use `whitelist` to choose only the ones you need to check.
 
 **Margins from hell.** If your element is not calculating width or height properly it could be due to a margin hanging outside of its container. To get a true measurement, make sure to not have any hanging margins, in some cases a padding of 1px added to the container will fix this. See the stack overflow answers [here](http://stackoverflow.com/questions/19718634/how-to-disable-margin-collapsing) for more tricks .
-
-## Browser Support
-All modern browsers supported. IE 9 & 10 support with a MutationObserver polyfill. I recommend this [one](https://github.com/megawac/MutationObserver.js)
 
 ## Run Example
 

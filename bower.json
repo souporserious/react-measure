@@ -1,6 +1,6 @@
 {
   "name": "react-measure",
-  "version": "0.3.5",
+  "version": "0.4.0",
   "homepage": "https://github.com/souporserious/react-measure",
   "authors": [
     "Travis Arnold <ftntravis@gmail.com>"
@@ -12,7 +12,10 @@
     "component",
     "measure",
     "measurements",
-    "dimensions"
+    "dimensions",
+    "element-queries",
+    "container-queries",
+    "size"
   ],
   "license": "MIT",
   "ignore": [

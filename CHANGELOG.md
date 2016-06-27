@@ -1,4 +1,19 @@
 ## CHANGELOG
+### 0.4.0
+
+Moved away from MutationObserver's in favor of [element-resize-detector](https://github.com/wnr/element-resize-detector)
+
+Added a more convenient API by allowing child functions [#11](https://github.com/souporserious/react-measure/issues/11)
+
+`measure` is now a public method available on the Measure component
+
+`accurate` prop now returns both cloned element width and height
+
+`shouldMeasure` now accepts only a boolean
+
+Removed `lodash.debounce` dependency
+
+
 ### 0.3.5
 
 Fixed bug in IE with accurate height calculation when checking for children nodes.
