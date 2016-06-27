@@ -1,10 +1,10 @@
-import createResizeDetector from 'element-resize-detector'
+import elementResizeDetectorMaker from 'element-resize-detector'
 
 let instance = null
 
 export default function resizeDetector() {
   if (!instance) {
-    instance = createResizeDetector({
+    instance = elementResizeDetectorMaker({
       strategy: `scroll`
     })
   }

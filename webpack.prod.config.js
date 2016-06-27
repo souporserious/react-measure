@@ -26,7 +26,7 @@ var config = {
   externals: {
     'react': 'React',
     'react-dom': 'ReactDOM',
-    'element-resize-detector': 'createResizeDetector'
+    'element-resize-detector': 'elementResizeDetectorMaker'
   },
 };
 

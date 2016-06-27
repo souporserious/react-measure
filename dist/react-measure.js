@@ -1,12 +1,12 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("React"), require("ReactDOM"), require("createResizeDetector"));
+		module.exports = factory(require("React"), require("ReactDOM"), require("elementResizeDetectorMaker"));
 	else if(typeof define === 'function' && define.amd)
-		define(["React", "ReactDOM", "createResizeDetector"], factory);
+		define(["React", "ReactDOM", "elementResizeDetectorMaker"], factory);
 	else if(typeof exports === 'object')
-		exports["Measure"] = factory(require("React"), require("ReactDOM"), require("createResizeDetector"));
+		exports["Measure"] = factory(require("React"), require("ReactDOM"), require("elementResizeDetectorMaker"));
 	else
-		root["Measure"] = factory(root["React"], root["ReactDOM"], root["createResizeDetector"]);
+		root["Measure"] = factory(root["React"], root["ReactDOM"], root["elementResizeDetectorMaker"]);
 })(this, function(__WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_5__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
