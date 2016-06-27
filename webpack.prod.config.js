@@ -25,7 +25,8 @@ var config = {
   },
   externals: {
     'react': 'React',
-    'react-dom': 'ReactDOM'
+    'react-dom': 'ReactDOM',
+    'element-resize-detector': 'createResizeDetector'
   },
 };
 
@@ -37,7 +38,7 @@ if(TARGET === 'minify') {
       warnings: false
     },
     mangle: {
-      except: ['React', 'ReactDOM', 'Measure']
+      except: ['React', 'ReactDOM', 'Measure', 'createResizeDetector']
     }
   }));
 }
