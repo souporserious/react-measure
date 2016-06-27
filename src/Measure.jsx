@@ -59,13 +59,13 @@ class Measure extends Component {
     return whitelist.filter(prop => blacklist.indexOf(prop) < 0)
   }
 
-  measure = () => {
+  measure = (accurate = this.props.accurate) => {
     const shouldMeasure = this.props.shouldMeasure()
 
     // bail out if we shouldn't measure
     if (!shouldMeasure) return
 
-    const dimensions = this.getDimensions(this._node, this.props.accurate)
+    const dimensions = this.getDimensions(this._node, accurate)
     const isChildFunction = (typeof this.props.children === 'function')
 
     // determine if we need to update our callback with new dimensions or not

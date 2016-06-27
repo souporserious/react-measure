@@ -19,13 +19,13 @@ class Slideable extends Component {
   }
 
   _instant = false
-  _isAnimating = false
   _measureComponent = null
   _node = null
 
   componentWillReceiveProps(nextProps) {
     // force measure so we can animate from an accurate measurement
     if (this.props.show !== nextProps.show) {
+      this._measureComponent.measure(true)
       this._instant = false
     }
   }
@@ -61,13 +61,11 @@ class Slideable extends Component {
           }}
         >
           {({ height }) => {
-            const destHeight = parseFloat(this.state.height).toFixed(2)
-            const currHeight = parseFloat(height).toFixed(2)
             let rmStyles = {}
 
             // only animate when necessary
             // don't always apply style values so height works responsively
-            if (destHeight !== currHeight) {
+            if (!show || (!this._instant && rmHeight !== height)) {
               rmStyles = {
                 height,
                 overflow: 'hidden'
