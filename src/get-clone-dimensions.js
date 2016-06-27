@@ -16,7 +16,6 @@ export default function getCloneDimensions(node) {
   clone.setAttribute('name', '')
 
   // set props to hide copy and get a true height calculation
-  clone.style.boxSizing = 'border-box'
   clone.style.height = 'auto'
   clone.style.position = 'absolute'
   clone.style.visibility = 'hidden'
