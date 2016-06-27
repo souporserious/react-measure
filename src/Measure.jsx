@@ -35,7 +35,7 @@ class Measure extends Component {
     this.measure()
 
     // add component to resize detector to detect changes on resize
-    resizeDetector().listenTo(this._node, this.measure)
+    resizeDetector().listenTo(this._node, () => this.measure())
   }
 
   componentWillReceiveProps({config, whitelist, blacklist}) {
