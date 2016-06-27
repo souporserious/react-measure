@@ -21,7 +21,10 @@
     "component",
     "measure",
     "measurements",
-    "dimensions"
+    "dimensions",
+    "element-queries",
+    "container-queries",
+    "size"
   ],
   "author": "Travis Arnold <travis@souporserious.com> (http://souporserious.com)",
   "license": "MIT",
