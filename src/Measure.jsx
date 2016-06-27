@@ -8,7 +8,7 @@ class Measure extends Component {
     accurate: PropTypes.bool,
     whitelist: PropTypes.array,
     blacklist: PropTypes.array,
-    shouldMeasure: PropTypes.func,
+    shouldMeasure: PropTypes.bool,
     onMeasure: PropTypes.func
   }
 
@@ -16,7 +16,7 @@ class Measure extends Component {
     accurate: false,
     whitelist: ['width', 'height', 'top', 'right', 'bottom', 'left'],
     blacklist: [],
-    shouldMeasure: () => true,
+    shouldMeasure: true,
     onMeasure: () => null
   }
 
@@ -60,10 +60,8 @@ class Measure extends Component {
   }
 
   measure = (accurate = this.props.accurate) => {
-    const shouldMeasure = this.props.shouldMeasure()
-
     // bail out if we shouldn't measure
-    if (!shouldMeasure) return
+    if (!this.props.shouldMeasure) return
 
     const dimensions = this.getDimensions(this._node, accurate)
     const isChildFunction = (typeof this.props.children === 'function')
