@@ -22,7 +22,6 @@ class ItemToMeasure extends Component {
     const { height } = this.state.dimensions
     return (
       <Measure
-        whitelist={['height']}
         onMeasure={(dimensions) => {
           this.setState({dimensions})
         }}
