@@ -11,6 +11,10 @@ Compute measurements of React components. Uses [element-resize-detector](https:/
 
 `bower install react-measure --save`
 
+## Codepen Demo
+
+[Live Demo](http://codepen.io/souporserious/pen/rLdwao/)
+
 ## Example Usage w/ state
 
 ```javascript
