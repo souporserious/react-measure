@@ -1,4 +1,9 @@
 ## CHANGELOG
+### 0.4.1
+Fixed dist build
+
+Updated to latest element-resize-detector
+
 ### 0.4.0
 
 Moved away from MutationObserver's in favor of [element-resize-detector](https://github.com/wnr/element-resize-detector)
