@@ -1,5 +1,8 @@
 ## React Measure
 
+[![npm version](https://badge.fury.io/js/react-measure.svg)](https://badge.fury.io/js/react-aria)
+[![Dependency Status](https://david-dm.org/souporserious/react-measure.svg)](https://david-dm.org/souporserious/react-measure)
+
 Compute measurements of React components. Uses [element-resize-detector](https://github.com/wnr/element-resize-detector) to detect changes of an element and return the new dimensions.
 
 ## Install
