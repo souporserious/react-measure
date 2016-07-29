@@ -1,13 +1,13 @@
 {
   "name": "react-measure",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Compute measurements of React components.",
   "main": "lib/react-measure.js",
   "scripts": {
     "build": "npm run build:lib && NODE_ENV=production webpack --config webpack.prod.config.js",
     "build:lib": "babel src --out-dir lib --stage 0",
     "dev": "webpack-dev-server --devtool eval --hot --progress --colors",
-    "prebuild": "rm -rf dist && mkdir dist",
+    "prebuild": "rm -rf dist lib && mkdir dist lib",
     "prepublish": "npm run build",
     "postbuild": "NODE_ENV=production TARGET=minify webpack --config webpack.prod.config.js",
     "test": "echo \"Error: no test specified\" && exit 1"

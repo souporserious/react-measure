@@ -1,4 +1,9 @@
 ## CHANGELOG
+### 0.4.2
+Removed old code from `lib` folder
+
+Make sure `package.json` cleans `lib` folder on each build
+
 ### 0.4.1
 Fixed dist build
 
