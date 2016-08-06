@@ -1,7 +1,7 @@
 import React, { Component, Children, PropTypes, createElement, cloneElement } from 'react'
 import ReactDOM from 'react-dom'
 import resizeDetector from './resize-detector'
-import getNodeDimensions from './get-node-dimensions'
+import getNodeDimensions from 'get-node-dimensions'
 
 class Measure extends Component {
   static propTypes = {
@@ -51,8 +51,8 @@ class Measure extends Component {
     resizeDetector().removeAllListeners(this._node)
   }
 
-  getDimensions(node = this._node, accurate = true) {
-    return getNodeDimensions(node, accurate)
+  getDimensions(node = this._node, clone) {
+    return getNodeDimensions(node, { clone })
   }
 
   _getPropsToMeasure({ whitelist, blacklist }) {

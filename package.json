@@ -37,7 +37,8 @@
     "react-dom": ">0.13.0"
   },
   "dependencies": {
-    "element-resize-detector": "^1.1.5"
+    "element-resize-detector": "^1.1.5",
+    "get-node-dimensions": "^0.1.1"
   },
   "devDependencies": {
     "autoprefixer-loader": "^2.0.0",
