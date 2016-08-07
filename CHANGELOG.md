@@ -1,4 +1,9 @@
 ## CHANGELOG
+### 0.5.0
+Moved dimension calculations to its own library
+
+Cleaned up build files for NPMCDN
+
 ### 0.4.2
 Removed old code from `lib` folder
 
