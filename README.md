@@ -12,7 +12,7 @@ Compute measurements of React components. Uses [element-resize-detector](https:/
 `bower install react-measure --save`
 
 ```html
-<script src="https://npmcdn.com/react-measure/dist/react-measure.js"></script>
+<script src="https://unpkg.com/react-measure/dist/react-measure.js"></script>
 (UMD library exposed as `Measure`)
 ```
 
