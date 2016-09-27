@@ -49,6 +49,8 @@ class Measure extends Component {
 
   componentWillUnmount() {
     resizeDetector().removeAllListeners(this._node)
+    resizeDetector().uninstall(this._node)
+    this._node = null
   }
 
   getDimensions(node = this._node, clone) {
