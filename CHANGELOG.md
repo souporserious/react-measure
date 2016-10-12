@@ -1,4 +1,9 @@
 ## CHANGELOG
+### 0.5.1
+Use properties instead of constructor
+
+When unmounting, call uninstall in addition to removeAllListeners [#15](https://github.com/souporserious/react-measure/pull/15)
+
 ### 0.5.0
 Moved dimension calculations to its own library
 
