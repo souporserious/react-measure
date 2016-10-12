@@ -20,13 +20,15 @@ class Measure extends Component {
     onMeasure: () => null
   }
 
-  state = {
-    dimensions: {}
+  constructor(props) {
+    super(props)
+    this.state = {
+      dimensions: {}
+    }
+    this._node = null
+    this._propsToMeasure = this._getPropsToMeasure(props)
+    this._lastDimensions = {}
   }
-
-  _node = null
-  _propsToMeasure = this._getPropsToMeasure(this.props)
-  _lastDimensions = {}
 
   componentDidMount() {
     this._node = ReactDOM.findDOMNode(this)
