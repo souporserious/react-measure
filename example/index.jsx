@@ -1,93 +1,8 @@
 import React, { Component, Children, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
-import shallowCompare from 'react/lib/shallowCompare'
 import Measure from '../src/react-measure'
-import Slideable from './Slideable'
 
 import './main.scss'
-
-class AccordionContent extends Component {
-  state = {
-    showChildSlideable: false,
-    showChildContent: false
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return shallowCompare(this, nextProps, nextState)
-  }
-
-  render() {
-    const { item, style } = this.props
-    const { showChildSlideable, showChildContent } = this.state
-
-    return(
-      <div
-        className="accordion__item__content"
-        style={style}
-        data-sliding={this.props['data-sliding']}
-      >
-        <button
-          onClick={e => {
-            e.stopPropagation()
-            this.setState({showChildSlideable: !showChildSlideable})
-          }}
-        >
-          Toggle Child Slideable
-        </button>
-        <Slideable show={showChildSlideable}>
-          <div style={{background: 'red'}}>
-            <p style={{margin: 0, padding: 12}}>Just another paragraph to test out height animations.</p>
-            <p style={{margin: 0, marginTop: 12, padding: 12}}>Just another paragraph to test out height animations.</p>
-          </div>
-        </Slideable>
-        <button
-          onClick={e => {
-            e.stopPropagation()
-            this.setState({showChildContent: !showChildContent})
-          }}
-        >
-          Toggle Child Content
-        </button>
-        { showChildContent &&
-          <div style={{background: 'orange'}}>
-            <p style={{margin: 0, padding: 12}}>Just another paragraph to test out height animations.</p>
-            <p style={{margin: 0, marginTop: 12, padding: 12}}>Just another paragraph to test out height animations.</p>
-          </div>
-        }
-        {item.contents.map((content, i) => <p key={i}>{content}</p>)}
-      </div>
-    )
-  }
-}
-
-class Accordion extends Component {
-  _handleClick(item) {
-    this.props.onClick(item)
-  }
-
-  render() {
-    const { items, active } = this.props
-
-    return(
-      <ul className="accordion__items">
-        {items.map(item =>
-          <li
-            key={item.id}
-            className="accordion__item"
-            onClick={this._handleClick.bind(this, item)}
-          >
-            <h2 className="accordion__item__title">{item.title}</h2>
-            <Slideable
-              show={active === item.id}
-            >
-              <AccordionContent item={item} active={active} />
-            </Slideable>
-          </li>
-        )}
-      </ul>
-    );
-  }
-}
 
 class Paragraph extends Component {
   render() {
@@ -179,80 +94,31 @@ class Paragraphs extends Component {
   }
 }
 
-class AnimatingChild extends Component {
-  render() {
-    const { animate } = this.props
-    return (
-      <Measure>
-        {dimensions =>
-          <div className={`square ${animate ? 'animate' : ''}`}>
-            <strong>
-              {animate ? 'Click to stop animating' : 'Click to animate'}
-            </strong>
-            {Object.keys(dimensions).map((dimension, i) =>
-              <div key={i}>{dimension}: {dimensions[dimension]}</div>
-            )}
-          </div>
-        }
-      </Measure>
-    )
-  }
-}
+const AnimatingChild = ({ animate }) => (
+  <Measure>
+    {dimensions =>
+      <div className={`square ${animate ? 'animate' : ''}`}>
+        <strong>
+          {animate ? 'Click to stop animating' : 'Click to animate'}
+        </strong>
+        <pre>
+          {JSON.stringify(dimensions, null, 2)}
+        </pre>
+      </div>
+    }
+  </Measure>
+)
 
 class App extends Component {
   state = {
-    items: [
-      {
-        id: 0,
-        title: 'What is a dog?',
-        contents: ['A dog is a type of domesticated animal. Known for its loyalty and faithfulness, it can be found as a welcome guest in many households across the world.']
-      }, {
-        id: 1,
-        title: 'What kinds of dogs are there?',
-        contents: ['There are many breeds of dogs. Each breed varies in size and temperament. Owners often select a breed of dog that they find to be compatible with their own lifestyle and desires from a companion.']
-      }, {
-        id: 2,
-        title: 'How do you acquire a dog?',
-        contents: ['Three common ways for a prospective owner to acquire a dog is from pet shops, private owners, or shelters.', 'A pet shop may be the most convenient way to buy a dog. Buying a dog from a private owner allows you to assess the pedigree and upbringing of your dog before choosing to take it home. Lastly, finding your dog from a shelter, helps give a good home to a dog who may not find one so readily.']
-      }
-    ],
-    active: 1,
-    showSVG: false
-  }
-
-  _handleAccordionClick = ({id}) => {
-    const active = (id === this.state.active) ? null : id;
-    this.setState({active});
+    animate: false
   }
 
   render() {
-    const { items, active, showSVG, animate } = this.state
-    const currentSelected = active === null ? 'Nothing selected' : items[active].title;
-
-    return(
-      <div className="app">
-        <div>
-          <div onClick={() => this.setState({showSVG: !showSVG})}>Toggle SVG</div>
-          <Slideable show={showSVG}>
-            <svg width="36px" height="36px" viewBox="0 0 36 36">
-              <circle fill="#373D3F" cx="18" cy="18" r="18"/>
-          	 <polygon fill="#CDD7DB" points="14,11 26,18 14,25"/>
-            </svg>
-          </Slideable>
-          <Slideable show={!showSVG}>
-            <svg width="36px" height="36px" viewBox="0 0 36 36">
-              <circle fill="#373D3F" cx="18" cy="18" r="18"/>
-          	 <polygon fill="#CDD7DB" points="14,11 26,18 14,25"/>
-            </svg>
-          </Slideable>
-        </div>
-        <strong>Current Selected:</strong> {currentSelected}
-        <Accordion
-          items={items}
-          active={active}
-          onClick={this._handleAccordionClick}
-        />
-        <Paragraphs />
+    const { animate } = this.state
+    return (
+      <div>
+        <Paragraphs/>
         <div onClick={() => this.setState({ animate: !animate })}>
           <AnimatingChild animate={animate}/>
         </div>
