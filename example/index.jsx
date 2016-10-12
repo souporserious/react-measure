@@ -19,7 +19,7 @@ class Paragraphs extends Component {
     super(props)
     this.state = {
       count: 0,
-      toggleFlex: false,
+      display: true,
       dimensions: {}
     }
   }
@@ -35,20 +35,9 @@ class Paragraphs extends Component {
     return paragraphs
   }
 
-  _renderDimensions() {
-    const { dimensions } = this.state
-
-    return (
-      Object.keys(dimensions).map((dimension, i) =>
-        <li key={i}>{dimension}: {dimensions[dimension]}</li>
-      )
-    )
-  }
-
   render() {
-    const { count, toggleFlex } = this.state
-
-    return(
+    const { count, display, dimensions } = this.state
+    return (
       <div className="measure-example">
         <header>
           <button
@@ -60,35 +49,39 @@ class Paragraphs extends Component {
           </button>
           <button
             onClick={() =>
-              this.setState({toggleFlex: !toggleFlex})
+              this.setState({display: !display})
             }
           >
-            Toggle Flex
+            Toggle Display
+          </button>
+          <button
+            onClick={() =>
+              this._measureComponent.measure()
+            }
+          >
+            Measure
           </button>
         </header>
-        <main>
-          <Measure
-            onMeasure={(dimensions) => {
-              this.setState({dimensions})
+        <pre>
+          {JSON.stringify(dimensions, null, 2)}
+        </pre>
+        <Measure
+          ref={c => this._measureComponent = c}
+          onMeasure={(dimensions) => {
+            this.setState({dimensions})
+          }}
+        >
+          <div
+            className="paragraphs"
+            style={{
+              display: display ? 'block' : 'none',
+              padding: 12,
+              background: 'red'
             }}
           >
-            <div
-              className="paragraphs"
-              style={{
-                flex: toggleFlex ? 2 : 1,
-                padding: 12,
-                background: 'red'
-              }}
-            >
-              {this._renderParagraphs()}
-            </div>
-          </Measure>
-          <ul
-            className="paragraphs-measurements"
-          >
-            {this._renderDimensions()}
-          </ul>
-        </main>
+            {this._renderParagraphs()}
+          </div>
+        </Measure>
       </div>
     )
   }
@@ -96,7 +89,7 @@ class Paragraphs extends Component {
 
 const AnimatingChild = ({ animate }) => (
   <Measure>
-    {dimensions =>
+    { dimensions =>
       <div className={`square ${animate ? 'animate' : ''}`}>
         <strong>
           {animate ? 'Click to stop animating' : 'Click to animate'}
@@ -118,7 +111,9 @@ class App extends Component {
     const { animate } = this.state
     return (
       <div>
-        <Paragraphs/>
+        <div style={{ marginBottom: 24 }}>
+          <Paragraphs/>
+        </div>
         <div onClick={() => this.setState({ animate: !animate })}>
           <AnimatingChild animate={animate}/>
         </div>
@@ -127,4 +122,4 @@ class App extends Component {
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('app'))
+ReactDOM.render(<App/>, document.getElementById('app'))

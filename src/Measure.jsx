@@ -5,17 +5,19 @@ import getNodeDimensions from 'get-node-dimensions'
 
 class Measure extends Component {
   static propTypes = {
-    accurate: PropTypes.bool,
     whitelist: PropTypes.array,
     blacklist: PropTypes.array,
+    useClone: PropTypes.bool,
+    cloneOptions: PropTypes.object,
     shouldMeasure: PropTypes.bool,
     onMeasure: PropTypes.func
   }
 
   static defaultProps = {
-    accurate: false,
     whitelist: ['width', 'height', 'top', 'right', 'bottom', 'left'],
     blacklist: [],
+    useClone: false,
+    cloneOptions: {},
     shouldMeasure: true,
     onMeasure: () => null
   }
@@ -45,7 +47,7 @@ class Measure extends Component {
     // whitelist or blacklist props have changed
     if (this.props.whitelist !== whitelist ||
         this.props.blacklist !== blacklist) {
-      this._propsToMeasure = this._getPropsToMeasure({whitelist, blacklist})
+      this._propsToMeasure = this._getPropsToMeasure({ whitelist, blacklist })
     }
   }
 
@@ -55,19 +57,19 @@ class Measure extends Component {
     this._node = null
   }
 
-  getDimensions(node = this._node, clone) {
-    return getNodeDimensions(node, { clone })
+  getDimensions(
+    node = this._node,
+    useClone = this.props.useClone,
+    cloneOptions = this.props.cloneOptions
+  ) {
+    return getNodeDimensions(node, { clone: useClone, ...cloneOptions })
   }
 
-  _getPropsToMeasure({ whitelist, blacklist }) {
-    return whitelist.filter(prop => blacklist.indexOf(prop) < 0)
-  }
-
-  measure = (accurate = this.props.accurate) => {
+  measure = (useClone = this.props.useClone) => {
     // bail out if we shouldn't measure
     if (!this.props.shouldMeasure) return
 
-    const dimensions = this.getDimensions(this._node, accurate)
+    const dimensions = this.getDimensions(this._node, useClone)
     const isChildFunction = (typeof this.props.children === 'function')
 
     // determine if we need to update our callback with new dimensions or not
@@ -88,6 +90,10 @@ class Measure extends Component {
         return true
       }
     })
+  }
+
+  _getPropsToMeasure({ whitelist, blacklist }) {
+    return whitelist.filter(prop => blacklist.indexOf(prop) < 0)
   }
 
   render() {
