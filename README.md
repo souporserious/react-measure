@@ -9,8 +9,6 @@ Compute measurements of React components. Uses [element-resize-detector](https:/
 
 `npm install react-measure --save`
 
-`bower install react-measure --save`
-
 ```html
 <script src="https://unpkg.com/react-measure/dist/react-measure.js"></script>
 (UMD library exposed as `Measure`)
@@ -56,7 +54,7 @@ class ItemToMeasure extends Component {
   render() {
     return (
       <Measure>
-        {dimensions =>
+        { dimensions =>
           <div>
             {Object.keys(dimensions).map((dimension, i) =>
               <div key={i}>{dimension}: {dimensions[dimension]}</div>
@@ -71,10 +69,6 @@ class ItemToMeasure extends Component {
 
 ## Props
 
-#### `accurate`: PropTypes.bool
-
-Tries to give the most accurate measure by cloning the element and measuring it. Use if you your item is hidden or you want know to find out what height/width you need to get to.
-
 #### `whitelist`: PropTypes.array
 
 Provide a list of properties to fire a callback for. Accepts any of the following properties `['width', 'height', 'top', 'right', 'bottom', 'left']`
@@ -82,6 +76,14 @@ Provide a list of properties to fire a callback for. Accepts any of the followin
 #### `blacklist`: PropTypes.array
 
 Like above, but will not fire a callback for the specified properties.
+
+#### `useClone`: PropTypes.bool
+
+Tries to give the most accurate measure by cloning the element and measuring it. Use if you your item is hidden or you want know to find out what height/width you need to get to.
+
+#### `cloneOptions`: PropTypes.Object
+
+Passes clone options to [getNodeDimensions](https://github.com/souporserious/get-node-dimensions).
 
 #### `shouldMeasure`: PropTypes.bool
 

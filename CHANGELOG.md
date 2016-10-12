@@ -1,4 +1,15 @@
 ## CHANGELOG
+### 1.0.0
+Update get-node-dimensions to 1.0.0
+
+`accurate` renamed to `useClone`
+
+Added `cloneOptions` prop that gets passed to `getNodeDimensions`
+
+Fixed build to not include `get-node-dimensions` library
+
+Removed bower support
+
 ### 0.5.1
 Use properties instead of constructor
 
