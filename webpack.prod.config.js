@@ -2,6 +2,33 @@ var path = require('path');
 var webpack = require('webpack');
 var TARGET = process.env.TARGET || null;
 
+var externals = {
+  'react': {
+    root: 'React',
+    commonjs2: 'react',
+    commonjs: 'react',
+    amd: 'react'
+  },
+  'react-dom': {
+    root: 'ReactDOM',
+    commonjs2: 'react-dom',
+    commonjs: 'react-dom',
+    amd: 'react-dom'
+  },
+  'element-resize-detector': {
+    root: 'elementResizeDetectorMaker',
+    commonjs2: 'element-resize-detector',
+    commonjs: 'element-resize-detector',
+    amd: 'element-resize-detector'
+  },
+  'get-node-dimensions': {
+    root: 'getNodeDimensions',
+    commonjs2: 'get-node-dimensions',
+    commonjs: 'get-node-dimensions',
+    amd: 'get-node-dimensions'
+  }
+};
+
 var config = {
   entry: {
     index: './src/react-measure.js',
@@ -23,11 +50,7 @@ var config = {
   resolve: {
     extensions: ['', '.js', '.jsx']
   },
-  externals: {
-    'react': 'React',
-    'react-dom': 'ReactDOM',
-    'element-resize-detector': 'elementResizeDetectorMaker'
-  },
+  externals: externals
 };
 
 if(TARGET === 'minify') {
@@ -38,7 +61,7 @@ if(TARGET === 'minify') {
       warnings: false
     },
     mangle: {
-      except: ['React', 'ReactDOM', 'Measure', 'createResizeDetector']
+      except: ['React', 'ReactDOM', 'elementResizeDetectorMaker', 'getNodeDimensions', 'Measure']
     }
   }));
 }
