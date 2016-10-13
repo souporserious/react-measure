@@ -1,6 +1,6 @@
 {
   "name": "react-measure",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Compute measurements of React components.",
   "main": "lib/react-measure.js",
   "files": [
@@ -42,7 +42,7 @@
   },
   "dependencies": {
     "element-resize-detector": "^1.1.9",
-    "get-node-dimensions": "^1.0.0"
+    "get-node-dimensions": "^1.1.0"
   },
   "devDependencies": {
     "autoprefixer-loader": "^2.0.0",
