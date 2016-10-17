@@ -1,4 +1,7 @@
 ## CHANGELOG
+### 1.2.0
+Provide dimension defaults
+
 ### 1.1.0
 Update get-node-dimensions to 1.1.0
 
