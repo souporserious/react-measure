@@ -1,7 +1,7 @@
 import React, { Component, Children, PropTypes, createElement, cloneElement } from 'react'
 import ReactDOM from 'react-dom'
-import resizeDetector from './resize-detector'
 import getNodeDimensions from 'get-node-dimensions'
+import resizeDetector from './resize-detector'
 
 class Measure extends Component {
   static propTypes = {
@@ -25,7 +25,14 @@ class Measure extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      dimensions: {}
+      dimensions: {
+        width: 0,
+        height: 0,
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0
+      }
     }
     this._node = null
     this._propsToMeasure = this._getPropsToMeasure(props)
