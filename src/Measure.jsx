@@ -86,7 +86,7 @@ class Measure extends Component {
         this.props.onMeasure(dimensions)
 
         // update state to send dimensions to child function
-        if (isChildFunction) {
+        if (isChildFunction && typeof this !== 'undefined') {
           this.setState({ dimensions })
         }
 
