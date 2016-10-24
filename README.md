@@ -22,6 +22,7 @@ Compute measurements of React components. Uses [element-resize-detector](https:/
 
 ```javascript
 import Measure from 'react-measure';
+import classNames from 'classnames';
 
 class ItemToMeasure extends Component {
   state = {
@@ -29,15 +30,23 @@ class ItemToMeasure extends Component {
   }
 
   render() {
-    const { height } = this.state.dimensions
+    const { width, height } = this.state.dimensions
+    const className = classNames(
+      (width < 400) && 'small-width-modifier'
+    )
+
     return (
       <Measure
         onMeasure={(dimensions) => {
           this.setState({dimensions})
         }}
       >
-        <div>
+        <div className={className}>
           I can do cool things with my dimensions now :D
+
+          { (height > 250) &&
+            <div>Render responsive content based on the component size!</div>
+          }
         </div>
       </Measure>
     )
@@ -50,21 +59,18 @@ class ItemToMeasure extends Component {
 ```javascript
 import Measure from 'react-measure';
 
-class ItemToMeasure extends Component {
-  render() {
-    return (
-      <Measure>
-        { dimensions =>
-          <div>
-            {Object.keys(dimensions).map((dimension, i) =>
-              <div key={i}>{dimension}: {dimensions[dimension]}</div>
-            )}
-          </div>
-        }
-      </Measure>
-    )
-  }
-}
+const ItemToMeasure = () => (
+  <Measure>
+    { dimensions =>
+      <div>
+        Some content here
+        <pre>
+          {JSON.stringify(dimensions, null, 2)}
+        </pre>
+      </div>
+    }
+  </Measure>
+)
 ```
 
 ## Props
