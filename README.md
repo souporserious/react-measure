@@ -26,7 +26,10 @@ import classNames from 'classnames';
 
 class ItemToMeasure extends Component {
   state = {
-    dimensions: {}
+    dimensions: {
+      width: -1,
+      height: -1
+    }
   }
 
   render() {
