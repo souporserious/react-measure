@@ -56,7 +56,7 @@ var config = {
   externals: externals
 };
 
-if(TARGET === 'minify') {
+if (TARGET === 'minify') {
   config.output.filename = 'react-measure.min.js';
   config.output.sourceMapFilename = 'react-measure.min.js';
   config.plugins.push(new webpack.optimize.UglifyJsPlugin({

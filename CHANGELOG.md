@@ -1,4 +1,7 @@
 ## CHANGELOG
+### 1.2.2
+Fix dist build
+
 ### 1.2.1
 Ensure `setState` is not called after unmounting [#18](https://github.com/souporserious/react-measure/pull/18)
 
