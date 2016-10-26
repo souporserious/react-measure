@@ -86,6 +86,10 @@ Provide a list of properties to fire a callback for. Accepts any of the followin
 
 Like above, but will not fire a callback for the specified properties.
 
+#### `includeMargin`: PropTypes.bool
+
+Whether or not to include margins in calculation. Defaults to `true`.
+
 #### `useClone`: PropTypes.bool
 
 Tries to give the most accurate measure by cloning the element and measuring it. Use if you your item is hidden or you want know to find out what height/width you need to get to.
