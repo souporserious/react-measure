@@ -7,6 +7,7 @@ class Measure extends Component {
   static propTypes = {
     whitelist: PropTypes.array,
     blacklist: PropTypes.array,
+    includeMargin: PropTypes.bool,
     useClone: PropTypes.bool,
     cloneOptions: PropTypes.object,
     shouldMeasure: PropTypes.bool,
@@ -16,6 +17,7 @@ class Measure extends Component {
   static defaultProps = {
     whitelist: ['width', 'height', 'top', 'right', 'bottom', 'left'],
     blacklist: [],
+    includeMargin: true,
     useClone: false,
     cloneOptions: {},
     shouldMeasure: true,
@@ -66,17 +68,25 @@ class Measure extends Component {
 
   getDimensions(
     node = this._node,
+    includeMargin = this.props.includeMargin,
     useClone = this.props.useClone,
     cloneOptions = this.props.cloneOptions
   ) {
-    return getNodeDimensions(node, { clone: useClone, ...cloneOptions })
+    return getNodeDimensions(node, {
+      margin: includeMargin,
+      clone: useClone,
+      ...cloneOptions
+    })
   }
 
-  measure = (useClone = this.props.useClone) => {
+  measure = (
+    includeMargin = this.props.includeMargin,
+    useClone = this.props.useClone
+  ) => {
     // bail out if we shouldn't measure
     if (!this.props.shouldMeasure) return
 
-    const dimensions = this.getDimensions(this._node, useClone)
+    const dimensions = this.getDimensions(this._node, includeMargin, useClone)
     const isChildFunction = (typeof this.props.children === 'function')
 
     // determine if we need to update our callback with new dimensions or not

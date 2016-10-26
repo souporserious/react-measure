@@ -111,9 +111,16 @@ class App extends Component {
     const { animate } = this.state
     return (
       <div>
-        <div style={{ marginBottom: 24 }}>
-          <Paragraphs/>
-        </div>
+        <Measure
+          onMeasure={dimensions => {
+            // show margin calculations
+            console.log(dimensions)
+          }}
+        >
+          <div style={{ marginBottom: 24 }}>
+            <Paragraphs/>
+          </div>
+        </Measure>
         <div onClick={() => this.setState({ animate: !animate })}>
           <AnimatingChild animate={animate}/>
         </div>

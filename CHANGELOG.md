@@ -1,4 +1,9 @@
 ## CHANGELOG
+### 1.3.0
+Update get-node-dimensions to 1.2.0
+
+Use `includeMargin` to account for margins when calculating dimensions now
+
 ### 1.2.2
 Fix dist build
 
