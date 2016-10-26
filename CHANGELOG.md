@@ -1,4 +1,7 @@
 ## CHANGELOG
+### 1.3.1
+Fixes exception when changing key of rendered child [#19](https://github.com/souporserious/react-measure/issues/19)
+
 ### 1.3.0
 Update get-node-dimensions to 1.2.0
 
