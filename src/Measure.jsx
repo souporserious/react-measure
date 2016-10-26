@@ -42,7 +42,7 @@ class Measure extends Component {
   }
 
   componentDidMount() {
-    this._node = ReactDOM.findDOMNode(this)
+    this._setDOMNode()
 
     // measure on first render
     this.measure()
@@ -66,6 +66,10 @@ class Measure extends Component {
     this._node = null
   }
 
+  _setDOMNode() {
+    this._node = ReactDOM.findDOMNode(this)
+  }
+
   getDimensions(
     node = this._node,
     includeMargin = this.props.includeMargin,
@@ -85,6 +89,11 @@ class Measure extends Component {
   ) => {
     // bail out if we shouldn't measure
     if (!this.props.shouldMeasure) return
+
+    // if no parent available we need to requery the DOM node
+    if (!this._node.parentNode) {
+      this._setDOMNode()
+    }
 
     const dimensions = this.getDimensions(this._node, includeMargin, useClone)
     const isChildFunction = (typeof this.props.children === 'function')

@@ -124,6 +124,19 @@ class App extends Component {
         <div onClick={() => this.setState({ animate: !animate })}>
           <AnimatingChild animate={animate}/>
         </div>
+
+        <Measure
+          whiteList={['width']}
+          onMeasure={dimensions => {
+            console.log('changing key dimensions', dimensions)
+          }}
+        >
+          { ({ width }) =>
+            !width
+              ? <div key="empty" style={{height: 1}} children={width}/>
+              : <div key="with-width" style={{height: 20}} children={width}/>
+          }
+        </Measure>
       </div>
     )
   }
