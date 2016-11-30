@@ -62,8 +62,7 @@ class Measure extends Component {
   }
 
   componentWillUnmount() {
-    resizeDetector().removeAllListeners(this._node)
-    resizeDetector().uninstall(this._node)
+    this.resizeObserver.disconnect(this._node)
     this._node = null
   }
 
