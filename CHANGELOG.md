@@ -1,4 +1,7 @@
 ## CHANGELOG
+### 1.4.0
+Moved away from element-resize-detector in favor of [resize-observer-polyfill](https://github.com/que-etc/resize-observer-polyfill) 🎉
+
 ### 1.3.1
 Fixes exception when changing key of rendered child [#19](https://github.com/souporserious/react-measure/issues/19)
 

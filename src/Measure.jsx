@@ -1,7 +1,7 @@
 import React, { Component, Children, PropTypes, createElement, cloneElement } from 'react'
 import ReactDOM from 'react-dom'
+import ResizeObserver from 'resize-observer-polyfill'
 import getNodeDimensions from 'get-node-dimensions'
-import resizeDetector from './resize-detector'
 
 class Measure extends Component {
   static propTypes = {
@@ -47,8 +47,9 @@ class Measure extends Component {
     // measure on first render
     this.measure()
 
-    // add component to resize detector to detect changes on resize
-    resizeDetector().listenTo(this._node, () => this.measure())
+    // add component to resize observer to detect changes on resize
+    this.resizeObserver = new ResizeObserver(() => this.measure())
+    this.resizeObserver.observe(this._node)
   }
 
   componentWillReceiveProps({config, whitelist, blacklist}) {

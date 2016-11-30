@@ -16,11 +16,11 @@ var externals = {
     commonjs: 'react-dom',
     amd: 'react-dom'
   },
-  'element-resize-detector': {
-    root: 'elementResizeDetectorMaker',
-    commonjs2: 'element-resize-detector',
-    commonjs: 'element-resize-detector',
-    amd: 'element-resize-detector'
+  'resize-observer-polyfill': {
+    root: 'ResizeObserver',
+    commonjs2: 'resize-observer-polyfill',
+    commonjs: 'resize-observer-polyfill',
+    amd: 'resize-observer-polyfill'
   },
   'get-node-dimensions': {
     root: 'getNodeDimensions',

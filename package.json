@@ -10,7 +10,7 @@
   "scripts": {
     "build:lib": "babel src --out-dir lib",
     "build": "npm run build:lib && NODE_ENV=production webpack --config webpack.prod.config.js",
-    "dev": "webpack-dev-server --devtool eval --hot --progress --colors",
+    "dev": "webpack-dev-server --devtool eval --hot --progress --colors --host 0.0.0.0",
     "postbuild": "NODE_ENV=production TARGET=minify webpack --config webpack.prod.config.js",
     "prebuild": "rm -rf dist && mkdir dist",
     "prepublish": "npm run build"
@@ -40,8 +40,8 @@
     "react-dom": ">0.13.0"
   },
   "dependencies": {
-    "element-resize-detector": "^1.1.9",
-    "get-node-dimensions": "^1.2.0"
+    "get-node-dimensions": "^1.2.0",
+    "resize-observer-polyfill": "^1.2.1"
   },
   "devDependencies": {
     "babel-cli": "^6.16.0",
