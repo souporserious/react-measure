@@ -1,6 +1,6 @@
 ## React Measure
 
-[![npm version](https://badge.fury.io/js/react-measure.svg)](https://badge.fury.io/js/react-aria)
+[![npm version](https://badge.fury.io/js/react-measure.svg)](https://badge.fury.io/js/react-measure)
 [![Dependency Status](https://david-dm.org/souporserious/react-measure.svg)](https://david-dm.org/souporserious/react-measure)
 
 Compute measurements of React components. Uses [resize-observer-polyfill](https://github.com/que-etc/resize-observer-polyfill) to detect changes of an element and return the new dimensions.
