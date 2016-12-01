@@ -1,7 +1,12 @@
 import React, { Component, Children, PropTypes, createElement, cloneElement } from 'react'
 import ReactDOM from 'react-dom'
-import ResizeObserver from 'resize-observer-polyfill'
 import getNodeDimensions from 'get-node-dimensions'
+const isWindowDefined = (typeof window !== 'undefined')
+
+// only require ResizeObserver polyfill if it isn't available and we aren't in a SSR environment
+if (isWindowDefined && !window.ResizeObserver) {
+  window.ResizeObserver = require('resize-observer-polyfill')
+}
 
 class Measure extends Component {
   static propTypes = {
@@ -48,8 +53,10 @@ class Measure extends Component {
     this.measure()
 
     // add component to resize observer to detect changes on resize
-    this.resizeObserver = new ResizeObserver(() => this.measure())
-    this.resizeObserver.observe(this._node)
+    if (isWindowDefined) {
+      this.resizeObserver = new ResizeObserver(() => this.measure())
+      this.resizeObserver.observe(this._node)
+    }
   }
 
   componentWillReceiveProps({config, whitelist, blacklist}) {
@@ -62,7 +69,9 @@ class Measure extends Component {
   }
 
   componentWillUnmount() {
-    this.resizeObserver.disconnect(this._node)
+    if (isWindowDefined) {
+      this.resizeObserver.disconnect(this._node)
+    }
     this._node = null
   }
 
