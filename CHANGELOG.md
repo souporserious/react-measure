@@ -1,4 +1,7 @@
 ## CHANGELOG
+### 1.4.2
+Only require ResizeObserver polyfill when window is available
+
 ### 1.4.1
 Cleanup old element-resize-detector code [23](https://github.com/souporserious/react-measure/pull/23)
 
