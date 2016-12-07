@@ -5,7 +5,8 @@ const isWindowDefined = (typeof window !== 'undefined')
 
 // only require ResizeObserver polyfill if it isn't available and we aren't in a SSR environment
 if (isWindowDefined && !window.ResizeObserver) {
-  window.ResizeObserver = require('resize-observer-polyfill').default
+  const ResizeObserver = require('resize-observer-polyfill')
+  window.ResizeObserver = ResizeObserver.default || ResizeObserver
 }
 
 class Measure extends Component {
