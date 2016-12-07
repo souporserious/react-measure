@@ -1,0 +1,53 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  padding: 24px;
+}
+
+button {
+  outline: 0;
+  cursor: pointer;
+}
+
+#app {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.measure-example {
+  header,
+  main {
+    display: flex;
+  }
+}
+
+.paragraphs {
+  flex: 1;
+}
+.paragraphs-measurements {
+  flex: 1;
+}
+
+// CSS Animation
+.square {
+  width: 50%;
+  height: 300px;
+  background: orange;
+}
+
+.animate {
+  animation: animateInOut 1000ms infinite;
+}
+
+@keyframes animateInOut {
+  0%, 100% {
+    width: 50%;
+    height: 300px;
+  }
+  50% {
+    width: 100%;
+    height: 600px;
+  }
+}
