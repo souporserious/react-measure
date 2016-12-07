@@ -1,4 +1,7 @@
 ## CHANGELOG
+### 1.4.4
+Use ResizeObserver.default if available. This fixes older browsers in the local dev environment.
+
 ### 1.4.3
 Requiring default export of `resize-observer-polyfill` [#28](https://github.com/souporserious/react-measure/pull/28)
 
