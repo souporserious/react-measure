@@ -1,9 +1,12 @@
 ## CHANGELOG
+### 1.4.3
+Requiring default export of `resize-observer-polyfill` [#28](https://github.com/souporserious/react-measure/pull/28)
+
 ### 1.4.2
 Only require ResizeObserver polyfill when window is available
 
 ### 1.4.1
-Cleanup old element-resize-detector code [23](https://github.com/souporserious/react-measure/pull/23)
+Cleanup old element-resize-detector code [#23](https://github.com/souporserious/react-measure/pull/23)
 
 ### 1.4.0
 Moved away from element-resize-detector in favor of [resize-observer-polyfill](https://github.com/que-etc/resize-observer-polyfill) 🎉
