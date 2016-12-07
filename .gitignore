@@ -5,11 +5,12 @@
 .AppleDouble
 .LSOverride
 
-# NPM
+# APP
 node_modules
 npm-debug.log
 /dist/
 /lib/
+/example/bundle.js
 
 # General Files
 .sass-cache

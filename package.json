@@ -10,10 +10,11 @@
   "scripts": {
     "build:lib": "babel src --out-dir lib",
     "build": "npm run build:lib && NODE_ENV=production webpack --config webpack.prod.config.js",
-    "dev": "webpack-dev-server --devtool eval --hot --progress --colors --host 0.0.0.0",
+    "dev": "webpack-dev-server --inline --hot --progress --colors --host 0.0.0.0 --devtool eval",
     "postbuild": "NODE_ENV=production TARGET=minify webpack --config webpack.prod.config.js",
     "prebuild": "rm -rf dist && mkdir dist",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "deploy": "NODE_ENV=production TARGET=minify webpack && git-directory-deploy --directory example --branch gh-pages"
   },
   "repository": {
     "type": "git",
@@ -53,6 +54,7 @@
     "babel-preset-stage-0": "^6.16.0",
     "chokidar": "^1.6.1",
     "css-loader": "^0.25.0",
+    "git-directory-deploy": "^1.5.1",
     "http-server": "^0.9.0",
     "node-libs-browser": "^1.0.0",
     "node-sass": "^3.2.0",
