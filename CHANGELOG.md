@@ -1,4 +1,9 @@
 ## CHANGELOG
+### 1.4.5
+Update to `resize-observer-polyfill` 1.3.1 to fix Webpack 2 issues [#29](https://github.com/souporserious/react-measure/issues/29)
+
+Remove monkey patch for importing `resize-observer-polyfill`
+
 ### 1.4.4
 Use ResizeObserver.default if available. This fixes older browsers in the local dev environment.
 
