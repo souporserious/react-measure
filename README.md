@@ -80,11 +80,11 @@ const ItemToMeasure = () => (
 
 #### `whitelist`: PropTypes.array
 
-Provide a list of properties to fire a callback for. Accepts any of the following properties `['width', 'height', 'top', 'right', 'bottom', 'left']`
+Provide a list of properties that determine when `onMeasure` should fire. Accepts any of the following properties `['width', 'height', 'top', 'right', 'bottom', 'left']`
 
 #### `blacklist`: PropTypes.array
 
-Like above, but will not fire a callback for the specified properties.
+Like above, but will not fire `onMeasure` for the specified properties.
 
 #### `includeMargin`: PropTypes.bool
 
@@ -92,7 +92,7 @@ Whether or not to include margins in calculation. Defaults to `true`.
 
 #### `useClone`: PropTypes.bool
 
-Tries to give the most accurate measure by cloning the element and measuring it. Use if you your item is hidden or you want know to find out what height/width you need to get to.
+Tries to give the most accurate measure by cloning the element and measuring it. Use if your item is hidden or you want to determine what a new dimension will be.
 
 #### `cloneOptions`: PropTypes.Object
 
@@ -104,7 +104,7 @@ Determines whether or not a measurement should occur. Useful if you only need to
 
 #### `onMeasure`: PropTypes.func
 
-Callback when the component has been mutated. Receives the new `dimensions` of your component.
+Callback when the component dimensions have changed. Receives the new `dimensions` of your component.
 
 ## Good to knows
 To help avoid layout thrashing, use the prop `blacklist` to ignore specific values and stop firing a render to check the DOM for changes. Likewise you can use `whitelist` to choose only the ones you need to check.
