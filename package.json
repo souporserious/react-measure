@@ -42,7 +42,7 @@
   },
   "dependencies": {
     "get-node-dimensions": "^1.2.0",
-    "resize-observer-polyfill": "1.3.1"
+    "resize-observer-polyfill": "^1.4.1"
   },
   "devDependencies": {
     "babel-cli": "^6.16.0",
