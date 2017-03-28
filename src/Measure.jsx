@@ -1,5 +1,4 @@
 import React, { Component, Children, PropTypes, createElement, cloneElement } from 'react'
-import ReactDOM from 'react-dom'
 import ResizeObserver from 'resize-observer-polyfill'
 import getNodeDimensions from 'get-node-dimensions'
 
@@ -42,8 +41,6 @@ class Measure extends Component {
   }
 
   componentDidMount() {
-    this._setDOMNode()
-
     // measure on first render
     this.measure()
 
@@ -66,10 +63,6 @@ class Measure extends Component {
     this._node = null
   }
 
-  _setDOMNode() {
-    this._node = ReactDOM.findDOMNode(this)
-  }
-
   getDimensions(
     node = this._node,
     includeMargin = this.props.includeMargin,
@@ -90,10 +83,8 @@ class Measure extends Component {
     // bail out if we shouldn't measure
     if (!this.props.shouldMeasure) return
 
-    // if no parent available we need to requery the DOM node
-    if (!this._node.parentNode) {
-      this._setDOMNode()
-    }
+    // More info here: https://facebook.github.io/react/docs/refs-and-the-dom.html#caveats
+    if (!this._node) return
 
     const dimensions = this.getDimensions(this._node, includeMargin, useClone)
     const isChildFunction = (typeof this.props.children === 'function')
@@ -124,10 +115,15 @@ class Measure extends Component {
 
   render() {
     const { children } = this.props
-    return Children.only(
+    const filtered = Children.only(
       typeof children === 'function'
         ? children(this.state.dimensions)
         : children
+    );
+    return (
+      <div ref={(c) => { this._node = c; }}>
+        { filtered }
+      </div>
     )
   }
 }
