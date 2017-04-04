@@ -42,14 +42,11 @@ class Measure extends Component {
   }
 
   componentDidMount() {
+    this.resizeObserver = new ResizeObserver(() => this.measure())
     this._setDOMNode()
 
     // measure on first render
     this.measure()
-
-    // add component to resize observer to detect changes on resize
-    this.resizeObserver = new ResizeObserver(() => this.measure())
-    this.resizeObserver.observe(this._node)
   }
 
   componentWillReceiveProps({config, whitelist, blacklist}) {
@@ -67,7 +64,10 @@ class Measure extends Component {
   }
 
   _setDOMNode() {
+    if (this._node) this.resizeObserver.disconnect(this._node)
     this._node = ReactDOM.findDOMNode(this)
+        // add component to resize observer to detect changes on resize
+    this.resizeObserver.observe(this._node)
   }
 
   getDimensions(
