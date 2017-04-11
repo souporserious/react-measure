@@ -1,4 +1,7 @@
 ## CHANGELOG
+### 1.4.7
+Update to use separate prop-types package as per React 15.5 deprecation [#43](https://github.com/souporserious/react-measure/pull/43#pullrequestreview-32216767)
+
 ### 1.4.6
 Update to `resize-observer-polyfill` 1.4.1
 
