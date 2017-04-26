@@ -5,6 +5,15 @@
 
 Compute measurements of React components. Uses [resize-observer-polyfill](https://github.com/que-etc/resize-observer-polyfill) to detect changes of an element and return the new dimensions.
 
+React Measure provides the following dimensions:
+
+* `width`
+* `height`
+* `top`
+* `right`
+* `bottom`
+* `left`
+
 ## Install
 
 `npm install react-measure --save`
