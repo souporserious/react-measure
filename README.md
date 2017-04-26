@@ -14,6 +14,8 @@ React Measure provides the following dimensions:
 * `bottom`
 * `left`
 
+**Note** React Measure currently only watches for changes in `width` and `height`. 
+
 ## Install
 
 `npm install react-measure --save`
