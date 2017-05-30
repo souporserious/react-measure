@@ -110,11 +110,13 @@ class ItemToMeasure extends Component {
 
 ## withContentRect(types) HoC
 
-A higher-order component that provides dimensions to the wrapped component. Accepts `types` which determines what measurements are returned, similar to above. Pass an array or single value of either `client`, `offset`, `scroll`, `bounds`, or `margin` to calculate and receive those measurements as the prop `contentRect` in your wrapped component. You can also use the `measure` function passed down to programmatically measure your component if you need to.
+A higher-order component that provides dimensions to the wrapped component. Accepts `types`, which determines what measurements are returned, similar to above. Then returns a function to pass the component you want measured.
 
-Receives the same props as above `measureRef`, `measure`, and `contentRect`.
+Pass an array or single value of either `client`, `offset`, `scroll`, `bounds`, or `margin` to calculate and receive those measurements as the prop `contentRect` in your wrapped component. You can also use the `measure` function passed down to programmatically measure your component if you need to. And finally, remember to pass down the `measureRef` to the component you want measured.
 
-Fun fact, the `Measure` component is a thin wrapper around `withContentRect`. Just check [the source](https://github.com/souporserious/react-measure/blob/master/src/Measure.jsx) this means your wrapped component will accept the same props as `Measure` does 😊
+Passes down the same props as the `Measure` child function above, `measureRef`, `measure`, and `contentRect`.
+
+Fun fact, the `Measure` component is a thin wrapper around `withContentRect`. Just check [the source](https://github.com/souporserious/react-measure/blob/master/src/Measure.jsx). This means your wrapped component will accept the same props as `Measure` does 😊
 
 ### Example
 
