@@ -1,4 +1,9 @@
 ## CHANGELOG
+### 2.0.0
+Complete rewrite. Check README for new docs.
+
+Most transitions from the old API should be easy. You just need to pass a ref callback down now. If you have any issues please feel free to file an issue.
+
 ### 1.4.7
 Update to use separate prop-types package as per React 15.5 deprecation [#43](https://github.com/souporserious/react-measure/pull/43#pullrequestreview-32216767)
 

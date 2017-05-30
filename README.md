@@ -5,18 +5,9 @@
 
 Compute measurements of React components. Uses [resize-observer-polyfill](https://github.com/que-etc/resize-observer-polyfill) to detect changes of an element and return the new dimensions.
 
-React Measure provides the following dimensions:
-
-* `width`
-* `height`
-* `top`
-* `right`
-* `bottom`
-* `left`
-
-**Note** React Measure currently only watches for changes in `width` and `height`. 
-
 ## Install
+
+`yarn add react-measure`
 
 `npm install react-measure --save`
 
@@ -25,15 +16,59 @@ React Measure provides the following dimensions:
 (UMD library exposed as `Measure`)
 ```
 
-## Codepen Demo
+## Measure Component
 
-[Live Demo](http://codepen.io/souporserious/pen/rLdwao/)
+### Props
 
-## Example Usage w/ state
+#### `client`: PropTypes.bool
+
+Adds the following to `contentRect.client` returned in the child function.
+
+[clientTop](https://developer.mozilla.org/en-US/docs/Web/API/Element/clientTop), [clientLeft](https://developer.mozilla.org/en-US/docs/Web/API/Element/clientLeft), [clientWidth](https://developer.mozilla.org/en-US/docs/Web/API/Element/clientWidth), and [clientHeight](https://developer.mozilla.org/en-US/docs/Web/API/Element/clientHeight).
+
+#### `offset`: PropTypes.bool
+
+Adds the following to `contentRect.offset` returned in the child function.
+
+[offsetTop](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetTop), [offsetLeft](https://developer.mozilla.org/en-US/docs/Web/API/Element/offsetLeft), [offsetWidth](https://developer.mozilla.org/en-US/docs/Web/API/Element/offsetWidth), and [offsetHeight](https://developer.mozilla.org/en-US/docs/Web/API/Element/offsetHeight).
+
+#### `scroll`: PropTypes.bool
+
+Adds the following to `contentRect.scroll` returned in the child function.
+
+[scrollTop](https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollTop), [scrollLeft](https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollLeft), [scrollWidth](https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollWidth), and [scrollHeight](https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollHeight).
+
+#### `bounds`: PropTypes.bool
+
+Uses [getBoundingClientRect](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect) to calculate the element rect and add it to `contentRect.bounds` returned in the child function.
+
+#### `margin`: PropTypes.bool
+
+Uses [getComputedStyle](https://developer.mozilla.org/en-US/docs/Web/API/Window/getComputedStyle) to calculate margins and add it to `contentRect.margin` returned in the child function.
+
+#### `innerRef`: PropTypes.func
+
+Use this to access the internal component `ref`.
+
+#### `onResize`: PropTypes.func
+
+Callback invoked when either element width or height have changed.
+
+#### `children`: PropTypes.func
+
+Children must be a function. Will receive the following object shape:
+
+- `measureRef`: must be passed down to your component's ref in order to obtain a proper node to measure
+
+- `measure`: use to programmatically measure your component, calls the internal `measure` method in `withContentRect`
+
+- `contentRect`: this will contain any of the following allowed rects from above: `client`, `offset`, `scroll`, `bounds`, or `margin`. It will also include `entry` from the `ResizeObserver` when available.
+
+### Example
 
 ```javascript
-import Measure from 'react-measure';
-import classNames from 'classnames';
+import Measure from 'react-measure'
+import classNames from 'classnames'
 
 class ItemToMeasure extends Component {
   state = {
@@ -51,76 +86,47 @@ class ItemToMeasure extends Component {
 
     return (
       <Measure
-        onMeasure={(dimensions) => {
-          this.setState({dimensions})
+        bounds
+        onResize={(contentRect) => {
+          this.setState({ dimensions: contentRect.bounds })
         }}
       >
-        <div className={className}>
-          I can do cool things with my dimensions now :D
+        {({ measureRef }) =>
+          <div ref={measureRef} className={className}>
+            I can do cool things with my dimensions now :D
 
-          { (height > 250) &&
-            <div>Render responsive content based on the component size!</div>
-          }
-        </div>
+            { (height > 250) &&
+              <div>Render responsive content based on the component size!</div>
+            }
+          </div>
+        }
       </Measure>
     )
   }
 }
 ```
 
-## Example Usage w/ child function
+## withContentRect(types) HoC
+
+A higher-order component that provides dimensions to the wrapped component. Accepts `types` which determines what measurements are returned, similar to above. Pass an array or single value of either `client`, `offset`, `scroll`, `bounds`, or `margin` to calculate and receive those measurements as the prop `contentRect` in your wrapped component. You can also use the `measure` function passed down to programmatically measure your component if you need to.
+
+**please note**
+`measureRef` must be passed down to your component's ref in order to obtain a proper node to measure
+
+### Example
 
 ```javascript
-import Measure from 'react-measure';
+import { withContentRect } from 'react-measure'
 
-const ItemToMeasure = () => (
-  <Measure>
-    { dimensions =>
-      <div>
-        Some content here
-        <pre>
-          {JSON.stringify(dimensions, null, 2)}
-        </pre>
-      </div>
-    }
-  </Measure>
-)
+const ItemToMeasure = withContentRect('bounds')(({ measureRef, measure, contentRect }) => (
+  <div ref={measureRef}>
+    Some content here
+    <pre>
+      {JSON.stringify(contentRect, null, 2)}
+    </pre>
+  </div>
+))
 ```
-
-## Props
-
-#### `whitelist`: PropTypes.array
-
-Provide a list of properties that determine when `onMeasure` should fire. Accepts any of the following properties `['width', 'height', 'top', 'right', 'bottom', 'left']`
-
-#### `blacklist`: PropTypes.array
-
-Like above, but will not fire `onMeasure` for the specified properties.
-
-#### `includeMargin`: PropTypes.bool
-
-Whether or not to include margins in calculation. Defaults to `true`.
-
-#### `useClone`: PropTypes.bool
-
-Tries to give the most accurate measure by cloning the element and measuring it. Use if your item is hidden or you want to determine what a new dimension will be.
-
-#### `cloneOptions`: PropTypes.Object
-
-Passes clone options to [getNodeDimensions](https://github.com/souporserious/get-node-dimensions).
-
-#### `shouldMeasure`: PropTypes.bool
-
-Determines whether or not a measurement should occur. Useful if you only need to measure in certain cases.
-
-#### `onMeasure`: PropTypes.func
-
-Callback when the component dimensions have changed. Receives the new `dimensions` of your component.
-
-## Good to knows
-To help avoid layout thrashing, use the prop `blacklist` to ignore specific values and stop firing a render to check the DOM for changes. Likewise you can use `whitelist` to choose only the ones you need to check.
-
-**Margins from hell.** If your element is not calculating width or height properly it could be due to a margin hanging outside of its container. To get a true measurement, make sure to not have any hanging margins, in some cases a padding of 1px added to the container will fix this. See the stack overflow answers [here](http://stackoverflow.com/questions/19718634/how-to-disable-margin-collapsing) for more tricks .
 
 ## Run Example
 
