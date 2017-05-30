@@ -1,6 +1,6 @@
 import React, { Component, Children, PropTypes, createElement } from 'react'
 import ReactDOM from 'react-dom'
-import Measure, { withDimensions } from '../src/react-measure'
+import Measure, { withContentRect } from '../src/react-measure'
 
 import './main.scss'
 
@@ -23,7 +23,7 @@ class Paragraphs extends Component {
     this.state = {
       count: 0,
       display: true,
-      dimensions: {},
+      contentRect: {},
     }
   }
 
@@ -41,15 +41,15 @@ class Paragraphs extends Component {
   render() {
     const { count, display } = this.state
     return (
-      <Measure>
-        {({ measure, measureRef, dimensions }) => (
+      <Measure scroll>
+        {({ measure, measureRef, contentRect }) => (
           <div className="measure-example">
             <header>
               <button onClick={() => this.setState({ count: count + 1 })}>
                 Add Paragraph
               </button>
               <button onClick={() => this.setState({ display: !display })}>
-                Toggle Display
+                Toggle Visibility
               </button>
               <button onClick={() => measure()}>
                 Measure
@@ -57,19 +57,25 @@ class Paragraphs extends Component {
             </header>
 
             <pre>
-              {JSON.stringify(dimensions, null, 2)}
+              {JSON.stringify(contentRect.scroll, null, 2)}
             </pre>
 
             <div
               ref={measureRef}
-              className="paragraphs"
               style={{
-                display: display ? 'block' : 'none',
-                padding: 12,
-                background: 'red',
+                height: display ? undefined : 0,
+                overflow: display ? undefined : 'hidden',
               }}
             >
-              {this._renderParagraphs()}
+              <div
+                className="paragraphs"
+                style={{
+                  padding: 12,
+                  background: 'red',
+                }}
+              >
+                {this._renderParagraphs()}
+              </div>
             </div>
           </div>
         )}
@@ -79,48 +85,54 @@ class Paragraphs extends Component {
 }
 
 const AnimatingChild = ({ animate }) => (
-  <Measure>
-    {({ measureRef, dimensions }) => (
+  <Measure offset>
+    {({ measureRef, contentRect }) => (
       <div ref={measureRef} className={`square ${animate ? 'animate' : ''}`}>
         <strong>
           {animate ? 'Click to stop animating' : 'Click to animate'}
         </strong>
         <pre>
-          {JSON.stringify(dimensions, null, 2)}
+          {JSON.stringify(contentRect.offset, null, 2)}
         </pre>
       </div>
     )}
   </Measure>
 )
 
-const DisplayDimensions = ({ innerRef, dimensions, ...props }) => (
+const DisplayContentRect = ({ innerRef, measure, contentRect, ...props }) => (
   <div ref={innerRef} {...props}>
     These are the dimensions of your component:
     <pre>
-      {JSON.stringify(dimensions, null, 2)}
+      {JSON.stringify(contentRect.bounds, null, 2)}
     </pre>
   </div>
 )
 
-const MeasuredHoF = withDimensions(({ measureRef, dimensions, ...props }) => (
-  <DisplayDimensions innerRef={measureRef} dimensions={dimensions} {...props} />
+const MeasuredHoF = withContentRect(
+  'bounds'
+)(({ measureRef, contentRect, ...props }) => (
+  <DisplayContentRect
+    innerRef={measureRef}
+    contentRect={contentRect}
+    {...props}
+  />
 ))
 
 const MeasuredHoC = props => (
-  <Measure>
-    {({ measureRef, dimensions }) => (
-      <DisplayDimensions
+  <Measure bounds>
+    {({ measureRef, contentRect }) => (
+      <DisplayContentRect
         innerRef={measureRef}
-        dimensions={dimensions}
+        contentRect={contentRect}
         {...props}
       />
     )}
   </Measure>
 )
 
-const LibComponent = props => <DisplayDimensions {...props} />
+const LibComponent = props => <DisplayContentRect {...props} />
 
-const MeasuredLib = withDimensions(({ measureRef, ...props }) => (
+const MeasuredLib = withContentRect('bounds')(({ measureRef, ...props }) => (
   <LibComponent innerRef={measureRef} {...props} />
 ))
 
@@ -133,16 +145,18 @@ class App extends Component {
     const { animate } = this.state
     return (
       <div>
-        <Measure
-          includeMargin
-          onResize={dimensions => {
-            // show margin calculations
-            console.log('including margin: ', dimensions)
-          }}
-        >
-          {({ measureRef, dimensions }) => (
-            <div ref={measureRef} style={{ marginBottom: 24 }}>
-              <Paragraphs />
+        <Measure client offset scroll bounds margin>
+          {({ measureRef, contentRect }) => (
+            <div>
+              <div style={{ position: 'fixed', top: 0, left: 0 }}>
+                <h4>Paragraphs</h4>
+                <pre>
+                  {JSON.stringify(contentRect, null, 2)}
+                </pre>
+              </div>
+              <div ref={measureRef} style={{ marginBottom: 24 }}>
+                <Paragraphs />
+              </div>
             </div>
           )}
         </Measure>

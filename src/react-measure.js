@@ -1,4 +1,4 @@
 import Measure from './Measure'
-import withDimensions from './with-dimensions'
+import withContentRect from './with-content-rect'
 
-export { Measure as default, withDimensions }
+export { Measure as default, withContentRect }
