@@ -53,10 +53,12 @@ function withContentRect(types) {
       _handleRef = node => {
         this._node = node
 
-        if (node) {
-          this._resizeObserver.observe(node)
-        } else {
-          this._resizeObserver.disconnect(node)
+        if (this._resizeObserver) {
+          if (node) {
+            this._resizeObserver.observe(node)
+          } else {
+            this._resizeObserver.disconnect(node)
+          }
         }
 
         if (typeof this.props.innerRef === 'function') {
