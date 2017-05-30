@@ -1,4 +1,7 @@
 ## CHANGELOG
+### 2.0.1
+Observe and disconnect ResizeObserver in ref callback
+
 ### 2.0.0
 Complete rewrite. Check README for new docs.
 
