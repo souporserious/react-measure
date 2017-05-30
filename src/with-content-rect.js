@@ -26,6 +26,7 @@ function withContentRect(types) {
         margin: PropTypes.bool,
         innerRef: PropTypes.func,
         onResize: PropTypes.func,
+        children: PropTypes.func,
       }
 
       state = {
@@ -87,8 +88,8 @@ function withContentRect(types) {
         const { innerRef, onResize, ...props } = this.props
         return createElement(WrappedComponent, {
           ...props,
-          measure: this.measure,
           measureRef: this._handleRef,
+          measure: this.measure,
           contentRect: this.state.contentRect,
         })
       }
