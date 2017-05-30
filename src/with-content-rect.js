@@ -1,19 +1,8 @@
 import React, { Component, createElement } from 'react'
 import PropTypes from 'prop-types'
 import ResizeObserver from 'resize-observer-polyfill'
+import getTypes from './get-types'
 import getContentRect from './get-content-rect'
-
-const types = ['client', 'offset', 'scroll', 'bounds', 'margin']
-
-function getTypes(props) {
-  const allowedTypes = []
-  types.forEach(type => {
-    if (props[type]) {
-      allowedTypes.push(type)
-    }
-  })
-  return allowedTypes
-}
 
 function withContentRect(types) {
   return WrappedComponent =>
@@ -40,23 +29,8 @@ function withContentRect(types) {
         },
       }
 
-      componentDidMount() {
-        if (typeof window !== 'object') return
-
-        if (this._node) {
-          this._resizeObserver = new ResizeObserver(this.measure)
-          this._resizeObserver.observe(this._node)
-        } else {
-          console.error(
-            'No ref found, attach the `measureRef` prop to the component you want to measure.'
-          )
-        }
-      }
-
-      componentWillUnmount() {
-        if (this.resizeObserver && this._node) {
-          this._resizeObserver.disconnect(this._node)
-        }
+      componentWillMount() {
+        this._resizeObserver = new ResizeObserver(this.measure)
       }
 
       measure = entries => {
@@ -76,11 +50,17 @@ function withContentRect(types) {
         }
       }
 
-      _handleRef = component => {
-        this._node = component
+      _handleRef = node => {
+        this._node = node
+
+        if (node) {
+          this._resizeObserver.observe(node)
+        } else {
+          this._resizeObserver.disconnect(node)
+        }
 
         if (typeof this.props.innerRef === 'function') {
-          this.props.innerRef(component)
+          this.props.innerRef(node)
         }
       }
 

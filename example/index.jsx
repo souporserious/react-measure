@@ -139,16 +139,19 @@ const MeasuredLib = withContentRect('bounds')(({ measureRef, ...props }) => (
 class App extends Component {
   state = {
     animate: false,
+    renderGroup: false,
   }
 
   render() {
-    const { animate } = this.state
+    const { animate, renderGroup } = this.state
     return (
       <div>
         <Measure client offset scroll bounds margin>
           {({ measureRef, contentRect }) => (
             <div>
-              <div style={{ position: 'fixed', top: 0, left: 0 }}>
+              <div
+              // style={{ position: 'fixed', top: 0, left: 0 }}
+              >
                 <h4>Paragraphs</h4>
                 <pre>
                   {JSON.stringify(contentRect, null, 2)}
@@ -163,9 +166,15 @@ class App extends Component {
         <div onClick={() => this.setState({ animate: !animate })}>
           <AnimatingChild animate={animate} />
         </div>
-        <MeasuredHoF />
-        <MeasuredHoC />
-        <MeasuredLib />
+        <button onClick={() => this.setState({ renderGroup: !renderGroup })}>
+          Toggle Group
+        </button>
+        {renderGroup &&
+          <div>
+            <MeasuredHoF />
+            <MeasuredHoC />
+            <MeasuredLib />
+          </div>}
       </div>
     )
   }
