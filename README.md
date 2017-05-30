@@ -18,6 +18,8 @@ Compute measurements of React components. Uses [resize-observer-polyfill](https:
 
 ## Measure Component
 
+Wrap any child component and calculate its client rect.
+
 ### Props
 
 #### `client`: PropTypes.bool
@@ -110,8 +112,9 @@ class ItemToMeasure extends Component {
 
 A higher-order component that provides dimensions to the wrapped component. Accepts `types` which determines what measurements are returned, similar to above. Pass an array or single value of either `client`, `offset`, `scroll`, `bounds`, or `margin` to calculate and receive those measurements as the prop `contentRect` in your wrapped component. You can also use the `measure` function passed down to programmatically measure your component if you need to.
 
-**please note**
-`measureRef` must be passed down to your component's ref in order to obtain a proper node to measure
+Receives the same props as above `measureRef`, `measure`, and `contentRect`.
+
+Fun fact, the `Measure` component is a thin wrapper around `withContentRect`. Just check [the source](https://github.com/souporserious/react-measure/blob/master/src/Measure.jsx) this means your wrapped component will accept the same props as `Measure` does 😊
 
 ### Example
 
