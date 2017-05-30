@@ -54,7 +54,7 @@ function withContentRect(types) {
       }
 
       componentWillUnmount() {
-        if (this.resizeObserver && this._node) {
+        if (this._resizeObserver && this._node) {
           this._resizeObserver.disconnect(this._node)
         }
       }
