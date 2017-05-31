@@ -1,4 +1,7 @@
 ## CHANGELOG
+### 2.0.2
+Disconnect correct node within `handleRef` [#51](https://github.com/souporserious/react-measure/pull/51)
+
 ### 2.0.1
 Observe and disconnect ResizeObserver in ref callback
 
