@@ -33,13 +33,27 @@ function withContentRect(types) {
         this._resizeObserver = new ResizeObserver(this.measure)
       }
 
+      componentDidMount() {
+        if ('scroll' in this.props) {
+          this._node.addEventListener('scroll', this.measure)
+        }
+      }
+
+      componentWillUpdate(nextProps) {
+        if (!('scroll' in this.props) && 'scroll' in nextProps) {
+          this._node.addEventListener('scroll', this.measure)
+        } else if ('scroll' in this.props && !('scroll' in nextProps)) {
+          this._node.removeEventListener('scroll', this.measure)
+        }
+      }
+
       measure = entries => {
         const contentRect = getContentRect(
           this._node,
           types || getTypes(this.props)
         )
 
-        if (entries) {
+        if (entries && !(entries.type === 'scroll')) {
           contentRect.entry = entries[0].contentRect
         }
 

@@ -9,7 +9,14 @@ class Paragraph extends Component {
     return (
       <div>
         <p>
-          The path of the righteous man is beset on all sides by the iniquities of the selfish and the tyranny of evil men. Blessed is he who, in the name of charity and good will, shepherds the weak through the valley of darkness, for he is truly his brother's keeper and the finder of lost children. And I will strike down upon thee with great vengeance and furious anger those who would attempt to poison and destroy My brothers. And you will know My name is the Lord when I lay My vengeance upon thee.
+          The path of the righteous man is beset on all sides by the iniquities
+          of the selfish and the tyranny of evil men. Blessed is he who, in the
+          name of charity and good will, shepherds the weak through the valley
+          of darkness, for he is truly his brother's keeper and the finder of
+          lost children. And I will strike down upon thee with great vengeance
+          and furious anger those who would attempt to poison and destroy My
+          brothers. And you will know My name is the Lord when I lay My
+          vengeance upon thee.
           {' '}
         </p>
       </div>
@@ -23,7 +30,7 @@ class Paragraphs extends Component {
     this.state = {
       count: 0,
       display: true,
-      contentRect: {},
+      contentRect: {}
     }
   }
 
@@ -42,7 +49,7 @@ class Paragraphs extends Component {
     const { count, display } = this.state
     return (
       <Measure scroll>
-        {({ measure, measureRef, contentRect }) => (
+        {({ measure, measureRef, contentRect }) =>
           <div className="measure-example">
             <header>
               <button onClick={() => this.setState({ count: count + 1 })}>
@@ -64,29 +71,89 @@ class Paragraphs extends Component {
               ref={measureRef}
               style={{
                 height: display ? undefined : 0,
-                overflow: display ? undefined : 'hidden',
+                overflow: display ? undefined : 'hidden'
               }}
             >
               <div
                 className="paragraphs"
                 style={{
                   padding: 12,
-                  background: 'red',
+                  background: 'red'
                 }}
               >
                 {this._renderParagraphs()}
               </div>
             </div>
-          </div>
-        )}
+          </div>}
       </Measure>
     )
   }
 }
 
-const AnimatingChild = ({ animate }) => (
+class Scroll extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      contentRect: {}
+    }
+  }
+
+  _renderParagraphs() {
+    let paragraphs = []
+
+    for (let i = 0; i < 20; i++) {
+      paragraphs.push(<Paragraph key={i} />)
+    }
+
+    return paragraphs
+  }
+
+  render() {
+    const { count } = this.state
+    return (
+      <div>
+        <h2>Scrolling</h2>
+
+        <Measure scroll>
+          {({ measure, measureRef, contentRect }) =>
+            <div className="measure-example">
+              <header>
+                <button onClick={() => measure()}>
+                  Measure
+                </button>
+              </header>
+
+              <pre>
+                {JSON.stringify(contentRect, null, 2)}
+              </pre>
+
+              <div
+                ref={measureRef}
+                style={{
+                  height: 300,
+                  overflow: 'scroll'
+                }}
+              >
+                <div
+                  className="paragraphs"
+                  style={{
+                    padding: 12,
+                    background: 'red'
+                  }}
+                >
+                  {this._renderParagraphs()}
+                </div>
+              </div>
+            </div>}
+        </Measure>
+      </div>
+    )
+  }
+}
+
+const AnimatingChild = ({ animate }) =>
   <Measure offset>
-    {({ measureRef, contentRect }) => (
+    {({ measureRef, contentRect }) =>
       <div ref={measureRef} className={`square ${animate ? 'animate' : ''}`}>
         <strong>
           {animate ? 'Click to stop animating' : 'Click to animate'}
@@ -94,52 +161,47 @@ const AnimatingChild = ({ animate }) => (
         <pre>
           {JSON.stringify(contentRect.offset, null, 2)}
         </pre>
-      </div>
-    )}
+      </div>}
   </Measure>
-)
 
-const DisplayContentRect = ({ innerRef, measure, contentRect, ...props }) => (
+const DisplayContentRect = ({ innerRef, measure, contentRect, ...props }) =>
   <div ref={innerRef} {...props}>
     These are the dimensions of your component:
     <pre>
       {JSON.stringify(contentRect.bounds, null, 2)}
     </pre>
   </div>
-)
 
 const MeasuredHoF = withContentRect(
   'bounds'
-)(({ measureRef, contentRect, ...props }) => (
+)(({ measureRef, contentRect, ...props }) =>
   <DisplayContentRect
     innerRef={measureRef}
     contentRect={contentRect}
     {...props}
   />
-))
+)
 
-const MeasuredHoC = props => (
+const MeasuredHoC = props =>
   <Measure bounds>
-    {({ measureRef, contentRect }) => (
+    {({ measureRef, contentRect }) =>
       <DisplayContentRect
         innerRef={measureRef}
         contentRect={contentRect}
         {...props}
-      />
-    )}
+      />}
   </Measure>
-)
 
 const LibComponent = props => <DisplayContentRect {...props} />
 
-const MeasuredLib = withContentRect('bounds')(({ measureRef, ...props }) => (
+const MeasuredLib = withContentRect('bounds')(({ measureRef, ...props }) =>
   <LibComponent innerRef={measureRef} {...props} />
-))
+)
 
 class App extends Component {
   state = {
     animate: false,
-    renderGroup: false,
+    renderGroup: false
   }
 
   render() {
@@ -147,7 +209,7 @@ class App extends Component {
     return (
       <div>
         <Measure client offset scroll bounds margin>
-          {({ measureRef, contentRect }) => (
+          {({ measureRef, contentRect }) =>
             <div>
               <div
               // style={{ position: 'fixed', top: 0, left: 0 }}
@@ -160,8 +222,7 @@ class App extends Component {
               <div ref={measureRef} style={{ marginBottom: 24 }}>
                 <Paragraphs />
               </div>
-            </div>
-          )}
+            </div>}
         </Measure>
         <div onClick={() => this.setState({ animate: !animate })}>
           <AnimatingChild animate={animate} />
@@ -175,6 +236,7 @@ class App extends Component {
             <MeasuredHoC />
             <MeasuredLib />
           </div>}
+        <Scroll />
       </div>
     )
   }
