@@ -16,11 +16,9 @@ button {
   margin: 0 auto;
 }
 
-.measure-example {
-  header,
-  main {
-    display: flex;
-  }
+.measure-example header,
+.measure-example main {
+  display: flex;
 }
 
 .paragraphs {
