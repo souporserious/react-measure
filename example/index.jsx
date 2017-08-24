@@ -1,8 +1,10 @@
+// @flow
+
 import React, { Component, Children, PropTypes, createElement } from 'react'
 import ReactDOM from 'react-dom'
 import Measure, { withContentRect } from '../src/react-measure'
 
-import './main.scss'
+import './main.css'
 
 class Paragraph extends Component {
   render() {
@@ -108,9 +110,7 @@ const DisplayContentRect = ({ innerRef, measure, contentRect, ...props }) => (
   </div>
 )
 
-const MeasuredHoF = withContentRect(
-  'bounds'
-)(({ measureRef, contentRect, ...props }) => (
+const MeasuredHoF = withContentRect(['bounds'])(({ measureRef, contentRect, ...props }) => (
   <DisplayContentRect
     innerRef={measureRef}
     contentRect={contentRect}
@@ -132,7 +132,7 @@ const MeasuredHoC = props => (
 
 const LibComponent = props => <DisplayContentRect {...props} />
 
-const MeasuredLib = withContentRect('bounds')(({ measureRef, ...props }) => (
+const MeasuredLib = withContentRect(['bounds'])(({ measureRef, ...props }) => (
   <LibComponent innerRef={measureRef} {...props} />
 ))
 

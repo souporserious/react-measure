@@ -1,4 +1,51 @@
-function getContentRect(node, types) {
+// @flow
+
+type EntryContentRect = {
+  x: number,
+  y: number,
+  top: number,
+  right: number,
+  bottom: number,
+  left: number
+};
+
+export type Entry = {
+  contentRect: EntryContentRect
+};
+
+type Rect = {
+  top: number,
+  left: number,
+  width: number,
+  height: number,
+}
+
+type Bounds = {
+  top: number,
+  right: number,
+  bottom: number,
+  left: number,
+  width: number,
+  height: number,
+}
+
+type Box = {
+  top: number,
+  right: number,
+  bottom: number,
+  left: number,
+}
+
+export type ContentRect = {
+  entry?: EntryContentRect,
+  client?: Rect,
+  offset?: Rect,
+  scroll?: Rect,
+  bounds?: Bounds,
+  margin?: Box
+}
+
+function getContentRect(node: HTMLElement, types: string[]): ContentRect {
   const calculations = {}
 
   if (types.indexOf('client') > -1) {

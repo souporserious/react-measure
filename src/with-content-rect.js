@@ -1,45 +1,54 @@
-import React, { Component, createElement } from 'react'
-import PropTypes from 'prop-types'
+// @flow
+
+import * as React from 'react'
 import ResizeObserver from 'resize-observer-polyfill'
 import getTypes from './get-types'
-import getContentRect from './get-content-rect'
+import getContentRect, { type Entry, type ContentRect } from './get-content-rect'
 
-function withContentRect(types) {
-  return WrappedComponent =>
-    class extends Component {
-      static propTypes = {
-        client: PropTypes.bool,
-        offset: PropTypes.bool,
-        scroll: PropTypes.bool,
-        bounds: PropTypes.bool,
-        margin: PropTypes.bool,
-        innerRef: PropTypes.func,
-        onResize: PropTypes.func,
-        children: PropTypes.func,
-      }
+type InputProps = {
+  client?: boolean,
+  offset?: boolean,
+  scroll?: boolean,
+  bounds?: boolean,
+  margin?: boolean,
+  innerRef?: (element: HTMLElement) => void,
+  onResize?: (contentRect: ContentRect) => void,
+}
+
+export type OutputProps = {
+  measureRef: (element: HTMLElement) => void,
+  measure: (entries: Entry[]) => void,
+  contentRect: ContentRect
+}
+
+type State = {
+  contentRect: ContentRect,
+}
+
+function withContentRect<Props: InputProps>(types?: string[]) {
+  return (WrappedComponent: React.ComponentType<{ ...Props, ...$Exact<OutputProps> }>) =>
+    class extends React.Component<Props, State> {
+      props: Props;
 
       state = {
-        contentRect: {
-          entry: {},
-          client: {},
-          offset: {},
-          scroll: {},
-          bounds: {},
-          margin: {},
-        },
+        contentRect: {},
       }
+
+      _resizeObserver: ResizeObserver;
+
+      _node: HTMLElement;
 
       componentWillMount() {
         this._resizeObserver = new ResizeObserver(this.measure)
       }
 
-      measure = entries => {
+      measure = (entries: Entry[]) => {
         const contentRect = getContentRect(
           this._node,
           types || getTypes(this.props)
         )
 
-        if (entries) {
+        if (entries.length !== 0) {
           contentRect.entry = entries[0].contentRect
         }
 
@@ -50,7 +59,7 @@ function withContentRect(types) {
         }
       }
 
-      _handleRef = node => {
+      _handleRef = (node: HTMLElement) => {
         if (this._resizeObserver) {
           if (node) {
             this._resizeObserver.observe(node)
@@ -67,7 +76,7 @@ function withContentRect(types) {
 
       render() {
         const { innerRef, onResize, ...props } = this.props
-        return createElement(WrappedComponent, {
+        return React.createElement(WrappedComponent, {
           ...props,
           measureRef: this._handleRef,
           measure: this.measure,

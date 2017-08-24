@@ -1,3 +1,5 @@
+// @flow
+
 import Measure from './Measure'
 import withContentRect from './with-content-rect'
 

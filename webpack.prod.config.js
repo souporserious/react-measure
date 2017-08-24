@@ -21,12 +21,6 @@ var externals = {
     commonjs2: 'resize-observer-polyfill',
     commonjs: 'resize-observer-polyfill',
     amd: 'resize-observer-polyfill'
-  },
-  'get-node-dimensions': {
-    root: 'getNodeDimensions',
-    commonjs2: 'get-node-dimensions',
-    commonjs: 'get-node-dimensions',
-    amd: 'get-node-dimensions'
   }
 };
 
