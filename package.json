@@ -55,7 +55,7 @@
     "babel-preset-stage-0": "^6.16.0",
     "chokidar": "^1.6.1",
     "css-loader": "^0.25.0",
-    "flow-bin": "^0.51.1",
+    "flow-bin": "^0.53.1",
     "git-directory-deploy": "^1.5.1",
     "http-server": "^0.9.0",
     "node-libs-browser": "^1.0.0",

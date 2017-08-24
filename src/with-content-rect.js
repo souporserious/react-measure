@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component, createElement } from 'react'
+import * as React from 'react'
 import ResizeObserver from 'resize-observer-polyfill'
 import getTypes from './get-types'
 import getContentRect, { type Entry, type ContentRect } from './get-content-rect'
@@ -18,19 +18,19 @@ type InputProps = {
 export type OutputProps = {
   measureRef: (element: HTMLElement) => void,
   measure: (entries: Entry[]) => void,
-  contentRect: ContentRect,
-};
+  contentRect: ContentRect
+}
 
 type State = {
   contentRect: ContentRect,
 }
 
 function withContentRect<Props: InputProps>(types?: string[]) {
-  return (WrappedComponent: ReactClass<$Exact<Props> & OutputProps>): ReactClass<Props> =>
-    class extends Component {
+  return (WrappedComponent: React.ComponentType<{ ...Props, ...$Exact<OutputProps> }>) =>
+    class extends React.Component<Props, State> {
       props: Props;
 
-      state: State = {
+      state = {
         contentRect: {},
       }
 
@@ -76,7 +76,7 @@ function withContentRect<Props: InputProps>(types?: string[]) {
 
       render() {
         const { innerRef, onResize, ...props } = this.props
-        return createElement(WrappedComponent, {
+        return React.createElement(WrappedComponent, {
           ...props,
           measureRef: this._handleRef,
           measure: this.measure,
