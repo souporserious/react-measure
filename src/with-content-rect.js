@@ -15,7 +15,7 @@ function withContentRect(types) {
         margin: PropTypes.bool,
         innerRef: PropTypes.func,
         onResize: PropTypes.func,
-        children: PropTypes.func,
+        children: PropTypes.element,
       }
 
       state = {
