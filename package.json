@@ -3,13 +3,15 @@
   "version": "2.0.2",
   "description": "Compute measurements of React components.",
   "main": "lib/react-measure.js",
+  "module": "lib/es/react-measure.js",
   "files": [
     "dist",
     "lib"
   ],
   "scripts": {
     "build:lib": "babel src --out-dir lib",
-    "build": "npm run build:lib && NODE_ENV=production webpack --config webpack.prod.config.js",
+    "build:es": "BABEL_ENV=es babel src --out-dir lib/es",
+    "build": "npm run build:lib && npm run build:es && NODE_ENV=production webpack --config webpack.prod.config.js",
     "dev": "webpack-dev-server --inline --hot --progress --colors --host 0.0.0.0 --devtool eval",
     "postbuild": "NODE_ENV=production TARGET=minify webpack --config webpack.prod.config.js",
     "prebuild": "rm -rf dist && mkdir dist",

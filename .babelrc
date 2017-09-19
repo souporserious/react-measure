@@ -1,10 +1,32 @@
 {
-  "presets": [
-    "es2015",
-    "stage-0",
-    "react"
-  ],
-  "plugins": [
-    "add-module-exports"
-  ]
+
+  "env": {
+    "development": {
+      "presets": [
+        "es2015",
+        "stage-0",
+        "react"
+      ],
+      "plugins": [
+        "add-module-exports"
+      ]
+    },
+    "production": {
+      "presets": [
+        "es2015",
+        "stage-0",
+        "react"
+      ],
+      "plugins": [
+        "add-module-exports"
+      ]
+    },
+    "es": {
+      "presets": [
+        ["es2015", { "modules": false }],
+        "stage-0",
+        "react"
+      ]
+    }
+  }
 }
