@@ -1,0 +1,58 @@
+// @flow
+
+import * as React from 'react';
+
+type Rect = {
+  top: number,
+  left: number,
+  width: number,
+  height: number,
+};
+
+export type ContentRect = {
+  entry: ?Rect,
+  client: Rect,
+  offset: Rect,
+  scroll: Rect,
+  bounds: {
+    top: number,
+    right: number,
+    bottom: number,
+    left: number,
+    width: number,
+    height: number,
+  },
+  margin: {
+    top: number,
+    right: number,
+    bottom: number,
+    left: number,
+  },
+};
+
+type Entry = {
+  contentRect: Rect
+};
+
+type Props = {
+  client?: boolean,
+  offset?: boolean,
+  scroll?: boolean,
+  bounds?: boolean,
+  margin?: boolean,
+  innerRef?: React.Ref<*>,
+  onResize?: ContentRect => void,
+  children: ({
+    measureRef: (React$ElementRef<*> | null) => mixed,
+    measure: Entry[] => void,
+    contentRect: ContentRect
+  }) => React.Element<*> | React.ChildrenArray<*>
+};
+
+declare type Types = 'client' | 'offset' | 'scroll' | 'bounds' | 'margin';
+
+declare export function withContentRect(types?: Types[]): React.ComponentType<Props>;
+
+declare var Measure: React.ComponentType<Props>;
+
+export default Measure;
