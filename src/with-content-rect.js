@@ -1,4 +1,4 @@
-import React, { Component, createElement } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import ResizeObserver from 'resize-observer-polyfill'
 import getTypes from './get-types'
@@ -67,12 +67,10 @@ function withContentRect(types) {
 
       render() {
         const { innerRef, onResize, ...props } = this.props
-        return createElement(WrappedComponent, {
-          ...props,
-          measureRef: this._handleRef,
-          measure: this.measure,
-          contentRect: this.state.contentRect,
-        })
+        return (
+            <WrappedComponent {...props} measureRef={this._handleRef}
+                measure={this.measure} contentRect={this.state.contentRect} />
+            );
       }
     }
 }
