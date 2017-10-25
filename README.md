@@ -1,3 +1,15 @@
+## Komodo Health Forked Changes
+On Internet Explorer and Edge, there is an issue where the browser cannot find the right context of this for ResizableObserver. The change here is to just bind the function passed in by this library.
+
+Here is the github issue tracking for the repo "resize-observer-polyfill"
+https://github.com/que-etc/resize-observer-polyfill/issues/20
+
+Here are the only lines of code that are changed where ".bind" has been added to the function passed in
+```
+  // Komodo - binds function to this context to resolve issues with IE
+  this.resizeObserver = new ResizeObserver(function() { this.measure() }.bind(this))
+```
+
 ## React Measure
 
 [![npm version](https://badge.fury.io/js/react-measure.svg)](https://badge.fury.io/js/react-measure)
