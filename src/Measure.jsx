@@ -48,7 +48,7 @@ class Measure extends Component {
     this.measure()
 
     // add component to resize observer to detect changes on resize
-    this.resizeObserver = new ResizeObserver(() => this.measure())
+    this.resizeObserver = new ResizeObserver(function() { this.measure() }.bind(this))
     this.resizeObserver.observe(this._node)
   }
 
