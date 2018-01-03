@@ -43,10 +43,10 @@ function getContentRect(node, types) {
   if (types.indexOf('margin') > -1) {
     const styles = getComputedStyle(node)
     calculations.margin = {
-      top: parseInt(styles.marginTop),
-      right: parseInt(styles.marginRight),
-      bottom: parseInt(styles.marginBottom),
-      left: parseInt(styles.marginLeft),
+      top: styles ? parseInt(styles.marginTop) : 0,
+      right: styles ? parseInt(styles.marginRight) : 0,
+      bottom: styles ? parseInt(styles.marginBottom) : 0,
+      left: styles ? parseInt(styles.marginLeft) : 0,
     }
   }
 
