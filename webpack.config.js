@@ -1,57 +1,54 @@
-var path = require('path');
-var webpack = require('webpack');
-var TARGET = process.env.TARGET || null;
+const path = require('path')
+const webpack = require('webpack')
+const config = {
+  devtool: 'eval',
 
-var config = {
-  entry: {
-  },
-  output: {
-    path: path.join(__dirname, 'example'),
-    filename: 'bundle.js'
-  },
-  module: {
-    loaders: [
-      { test: /\.(js|jsx)/, exclude: /node_modules/, loader: 'babel-loader' },
-      { test: /\.(css|scss)/, loader: 'style!css!postcss!sass?sourceMap' }
-    ]
-  },
-  resolve: {
-    extensions: ['', '.js', '.jsx']
-  },
-  plugins: [],
   devServer: {
-    contentBase: './example',
-    inline: true
-  }
-};
+    contentBase: path.resolve(__dirname, 'example'),
+    disableHostCheck: true,
+    historyApiFallback: true,
+    hot: true,
+    host: '0.0.0.0',
+    port: 8080,
+  },
 
-if (TARGET === 'minify') {
-  config.entry.index = path.join(__dirname, 'example/index.jsx');
+  entry: [
+    'react-hot-loader/patch',
+    'webpack-dev-server/client?http://localhost:8080',
+    'webpack/hot/only-dev-server',
+    './example/index.js',
+  ],
 
-  config.plugins.push(new webpack.DefinePlugin({
-    'process.env': {
-      NODE_ENV: JSON.stringify('production')
-    }
-  }))
-
-  config.plugins.push(new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        screw_ie8: true,
-        warnings: false
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        use: [
+          {
+            loader: 'babel-loader',
+          },
+        ],
+        exclude: /node_modules/,
       },
-      mangle: {
-        screw_ie8: true
+    ],
+  },
+
+  output: {
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'example'),
+    publicPath: '/',
+  },
+
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify('development'),
       },
-      output: {
-        comments: false,
-        screw_ie8: true
-      }
-    }));
-} else {
-  config.entry.index = [
-    'webpack/hot/dev-server',
-    path.join(__dirname, 'example/index.jsx')
-  ];
+    }),
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NamedModulesPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
+  ],
 }
 
-module.exports = config;
+module.exports = config
