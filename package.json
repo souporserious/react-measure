@@ -3,13 +3,11 @@
   "version": "2.0.2",
   "description": "Compute measurements of React components.",
   "main": "lib/react-measure.js",
-  "files": [
-    "dist",
-    "lib"
-  ],
+  "files": ["dist", "lib"],
   "scripts": {
     "build": "babel src --out-dir lib",
-    "deploy": "NODE_ENV=production TARGET=minify webpack && git-directory-deploy --directory example --branch gh-pages",
+    "deploy":
+      "NODE_ENV=production TARGET=minify webpack && git-directory-deploy --directory example --branch gh-pages",
     "dev": "webpack-dev-server",
     "prepublish": "npm run build",
     "start": "npm run dev"
@@ -30,7 +28,8 @@
     "scroll",
     "position"
   ],
-  "author": "Travis Arnold <travis@souporserious.com> (http://souporserious.com)",
+  "author":
+    "Travis Arnold <travis@souporserious.com> (http://souporserious.com)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/souporserious/react-measure/issues"
@@ -47,16 +46,20 @@
   "devDependencies": {
     "babel-cli": "^6.16.0",
     "babel-core": "^6.17.0",
+    "babel-eslint": "^8.2.1",
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",
-    "chokidar": "^2.0.0",
+    "create-react-context": "^0.1.6",
+    "faker": "^4.1.0",
     "git-directory-deploy": "^1.5.1",
+    "popmotion": "^8.1.10",
+    "prettier": "^1.10.2",
     "react": "16.2.0",
     "react-dom": "16.2.0",
-    "react-hot-loader": "^4.0.0-beta.19",
     "react-motion": "^0.5.2",
+    "stylefire": "^1.1.9",
     "webpack": "^3.10.0",
     "webpack-dev-middleware": "^2.0.4",
     "webpack-dev-server": "^2.11.1",

@@ -1,10 +1,21 @@
-import React, { Component } from 'react'
-import { hot } from 'react-hot-loader'
+import React, { Component, Fragment } from 'react'
+
+import Collapse from './components/Collapse'
+import OverflowMenu from './components/OverflowMenu'
+import Popover from './components/Popover'
+import Table from './components/Table'
 
 class App extends Component {
   render() {
-    return <div>Hello world</div>
+    return (
+      <div role="main">
+        <Collapse />
+        <Popover />
+        <OverflowMenu />
+        <Table />
+      </div>
+    )
   }
 }
 
-export default hot(module)(App)
+export default App

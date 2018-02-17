@@ -9,15 +9,10 @@ const config = {
     historyApiFallback: true,
     hot: true,
     host: '0.0.0.0',
-    port: 8080,
+    port: 8001,
   },
 
-  entry: [
-    'react-hot-loader/patch',
-    'webpack-dev-server/client?http://localhost:8080',
-    'webpack/hot/only-dev-server',
-    './example/index.js',
-  ],
+  entry: ['./example/index.js'],
 
   module: {
     rules: [
