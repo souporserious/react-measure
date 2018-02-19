@@ -78,6 +78,8 @@ export function getElementSize(node) {
 export function getMeasurements(node) {
   const rect = node.getBoundingClientRect()
   return {
+    x: rect.x,
+    y: rect.y,
     width: rect.width,
     height: rect.height,
     top: rect.top,
