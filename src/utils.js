@@ -3,11 +3,18 @@ const html = document.documentElement
 
 export function isScrollElement(element) {
   try {
-    const { overflow, overflowY, overflowX } = window.getComputedStyle(element)
+    const { overflow, overflowX, overflowY } = window.getComputedStyle(element)
     return /(auto|scroll)/.test(overflow + overflowX + overflowY)
   } catch (e) {
     return false
   }
+}
+
+export function getParentNode(element) {
+  if (element.nodeName === 'HTML') {
+    return element
+  }
+  return element.parentNode || element.host
 }
 
 export function getClosestScrollElement(element) {
@@ -16,7 +23,7 @@ export function getClosestScrollElement(element) {
   } else if (isScrollElement(element)) {
     return element
   } else {
-    return getClosestScrollElement(element.parentNode)
+    return getClosestScrollElement(getParentNode(element))
   }
 }
 
@@ -77,6 +84,8 @@ export function getMeasurements(node) {
     right: rect.right,
     bottom: rect.bottom,
     left: rect.left,
+    offsetWidth: node.offsetWidth,
+    offsetHeight: node.offsetHeight,
     scrollTop: node.scrollTop,
     scrollLeft: node.scrollLeft,
     scrollWidth: node.scrollWidth,
