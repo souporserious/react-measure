@@ -9,7 +9,7 @@ class Measure extends Component {
   firstResizeEvent = true
   nodes = {}
   refsById = {}
-  state = { measurements: {} }
+  state = { measurements: null }
 
   bind = id => {
     if (!this.refsById[id]) {
