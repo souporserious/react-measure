@@ -11,6 +11,8 @@ import {
 
 class Viewport extends Component {
   firstResizeEvent = true
+  initialScrollX = 0
+  initialScrollY = 0
 
   state = {
     width: 0,
@@ -29,6 +31,13 @@ class Viewport extends Component {
 
     this.scrollElement.addEventListener('scroll', this.requestScroll)
     this.requestScroll()
+
+    this.initialScrollX = this.isWindow
+      ? window.pageXOffset
+      : this.scrollElement.scrollLeft
+    this.initialScrollY = this.isWindow
+      ? window.pageYOffset
+      : this.scrollElement.scrollTop
 
     if (this.isWindow) {
       window.addEventListener('resize', this.updateWindowSize)
@@ -112,6 +121,8 @@ class Viewport extends Component {
       bind: {
         ref: this.setRef,
       },
+      initialScrollX: this.initialScrollX,
+      initialScrollY: this.initialScrollY,
       ...this.state,
     })
   }
