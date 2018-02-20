@@ -1,13 +1,15 @@
 {
   "name": "react-measure",
-  "version": "2.0.2",
+  "version": "3.0.0-rc.0",
   "description": "Compute measurements of React components.",
   "main": "lib/react-measure.js",
-  "files": ["dist", "lib"],
+  "files": [
+    "dist",
+    "lib"
+  ],
   "scripts": {
     "build": "babel src --out-dir lib",
-    "deploy":
-      "NODE_ENV=production TARGET=minify webpack && git-directory-deploy --directory example --branch gh-pages",
+    "deploy": "NODE_ENV=production TARGET=minify webpack && git-directory-deploy --directory example --branch gh-pages",
     "dev": "webpack-dev-server",
     "prepublish": "npm run build",
     "start": "npm run dev"
@@ -28,8 +30,7 @@
     "scroll",
     "position"
   ],
-  "author":
-    "Travis Arnold <travis@souporserious.com> (http://souporserious.com)",
+  "author": "Travis Arnold <travis@souporserious.com> (http://souporserious.com)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/souporserious/react-measure/issues"
