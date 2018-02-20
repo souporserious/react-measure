@@ -20,7 +20,6 @@ class Measure extends Component {
         } else {
           this.resizeObserver.unobserve(this.nodes[id])
           delete this.nodes[id]
-          delete this.refsById[id]
         }
         this.setState(state => {
           const newMeasurements = { ...state.measurements }
