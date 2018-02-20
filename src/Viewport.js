@@ -56,7 +56,7 @@ class Viewport extends Component {
   }
 
   componentWillUnmount() {
-    this.eventElement.removeEventListener('scroll', this.requestScroll)
+    this.scrollElement.removeEventListener('scroll', this.requestScroll)
     if (this.isWindow) {
       window.removeEventListener('resize', this.updateWindowSize)
     } else {
