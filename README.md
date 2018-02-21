@@ -69,7 +69,7 @@ Children must be a function. Will receive the following object shape:
 ### Example
 
 ```javascript
-import Measure from 'react-measure'
+import { Measure } from 'react-measure'
 import classNames from 'classnames'
 
 class ItemToMeasure extends Component {
