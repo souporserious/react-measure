@@ -9,10 +9,19 @@
   ],
   "scripts": {
     "build": "babel src --out-dir lib",
+    "lint": "prettier --list-different \"**/*.js\"",
     "deploy": "NODE_ENV=production TARGET=minify webpack && git-directory-deploy --directory example --branch gh-pages",
     "dev": "webpack-dev-server",
-    "prepublish": "npm run build",
-    "start": "npm run dev"
+    "test": "npm run lint",
+    "prepublish": "npm run build && npm run lint",
+    "start": "npm run dev",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,md}": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "repository": {
     "type": "git",
@@ -55,6 +64,8 @@
     "create-react-context": "^0.1.6",
     "faker": "^4.1.0",
     "git-directory-deploy": "^1.5.1",
+    "husky": "^0.14.3",
+    "lint-staged": "^7.0.0",
     "popmotion": "^8.1.10",
     "prettier": "^1.10.2",
     "react": "16.2.0",
