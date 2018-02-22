@@ -1,9 +1,28 @@
-import React, { Component } from 'react'
+// @flow
+
+import * as React from 'react'
 import ResizeObserver from 'resize-observer-polyfill'
 
-import { getMeasurements } from './utils'
+import { type Measurements, getMeasurements } from './utils'
 
-class Measure extends Component {
+type Props = {
+  onMeasure: ({ [string]: Measurements }) => void,
+  children: ({
+    bind: (id: string) => { ref: (?Element) => void },
+    measure: () => void,
+    measurements: ?{ [string]: Measurements },
+  }) => React.Node,
+}
+
+type State = {
+  measurements: ?{ [string]: Measurements },
+}
+
+class Measure extends React.Component<Props, State> {
+  static defaultProps = {
+    onMeasure: () => {},
+  }
+
   // prevent firing two renders when component mounts, getting measurements in bind
   // is faster than attaching a ResizeObserver and waiting for the first callback
   firstResizeEvent = true
@@ -11,7 +30,7 @@ class Measure extends Component {
   refsById = {}
   state = { measurements: null }
 
-  bind = id => {
+  bind = (id: string) => {
     if (!this.refsById[id]) {
       this.refsById[id] = node => {
         if (node) {
@@ -43,14 +62,16 @@ class Measure extends Component {
         const newMeasurements = { ...state.measurements }
         entries.forEach(entry => {
           const id = this.getIdFromNode(entry.target)
-          newMeasurements[id] = getMeasurements(entry.target)
+          if (id !== null && entry.target instanceof HTMLElement) {
+            newMeasurements[id] = getMeasurements(entry.target)
+          }
         })
         return { measurements: newMeasurements }
       }, this.fireOnMeasure)
     }
   })
 
-  getIdFromNode = node => {
+  getIdFromNode = (node: Element) => {
     let id = null
     Object.keys(this.nodes).some(key => {
       if (this.nodes[key] === node) {
@@ -61,7 +82,7 @@ class Measure extends Component {
   }
 
   fireOnMeasure = () => {
-    if (this.props.onMeasure) {
+    if (this.props.onMeasure && this.state.measurements) {
       this.props.onMeasure(this.state.measurements)
     }
   }

@@ -1,7 +1,26 @@
+// @flow
+
+export type Measurements = {
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  top: number,
+  right: number,
+  bottom: number,
+  left: number,
+  offsetWidth: number,
+  offsetHeight: number,
+  scrollTop: number,
+  scrollLeft: number,
+  scrollWidth: number,
+  scrollHeight: number,
+}
+
 const body = document.body
 const html = document.documentElement
 
-export function isScrollElement(element) {
+export function isScrollElement(element: Node) {
   try {
     const { overflow, overflowX, overflowY } = window.getComputedStyle(element)
     return /(auto|scroll)/.test(overflow + overflowX + overflowY)
@@ -10,14 +29,15 @@ export function isScrollElement(element) {
   }
 }
 
-export function getParentNode(element) {
+export function getParentNode(element: Node) {
   if (element.nodeName === 'HTML') {
     return element
   }
-  return element.parentNode || element.host
+  // $FlowFixMe shadowRoot.host
+  return element.parentNode || element.host || null
 }
 
-export function getClosestScrollElement(element) {
+export function getClosestScrollElement(element: ?Node) {
   if (!element || element === body) {
     return window
   } else if (isScrollElement(element)) {
@@ -27,34 +47,46 @@ export function getClosestScrollElement(element) {
   }
 }
 
-export function getScrollDirection(axis, last, next) {
+export function getScrollXDirection(last: number, next: number) {
   if (next === last) {
     return null
   } else {
-    return next - last > 0
-      ? axis === 'x' ? 'right' : 'down'
-      : axis === 'x' ? 'left' : 'up'
+    return next - last > 0 ? 'right' : 'left'
+  }
+}
+
+export function getScrollYDirection(last: number, next: number) {
+  if (next === last) {
+    return null
+  } else {
+    return next - last > 0 ? 'down' : 'up'
   }
 }
 
 export function getDocumentWidth() {
-  return Math.max(
-    body.scrollWidth,
-    body.offsetWidth,
-    html.clientWidth,
-    html.scrollWidth,
-    html.offsetWidth
-  )
+  if (body && html) {
+    return Math.max(
+      body.scrollWidth,
+      body.offsetWidth,
+      html.clientWidth,
+      html.scrollWidth,
+      html.offsetWidth
+    )
+  }
+  return 0
 }
 
 export function getDocumentHeight() {
-  return Math.max(
-    body.scrollHeight,
-    body.offsetHeight,
-    html.clientHeight,
-    html.scrollHeight,
-    html.offsetHeight
-  )
+  if (body && html) {
+    return Math.max(
+      body.scrollHeight,
+      body.offsetHeight,
+      html.clientHeight,
+      html.scrollHeight,
+      html.offsetHeight
+    )
+  }
+  return 0
 }
 
 export function getWindowSize() {
@@ -66,7 +98,7 @@ export function getWindowSize() {
   }
 }
 
-export function getElementSize(node) {
+export function getElementSize(node: HTMLElement) {
   return {
     width: node.offsetWidth,
     height: node.offsetHeight,
@@ -75,11 +107,11 @@ export function getElementSize(node) {
   }
 }
 
-export function getMeasurements(node) {
+export function getMeasurements(node: HTMLElement) {
   const rect = node.getBoundingClientRect()
   return {
-    x: rect.x,
-    y: rect.y,
+    x: rect.left,
+    y: rect.top,
     width: rect.width,
     height: rect.height,
     top: rect.top,

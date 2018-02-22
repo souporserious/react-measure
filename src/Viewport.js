@@ -1,18 +1,51 @@
 // @flow
-import React, { Component } from 'react'
+
+import * as React from 'react'
 import ResizeObserver from 'resize-observer-polyfill'
 
 import {
   getClosestScrollElement,
-  getScrollDirection,
+  getScrollXDirection,
+  getScrollYDirection,
   getWindowSize,
   getElementSize,
 } from './utils'
 
-class Viewport extends Component {
+type State = {|
+  width: number,
+  height: number,
+  scrollWidth: number,
+  scrollHeight: number,
+  scrollX: number,
+  scrollY: number,
+  scrollXDirection: 'left' | 'right' | null,
+  scrollYDirection: 'down' | 'up' | null,
+|}
+
+type Props = {|
+  children: ({
+    bind: {
+      ref: (?Element) => void,
+    },
+    initialScrollX: number,
+    initialScrollY: number,
+    ...State,
+  }) => React.Node,
+|}
+
+class Viewport extends React.Component<Props, State> {
   firstResizeEvent = true
   initialScrollX = 0
   initialScrollY = 0
+  node: ?Element = null
+  scrollElement: any
+  isWindow: boolean
+  resizeObserver: ResizeObserver
+  lastScrollX: number
+  latestScrollX: number
+  lastScrollY: number
+  latestScrollY: number
+  isScrolling: boolean = false
 
   state = {
     width: 0,
@@ -78,13 +111,11 @@ class Viewport extends Component {
   }
 
   updateScroll = () => {
-    const scrollXDirection = getScrollDirection(
-      'x',
+    const scrollXDirection = getScrollXDirection(
       this.lastScrollX,
       this.latestScrollX
     )
-    const scrollYDirection = getScrollDirection(
-      'y',
+    const scrollYDirection = getScrollYDirection(
       this.lastScrollY,
       this.latestScrollY
     )
@@ -110,7 +141,7 @@ class Viewport extends Component {
     this.setState(getElementSize(this.scrollElement))
   }
 
-  setRef = node => {
+  setRef = (node: ?Element) => {
     if (!this.node) {
       this.node = node
     }
