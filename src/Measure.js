@@ -5,18 +5,18 @@ import ResizeObserver from 'resize-observer-polyfill'
 
 import { type Measurements, getMeasurements } from './utils'
 
-type Props = {
+type Props = {|
   onMeasure: ({ [string]: Measurements }) => void,
-  children: ({
+  children: ({|
     bind: (id: string) => { ref: (?Element) => void },
     measure: () => void,
     measurements: ?{ [string]: Measurements },
-  }) => React.Node,
-}
+  |}) => React.Node,
+|}
 
-type State = {
+type State = {|
   measurements: ?{ [string]: Measurements },
-}
+|}
 
 class Measure extends React.Component<Props, State> {
   static defaultProps = {

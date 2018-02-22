@@ -1,6 +1,6 @@
 // @flow
 
-export type Measurements = {
+export type Measurements = {|
   x: number,
   y: number,
   width: number,
@@ -15,7 +15,7 @@ export type Measurements = {
   scrollLeft: number,
   scrollWidth: number,
   scrollHeight: number,
-}
+|}
 
 const body = document.body
 const html = document.documentElement
