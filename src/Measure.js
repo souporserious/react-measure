@@ -82,7 +82,7 @@ class Measure extends React.Component<Props, State> {
   }
 
   fireOnMeasure = () => {
-    if (this.props.onMeasure && this.state.measurements) {
+    if (this.state.measurements) {
       this.props.onMeasure(this.state.measurements)
     }
   }
