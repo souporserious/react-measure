@@ -9,6 +9,7 @@
   ],
   "scripts": {
     "build": "babel src --out-dir lib",
+    "postbuild": "npm run build:flow",
     "build:flow": "flow-copy-source src lib",
     "typecheck": "flow check --max-warnings=0",
     "lint": "prettier --list-different \"**/*.js\"",
