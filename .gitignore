@@ -10,6 +10,7 @@ node_modules
 npm-debug.log
 /dist/
 /lib/
+/esm/
 /example/bundle.js
 
 # General Files
