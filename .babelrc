@@ -5,7 +5,7 @@
     "react"
   ],
   plugins: [
-    "transform-runtime"
+    ["transform-runtime", { "polyfill": false }]
   ],
   "env": {
     "cjs": {
