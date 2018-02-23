@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "build:esm": "del esm && babel src --out-dir esm",
-    "build:cjs": "del lib && babel src --out-dir lib",
+    "build:cjs": "del lib && cross-env NODE_ENV=cjs babel src --out-dir lib",
     "build": "npm run build:esm && npm run build:cjs",
     "lint": "prettier --list-different \"**/*.js\"",
     "deploy": "NODE_ENV=production TARGET=minify webpack && git-directory-deploy --directory example --branch gh-pages",
