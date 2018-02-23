@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react'
-import { Viewport, Measure } from '../src'
+import { Viewport, Measure } from '../'
 ;[
   <Viewport>
     {params => {

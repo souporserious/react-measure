@@ -5,12 +5,13 @@
   "main": "lib/index.js",
   "files": [
     "dist",
-    "lib"
+    "lib",
+    "src"
   ],
   "scripts": {
     "build": "babel src --out-dir lib",
     "postbuild": "npm run build:flow",
-    "build:flow": "flow-copy-source src lib",
+    "build:flow": "echo \"// @flow\\n\\nexport * from '../src';\" > lib/index.js.flow",
     "typecheck": "flow check --max-warnings=0",
     "lint": "prettier --list-different \"**/*.js\"",
     "deploy": "NODE_ENV=production TARGET=minify webpack && git-directory-deploy --directory example --branch gh-pages",
@@ -67,7 +68,6 @@
     "create-react-context": "^0.1.6",
     "faker": "^4.1.0",
     "flow-bin": "^0.66.0",
-    "flow-copy-source": "^1.3.0",
     "git-directory-deploy": "^1.5.1",
     "husky": "^0.14.3",
     "lint-staged": "^7.0.0",
