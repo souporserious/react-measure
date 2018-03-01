@@ -1,3 +1,17 @@
 {
-  "presets": ["env", "stage-0", "react"]
+  "presets": [
+    ["env", { "modules": false, "loose": true }],
+    "stage-2",
+    "react"
+  ],
+  plugins: [
+    ["transform-runtime", { "polyfill": false }]
+  ],
+  "env": {
+    "cjs": {
+      "plugins": [
+        "transform-es2015-modules-commonjs"
+      ]
+    }
+  }
 }
