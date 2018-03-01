@@ -5,11 +5,15 @@
 
 Compute measurements of React components. Uses [resize-observer-polyfill](https://github.com/que-etc/resize-observer-polyfill) to detect changes of an element and return the new dimensions.
 
+## ☢️ New Version in progress
+
+Please make sure to install `2.0.0` for now and use these docs. Or follow along with the [rewrite](https://github.com/souporserious/react-measure/tree/rewrite) branch to try out the new experimental API.
+
 ## Install
 
-`yarn add react-measure`
+`yarn add react-measure@^2.0.0`
 
-`npm install react-measure --save`
+`npm install react-measure@^2.0.0 --save`
 
 ```html
 <script src="https://unpkg.com/react-measure/dist/react-measure.js"></script>
