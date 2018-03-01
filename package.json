@@ -3,12 +3,16 @@
   "version": "3.0.0-rc.3",
   "description": "Compute measurements of React components.",
   "main": "lib/index.js",
+  "module": "esm/index.js",
   "files": [
     "dist",
+    "esm",
     "lib"
   ],
   "scripts": {
-    "build": "babel src --out-dir lib",
+    "build:esm": "del esm && babel src --out-dir esm",
+    "build:cjs": "del lib && cross-env NODE_ENV=cjs babel src --out-dir lib",
+    "build": "npm run build:esm && npm run build:cjs",
     "lint": "prettier --list-different \"**/*.js\"",
     "deploy": "NODE_ENV=production TARGET=minify webpack && git-directory-deploy --directory example --branch gh-pages",
     "dev": "webpack-dev-server",
@@ -50,6 +54,7 @@
     "react-dom": ">0.13.0"
   },
   "dependencies": {
+    "babel-runtime": "^6.26.0",
     "prop-types": "^15.6.0",
     "resize-observer-polyfill": "^1.5.0"
   },
@@ -58,10 +63,14 @@
     "babel-core": "^6.17.0",
     "babel-eslint": "^8.2.1",
     "babel-loader": "^7.1.2",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.16.0",
-    "babel-preset-stage-0": "^6.16.0",
+    "babel-preset-stage-2": "^6.24.1",
     "create-react-context": "^0.1.6",
+    "cross-env": "^5.1.3",
+    "del-cli": "^1.1.0",
     "faker": "^4.1.0",
     "git-directory-deploy": "^1.5.1",
     "husky": "^0.14.3",
