@@ -20,11 +20,21 @@
     "lint": "prettier --list-different \"**/*.js\"",
     "deploy": "NODE_ENV=production TARGET=minify webpack && git-directory-deploy --directory example --branch gh-pages",
     "dev": "webpack-dev-server",
-    "test": "npm run typecheck && npm run lint",
+    "test": "npm run typecheck && npm run lint && size-limit",
     "prepublish": "npm run build && npm run lint",
     "start": "npm run dev",
     "precommit": "lint-staged"
   },
+  "size-limit": [
+    {
+      "path": "lib/index.js",
+      "limit": "9.6 KB"
+    },
+    {
+      "path": "esm/index.js",
+      "limit": "9.4 KB"
+    }
+  ],
   "lint-staged": {
     "*.{js,md}": [
       "prettier --write",
@@ -85,6 +95,7 @@
     "react": "16.2.0",
     "react-dom": "16.2.0",
     "react-motion": "^0.5.2",
+    "size-limit": "^0.15.1",
     "stylefire": "^1.1.9",
     "webpack": "^3.10.0",
     "webpack-dev-middleware": "^2.0.4",
