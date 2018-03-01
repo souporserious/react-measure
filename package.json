@@ -6,17 +6,21 @@
   "module": "esm/index.js",
   "files": [
     "dist",
-    "esm",
-    "lib"
+    "lib",
+    "src",
+    "esm"
   ],
   "scripts": {
-    "build:esm": "del esm && babel src --out-dir esm",
     "build:cjs": "del lib && cross-env NODE_ENV=cjs babel src --out-dir lib",
+    "build:esm": "del esm && babel src --out-dir esm",
+    "build:flow": "echo \"// @flow\\n\\nexport * from '../src';\" > lib/index.js.flow",
     "build": "npm run build:esm && npm run build:cjs",
+    "postbuild": "npm run build:flow",
+    "typecheck": "flow check --max-warnings=0",
     "lint": "prettier --list-different \"**/*.js\"",
     "deploy": "NODE_ENV=production TARGET=minify webpack && git-directory-deploy --directory example --branch gh-pages",
     "dev": "webpack-dev-server",
-    "test": "npm run lint",
+    "test": "npm run typecheck && npm run lint",
     "prepublish": "npm run build && npm run lint",
     "start": "npm run dev",
     "precommit": "lint-staged"
@@ -72,6 +76,7 @@
     "cross-env": "^5.1.3",
     "del-cli": "^1.1.0",
     "faker": "^4.1.0",
+    "flow-bin": "^0.66.0",
     "git-directory-deploy": "^1.5.1",
     "husky": "^0.14.3",
     "lint-staged": "^7.0.0",
