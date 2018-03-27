@@ -69,7 +69,6 @@
   },
   "dependencies": {
     "babel-runtime": "^6.26.0",
-    "prop-types": "^15.6.0",
     "resize-observer-polyfill": "^1.5.0"
   },
   "devDependencies": {
