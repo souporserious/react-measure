@@ -5,9 +5,6 @@
     "@babel/react",
     "@babel/flow"
   ],
-  plugins: [
-    ["@babel/transform-runtime", { "polyfill": false }]
-  ],
   "env": {
     "cjs": {
       "plugins": [

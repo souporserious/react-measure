@@ -2,39 +2,25 @@
   "name": "react-measure",
   "version": "3.0.0-rc.3",
   "description": "Compute measurements of React components.",
-  "main": "lib/index.js",
-  "module": "esm/index.js",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
   "files": [
     "dist",
-    "lib",
-    "src",
-    "esm"
+    "src"
   ],
   "scripts": {
-    "build:cjs": "del lib && cross-env NODE_ENV=cjs babel src --out-dir lib",
-    "build:esm": "del esm && babel src --out-dir esm",
-    "build:flow": "echo \"// @flow\\n\\nexport * from '../src';\" > lib/index.js.flow",
-    "build": "npm run build:esm && npm run build:cjs",
-    "postbuild": "npm run build:flow",
+    "build:code": "del dist && rollup -c",
+    "build:flow": "echo \"// @flow\\n\\nexport * from '../src';\" > dist/index.cjs.js.flow",
+    "build": "npm run build:code && npm run build:flow",
     "typecheck": "flow check --max-warnings=0",
     "lint": "prettier --list-different \"**/*.js\"",
     "deploy": "NODE_ENV=production TARGET=minify webpack && git-directory-deploy --directory example --branch gh-pages",
     "dev": "webpack-dev-server",
-    "test": "npm run typecheck && npm run lint && size-limit",
+    "test": "npm run typecheck && npm run lint",
     "prepublish": "npm run build && npm run lint",
     "start": "npm run dev",
     "precommit": "lint-staged"
   },
-  "size-limit": [
-    {
-      "path": "lib/index.js",
-      "limit": "9.6 KB"
-    },
-    {
-      "path": "esm/index.js",
-      "limit": "9.4 KB"
-    }
-  ],
   "lint-staged": {
     "*.{js,md}": [
       "prettier --write",
@@ -72,7 +58,6 @@
     "resize-observer-polyfill": "^1.5.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.0.0-beta.42",
     "@babel/core": "^7.0.0-beta.42",
     "@babel/plugin-transform-modules-commonjs": "^7.0.0-beta.42",
     "@babel/plugin-transform-runtime": "^7.0.0-beta.42",
@@ -96,7 +81,10 @@
     "react": "16.2.0",
     "react-dom": "16.2.0",
     "react-motion": "^0.5.2",
-    "size-limit": "^0.15.1",
+    "rollup": "^0.57.1",
+    "rollup-plugin-babel": "^4.0.0-beta.2",
+    "rollup-plugin-node-resolve": "^3.3.0",
+    "rollup-plugin-size-snapshot": "^0.2.0",
     "stylefire": "^1.1.9",
     "webpack": "^3.10.0",
     "webpack-dev-middleware": "^2.0.4",
