@@ -4,12 +4,5 @@
     "@babel/stage-3",
     "@babel/react",
     "@babel/flow"
-  ],
-  "env": {
-    "cjs": {
-      "plugins": [
-        "@babel/transform-modules-commonjs"
-      ]
-    }
-  }
+  ]
 }
