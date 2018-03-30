@@ -8,6 +8,17 @@ const input = './src/index.js'
 
 const isExternal = id => !id.startsWith('.') && !id.startsWith('/')
 
+const getBabelOptions = ({ useESModules }) => ({
+  exclude: '**/node_modules/**',
+  runtimeHelpers: true,
+  plugins: [
+    [
+      '@babel/plugin-transform-runtime',
+      { polyfill: false, useBuiltIns: true, useESModules },
+    ],
+  ],
+})
+
 export default [
   {
     input,
@@ -22,48 +33,24 @@ export default [
     external: ['react'],
     plugins: [
       nodeResolve(),
-      babel({
-        exclude: /node_modules/,
-      }),
+      babel(getBabelOptions({ useESModules: true })),
       sizeSnapshot(),
     ],
   },
 
   {
     input,
-    output: {
-      file: pkg.main,
-      format: 'cjs',
-    },
+    output: { file: pkg.main, format: 'cjs' },
     external: isExternal,
-    plugins: [
-      babel({
-        runtimeHelpers: true,
-        plugins: [
-          ['@babel/transform-runtime', { polyfill: false, useBuiltIns: true }],
-        ],
-      }),
-      sizeSnapshot(),
-    ],
+    plugins: [babel(getBabelOptions({ useESModules: false })), sizeSnapshot()],
   },
 
   {
     input,
-    output: {
-      file: pkg.module,
-      format: 'es',
-    },
+    output: { file: pkg.module, format: 'es' },
     external: isExternal,
     plugins: [
-      babel({
-        runtimeHelpers: true,
-        plugins: [
-          [
-            '@babel/transform-runtime',
-            { polyfill: false, useBuiltIns: true, useESModules: true },
-          ],
-        ],
-      }),
+      babel(getBabelOptions({ useESModules: true })),
       sizeSnapshot({ treeshake: true }),
     ],
   },
