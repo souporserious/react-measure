@@ -4,11 +4,13 @@ import { sizeSnapshot } from 'rollup-plugin-size-snapshot'
 
 const pkg = require('./package.json')
 
+const input = './src/index.js'
+
 const isExternal = id => !id.startsWith('.') && !id.startsWith('/')
 
 export default [
   {
-    input: './src/index.js',
+    input,
     output: {
       file: 'dist/index.umd.js',
       format: 'umd',
@@ -28,7 +30,7 @@ export default [
   },
 
   {
-    input: './src/index.js',
+    input,
     output: {
       file: pkg.main,
       format: 'cjs',
@@ -46,7 +48,7 @@ export default [
   },
 
   {
-    input: './src/index.js',
+    input,
     output: {
       file: pkg.module,
       format: 'es',
