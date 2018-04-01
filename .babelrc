@@ -4,15 +4,5 @@
     "@babel/stage-3",
     "@babel/react",
     "@babel/flow"
-  ],
-  plugins: [
-    ["@babel/transform-runtime", { "polyfill": false }]
-  ],
-  "env": {
-    "cjs": {
-      "plugins": [
-        "@babel/transform-modules-commonjs"
-      ]
-    }
-  }
+  ]
 }

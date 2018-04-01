@@ -8,9 +8,7 @@
 # APP
 node_modules
 npm-debug.log
-/dist/
-/lib/
-/esm/
+/dist
 /example/bundle.js
 
 # General Files
