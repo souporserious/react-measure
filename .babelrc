@@ -1,8 +1,22 @@
 {
-  "presets": [
-    ["@babel/env", { "modules": false, "loose": true }],
-    "@babel/stage-3",
-    "@babel/react",
-    "@babel/flow"
-  ]
+  "env": {
+    "code": {
+      "presets": [
+        ["@babel/env", { "modules": false, "loose": true }],
+        "@babel/stage-3",
+        "@babel/react",
+        "@babel/flow"
+      ]
+    },
+    "test": {
+      "presets": [
+        "@babel/stage-3",
+        ["@babel/react", { useBuiltIns: true }],
+        "@babel/flow"
+      ],
+      "plugins": [
+        "@babel/transform-modules-commonjs"
+      ]
+    }
+  }
 }
