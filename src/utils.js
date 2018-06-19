@@ -17,9 +17,6 @@ export type Measurements = {|
   scrollHeight: number,
 |}
 
-const body = document.body
-const html = document.documentElement
-
 export function isScrollElement(element: Node) {
   try {
     const { overflow, overflowX, overflowY } = window.getComputedStyle(element)
@@ -38,7 +35,7 @@ export function getParentNode(element: Node) {
 }
 
 export function getClosestScrollElement(element: ?Node) {
-  if (!element || element === body) {
+  if (!element || !document || element === document.body) {
     return window
   } else if (isScrollElement(element)) {
     return element
@@ -64,26 +61,26 @@ export function getScrollYDirection(last: number, next: number) {
 }
 
 export function getDocumentWidth() {
-  if (body && html) {
+  if (document && document.body && document.documentElement) {
     return Math.max(
-      body.scrollWidth,
-      body.offsetWidth,
-      html.clientWidth,
-      html.scrollWidth,
-      html.offsetWidth
+      document.body.scrollWidth,
+      document.body.offsetWidth,
+      document.documentElement.clientWidth,
+      document.documentElement.scrollWidth,
+      document.documentElement.offsetWidth
     )
   }
   return 0
 }
 
 export function getDocumentHeight() {
-  if (body && html) {
+  if (document && document.body && document.documentElement) {
     return Math.max(
-      body.scrollHeight,
-      body.offsetHeight,
-      html.clientHeight,
-      html.scrollHeight,
-      html.offsetHeight
+      document.body.scrollHeight,
+      document.body.offsetHeight,
+      document.documentElement.clientHeight,
+      document.documentElement.scrollHeight,
+      document.documentElement.offsetHeight
     )
   }
   return 0
