@@ -91,6 +91,7 @@
     "react-dom": "16.2.0",
     "react-motion": "^0.5.2",
     "react-powerplug": "^1.0.0-alpha.3",
+    "react-test-renderer": "^16.4.1",
     "rollup": "^0.57.1",
     "rollup-plugin-babel": "^4.0.0-beta.3",
     "rollup-plugin-node-resolve": "^3.3.0",
