@@ -33,6 +33,13 @@ function withContentRect(types) {
         this._resizeObserver = new ResizeObserver(this.measure)
       }
 
+      componentWillUnmount() {
+        if (this._resizeObserver && this._node) {
+          this._resizeObserver.disconnect(this._node);
+        }
+        this._resizeObserver = null;
+      }
+
       measure = entries => {
         const contentRect = getContentRect(
           this._node,
