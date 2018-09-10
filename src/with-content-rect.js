@@ -6,7 +6,7 @@ import getContentRect from './get-content-rect'
 
 function withContentRect(types) {
   return WrappedComponent =>
-    class extends Component {
+    class WithContentRect extends Component {
       static propTypes = {
         client: PropTypes.bool,
         offset: PropTypes.bool,
@@ -15,7 +15,6 @@ function withContentRect(types) {
         margin: PropTypes.bool,
         innerRef: PropTypes.func,
         onResize: PropTypes.func,
-        children: PropTypes.element,
       }
 
       state = {
