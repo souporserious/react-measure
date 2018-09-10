@@ -1,8 +1,12 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import withContentRect from './with-content-rect'
 
-function Measure({ measure, measureRef, contentRect, children }) {
+const Measure =  withContentRect()(function Measure ({ measure, measureRef, contentRect, children }) {
   return children({ measure, measureRef, contentRect })
-}
+})
 
-export default withContentRect()(Measure)
+Measure.displayName = 'Measure'
+Measure.propTypes.children = PropTypes.func
+
+export default Measure
