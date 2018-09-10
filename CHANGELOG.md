@@ -1,5 +1,10 @@
 ## CHANGELOG
 
+### 2.1.1
+
+Allow children to be any element
+[#78](https://github.com/souporserious/react-measure/pull/78)
+
 ### 2.1.0
 
 Disconnect and de-initialize resize observer on unmount
