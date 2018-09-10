@@ -1,5 +1,10 @@
 ## CHANGELOG
 
+### 2.1.2
+
+Move children propType from with-content-rect to Measure
+[#117](https://github.com/souporserious/react-measure/pull/117)
+
 ### 2.1.1
 
 Allow children to be any element
