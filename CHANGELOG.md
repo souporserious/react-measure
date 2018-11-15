@@ -1,5 +1,16 @@
 ## CHANGELOG
 
+### 2.1.3
+
+Update `resize-observer-polyfill`
+[#88](https://github.com/souporserious/react-measure/pull/88)
+
+Added handling when `getComputedStyle` returns `null`
+[#89](https://github.com/souporserious/react-measure/pull/89)
+
+Call `setState` within `requestAnimationFrame` to prevent infinite loop
+[#118](https://github.com/souporserious/react-measure/pull/118)
+
 ### 2.1.2
 
 Move children propType from with-content-rect to Measure
