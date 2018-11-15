@@ -1,11 +1,15 @@
-## React Measure
+## 📏 React Measure
 
 [![npm version](https://badge.fury.io/js/react-measure.svg)](https://badge.fury.io/js/react-measure)
 [![Dependency Status](https://david-dm.org/souporserious/react-measure.svg)](https://david-dm.org/souporserious/react-measure)
 
-Compute measurements of React components. Uses
-[resize-observer-polyfill](https://github.com/que-etc/resize-observer-polyfill)
-to detect changes of an element and return the new dimensions.
+Compute measurements of React components. Uses a
+[`ResizeObserver`](https://developers.google.com/web/updates/2016/10/resizeobserver)
+to detect when an element's dimensions have changed.
+
+Includes a
+[polyfill for `ResizeObserver`](https://github.com/que-etc/resize-observer-polyfill)
+in unsupported browsers.
 
 ## Install
 
