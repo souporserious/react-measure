@@ -43,10 +43,10 @@ and
 Adds the following to `contentRect.offset` returned in the child function.
 
 [offsetTop](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetTop),
-[offsetLeft](https://developer.mozilla.org/en-US/docs/Web/API/Element/offsetLeft),
-[offsetWidth](https://developer.mozilla.org/en-US/docs/Web/API/Element/offsetWidth),
+[offsetLeft](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetLeft),
+[offsetWidth](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetWidth),
 and
-[offsetHeight](https://developer.mozilla.org/en-US/docs/Web/API/Element/offsetHeight).
+[offsetHeight](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetHeight).
 
 #### `scroll`: PropTypes.bool
 
