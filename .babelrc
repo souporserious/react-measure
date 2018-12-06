@@ -1,7 +1,27 @@
 {
   "presets": [
-    "es2015",
-    "stage-0",
-    "react"
+    [
+      "@babel/preset-env",
+      {
+        "loose": true,
+        "modules": false,
+        "useBuiltIns": "entry"
+      }
+    ],
+    [
+      "@babel/preset-react",
+      {
+        "useBuiltIns": true,
+        "pragma": "React.createElement"
+      }
+    ]
+  ],
+  "plugins": [
+    [
+      "@babel/plugin-proposal-class-properties",
+      {
+        "loose": true
+      }
+    ]
   ]
 }

@@ -1,22 +1,4 @@
-# Mac OSX Files
 .DS_Store
-.Trashes
-.Spotlight-V100
-.AppleDouble
-.LSOverride
-
-# APP
 node_modules
 npm-debug.log
-/dist/
-/lib/
-/example/bundle.js
-
-# General Files
-.sass-cache
-.hg
-.idea
-.svn
-.cache
-.project
-.tmp
+lib
