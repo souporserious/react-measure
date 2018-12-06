@@ -28,11 +28,6 @@ function withContentRect(types) {
         },
       }
 
-      componentWillMount() {
-        this._resizeObserver = new ResizeObserver(this.measure)
-        this.animationFrameID = null;
-      }
-
       componentWillUnmount() {
         if (this._resizeObserver && this._node) {
           this._resizeObserver.disconnect(this._node);
@@ -56,7 +51,7 @@ function withContentRect(types) {
             this.setState({ contentRect })
           }
         })
-        
+
         if (typeof this.props.onResize === 'function') {
           this.props.onResize(contentRect)
         }
@@ -76,6 +71,10 @@ function withContentRect(types) {
           this.props.innerRef(node)
         }
       }
+
+      _resizeObserver = new ResizeObserver(this.measure)
+
+      animationFrameID = null;
 
       render() {
         const { innerRef, onResize, ...props } = this.props
