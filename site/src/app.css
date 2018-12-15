@@ -16,11 +16,9 @@ button {
   margin: 0 auto;
 }
 
-.measure-example {
-  header,
-  main {
-    display: flex;
-  }
+.measure-example header,
+.measure-example main {
+  display: flex;
 }
 
 .paragraphs {
@@ -30,7 +28,6 @@ button {
   flex: 1;
 }
 
-// CSS Animation
 .square {
   width: 50%;
   height: 300px;
@@ -42,7 +39,8 @@ button {
 }
 
 @keyframes animateInOut {
-  0%, 100% {
+  0%,
+  100% {
     width: 50%;
     height: 300px;
   }

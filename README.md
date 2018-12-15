@@ -181,12 +181,14 @@ move into folder
 
 `cd ~/react-measure`
 
-install dependencies
+install package dependencies
 
-`npm install`
+`yarn`
 
-run dev mode
+move into site folder and install local site dependencies
 
-`npm run dev`
+`cd ~/site && yarn`
 
-open your browser and visit: `http://localhost:8080/`
+run development mode
+
+`gatsby develop`
