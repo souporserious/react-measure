@@ -1,6 +1,7 @@
 import React, { Component, createElement } from 'react'
 import PropTypes from 'prop-types'
 import ResizeObserver from 'resize-observer-polyfill'
+
 import getTypes from './get-types'
 import getContentRect from './get-content-rect'
 
@@ -28,12 +29,16 @@ function withContentRect(types) {
         },
       }
 
+      _resizeObserver = new ResizeObserver(this.measure)
+
+      _animationFrameID = null
+
       componentWillUnmount() {
-        if (this._resizeObserver && this._node) {
-          this._resizeObserver.disconnect(this._node);
+        if (this._resizeObserver) {
+          this._resizeObserver.disconnect()
+          this._resizeObserver = null
         }
-        this._resizeObserver = null;
-        window.cancelAnimationFrame(this.animationFrameID);
+        window.cancelAnimationFrame(this._animationFrameID)
       }
 
       measure = entries => {
@@ -46,7 +51,7 @@ function withContentRect(types) {
           contentRect.entry = entries[0].contentRect
         }
 
-        this.animationFrameID = window.requestAnimationFrame(() => {
+        this._animationFrameID = window.requestAnimationFrame(() => {
           if (this._resizeObserver) {
             this.setState({ contentRect })
           }
@@ -62,19 +67,16 @@ function withContentRect(types) {
           if (node) {
             this._resizeObserver.observe(node)
           } else {
-            this._resizeObserver.disconnect(this._node)
+            this._resizeObserver.unobserve(this._node)
           }
         }
+
         this._node = node
 
         if (typeof this.props.innerRef === 'function') {
           this.props.innerRef(node)
         }
       }
-
-      _resizeObserver = new ResizeObserver(this.measure)
-
-      animationFrameID = null;
 
       render() {
         const { innerRef, onResize, ...props } = this.props
