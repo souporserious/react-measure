@@ -152,7 +152,7 @@ Passes down the same props as the `Measure` child function above, `measureRef`,
 
 Fun fact, the `Measure` component is a thin wrapper around `withContentRect`.
 Just check
-[the source](https://github.com/souporserious/react-measure/blob/master/src/Measure.jsx).
+[the source](https://github.com/souporserious/react-measure/blob/master/src/Measure.js).
 This means your wrapped component will accept the same props as `Measure` does
 😊
 
