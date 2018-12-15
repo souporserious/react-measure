@@ -1,5 +1,5 @@
-import React, { Component, Children, PropTypes, createElement } from 'react'
-import Measure, { withContentRect } from '../../../src'
+import React, { Component } from 'react'
+import Measure from '../../../src'
 
 import '../app.css'
 

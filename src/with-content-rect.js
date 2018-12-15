@@ -1,4 +1,4 @@
-import React, { Component, createElement } from 'react'
+import { Component, createElement } from 'react'
 import PropTypes from 'prop-types'
 import ResizeObserver from 'resize-observer-polyfill'
 
