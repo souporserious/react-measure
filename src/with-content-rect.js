@@ -29,9 +29,11 @@ function withContentRect(types) {
         },
       }
 
-      _resizeObserver = new ResizeObserver(this.measure)
-
       _animationFrameID = null
+
+      _resizeObserver = new ResizeObserver(() => {
+        this.measure()
+      })
 
       componentWillUnmount() {
         if (this._resizeObserver) {
