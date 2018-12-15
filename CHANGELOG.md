@@ -1,5 +1,16 @@
 ## CHANGELOG
 
+### 2.2.0
+
+Remove `componentWillMount` for React >16 StrictMode compliance
+[#121](https://github.com/souporserious/react-measure/pull/121)
+
+Upgrade `get-node-dimensions` package to `1.2.1`
+
+Upgrade `prop-types` package to `15.6.2`
+
+Fixes `disconnect` being used instead of `unobserve` for `ResizeObserver`
+
 ### 2.1.3
 
 Update `resize-observer-polyfill`
