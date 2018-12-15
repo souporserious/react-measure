@@ -1,6 +1,6 @@
 {
   "name": "react-measure",
-  "version": "2.1.3",
+  "version": "2.2.0",
   "description": "Compute measurements of React components.",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
