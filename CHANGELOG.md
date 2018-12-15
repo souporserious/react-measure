@@ -1,5 +1,11 @@
 ## CHANGELOG
 
+### 2.2.1
+
+Fix `ResizeObserver` callback error
+
+Fix `eslint` warnings
+
 ### 2.2.0
 
 Remove `componentWillMount` for React >16 StrictMode compliance
