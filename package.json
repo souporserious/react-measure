@@ -37,6 +37,7 @@
     "react-dom": ">0.13.0"
   },
   "dependencies": {
+    "@babel/runtime": "^7.2.0",
     "get-node-dimensions": "^1.2.1",
     "prop-types": "^15.6.2",
     "resize-observer-polyfill": "^1.5.0"
