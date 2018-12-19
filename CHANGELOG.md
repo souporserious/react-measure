@@ -1,5 +1,9 @@
 ## CHANGELOG
 
+### 2.2.2
+
+Add `@babel/runtime` as a dependency
+
 ### 2.2.1
 
 Fix `ResizeObserver` callback error
