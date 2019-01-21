@@ -14,7 +14,7 @@ function withContentRect(types) {
         scroll: PropTypes.bool,
         bounds: PropTypes.bool,
         margin: PropTypes.bool,
-        innerRef: PropTypes.func,
+        innerRef: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
         onResize: PropTypes.func,
       }
 
@@ -75,8 +75,13 @@ function withContentRect(types) {
 
         this._node = node
 
-        if (typeof this.props.innerRef === 'function') {
-          this.props.innerRef(node)
+        const { innerRef } = this.props
+        if (innerRef) {
+          if (typeof innerRef === 'function') {
+            innerRef(node);
+          } else {
+            innerRef.current = node;
+          }
         }
       }
 
