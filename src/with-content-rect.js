@@ -31,12 +31,19 @@ function withContentRect(types) {
 
       _animationFrameID = null
 
-      _resizeObserver = new ResizeObserver(() => {
-        this.measure()
-      })
+      _resizeObserver = null
+
+      _node = null
+
+      componentDidMount() {
+        this._resizeObserver = new ResizeObserver(this.measure)
+        if (this._node !== null) {
+          this._resizeObserver.observe(this._node)
+        }
+      }
 
       componentWillUnmount() {
-        if (this._resizeObserver) {
+        if (this._resizeObserver !== null) {
           this._resizeObserver.disconnect()
           this._resizeObserver = null
         }
@@ -54,7 +61,7 @@ function withContentRect(types) {
         }
 
         this._animationFrameID = window.requestAnimationFrame(() => {
-          if (this._resizeObserver) {
+          if (this._resizeObserver !== null) {
             this.setState({ contentRect })
           }
         })
@@ -65,8 +72,8 @@ function withContentRect(types) {
       }
 
       _handleRef = node => {
-        if (this._resizeObserver) {
-          if (node) {
+        if (this._resizeObserver !== null) {
+          if (node !== null) {
             this._resizeObserver.observe(node)
           } else {
             this._resizeObserver.unobserve(this._node)
