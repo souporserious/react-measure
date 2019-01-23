@@ -18,8 +18,8 @@ in unsupported browsers.
 `npm install react-measure --save`
 
 ```html
-<script src="https://unpkg.com/react-measure/dist/react-measure.js"></script>
-(UMD library exposed as `Measure`)
+<script src="https://unpkg.com/react-measure/dist/index.umd.js"></script>
+(UMD library exposed as `ReactMeasure`)
 ```
 
 ## Measure Component
