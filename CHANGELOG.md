@@ -1,5 +1,11 @@
 ## CHANGELOG
 
+### 2.2.3
+
+Fix not passing `ResizeObserver` `entries` to `measure` method #125
+
+Add support for `createRef` #126
+
 ### 2.2.2
 
 Add `@babel/runtime` as a dependency
