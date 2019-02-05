@@ -72,22 +72,22 @@ function withContentRect(types) {
       }
 
       _handleRef = node => {
-        if (this._resizeObserver !== null) {
-          if (node !== null) {
-            this._resizeObserver.observe(node)
-          } else {
-            this._resizeObserver.unobserve(this._node)
-          }
+        if (this._resizeObserver !== null && this._node !== null) {
+          this._resizeObserver.unobserve(this._node)
         }
 
         this._node = node
 
+        if (this._resizeObserver !== null && this._node !== null) {
+          this._resizeObserver.observe(this._node)
+        }
+
         const { innerRef } = this.props
         if (innerRef) {
           if (typeof innerRef === 'function') {
-            innerRef(node);
+            innerRef(this._node)
           } else {
-            innerRef.current = node;
+            innerRef.current = this._node
           }
         }
       }
