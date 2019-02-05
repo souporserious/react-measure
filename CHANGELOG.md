@@ -1,10 +1,14 @@
 ## CHANGELOG
 
+### 2.2.4
+
+Only observe one element, add tests [#130](https://github.com/souporserious/react-measure/pull/130)
+
 ### 2.2.3
 
-Fix not passing `ResizeObserver` `entries` to `measure` method #125
+Fix not passing `ResizeObserver` `entries` to `measure` method [#125](https://github.com/souporserious/react-measure/pull/125)
 
-Add support for `createRef` #126
+Add support for `createRef` [#126](https://github.com/souporserious/react-measure/pull/126)
 
 ### 2.2.2
 
