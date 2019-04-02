@@ -1,5 +1,9 @@
 ## CHANGELOG
 
+### 2.2.5
+
+Fix sporadic `ResizeObserver` loop limit exceeded error when using `onResize` [#133](https://github.com/souporserious/react-measure/pull/133)
+
 ### 2.2.4
 
 Only observe one element, add tests [#130](https://github.com/souporserious/react-measure/pull/130)
