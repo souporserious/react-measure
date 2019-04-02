@@ -63,12 +63,11 @@ function withContentRect(types) {
         this._animationFrameID = window.requestAnimationFrame(() => {
           if (this._resizeObserver !== null) {
             this.setState({ contentRect })
+            if (typeof this.props.onResize === 'function') {
+              this.props.onResize(contentRect)
+            }
           }
         })
-
-        if (typeof this.props.onResize === 'function') {
-          this.props.onResize(contentRect)
-        }
       }
 
       _handleRef = node => {
