@@ -39,6 +39,15 @@ function withContentRect(types) {
         this._resizeObserver = new ResizeObserver(this.measure)
         if (this._node !== null) {
           this._resizeObserver.observe(this._node)
+
+          if (typeof this.props.onResize === 'function') {
+            this.props.onResize(
+              getContentRect(
+                this._node,
+                types || getTypes(this.props)
+              )
+            )
+          }
         }
       }
 
