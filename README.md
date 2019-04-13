@@ -191,4 +191,4 @@ move into site folder and install local site dependencies
 
 run development mode
 
-`gatsby develop`
+`yarn gatsby develop`
