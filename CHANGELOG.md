@@ -1,5 +1,9 @@
 ## CHANGELOG
 
+### 2.2.6
+
+Fix initial `onResize` delay caused by `requestAnimationFrame` [#135](https://github.com/souporserious/react-measure/pull/135)
+
 ### 2.2.5
 
 Fix sporadic `ResizeObserver` loop limit exceeded error when using `onResize` [#133](https://github.com/souporserious/react-measure/pull/133)
