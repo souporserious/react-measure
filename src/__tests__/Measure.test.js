@@ -32,7 +32,7 @@ describe('Measure', () => {
     container = document.createElement('div')
   })
 
-  it('should handel entry', () => {
+  it('should handle entry', () => {
     const ref = createRef()
     render(<MeasureWith innerRef={ref} />, container)
     expect(container.firstChild).toMatchSnapshot()
@@ -42,18 +42,18 @@ describe('Measure', () => {
     ])
     jest.runAllTimers()
 
-    expect(defaultChildrenFn).toHaveBeenCalledTimes(2)
+    expect(defaultChildrenFn).toHaveBeenCalledTimes(1)
     expect(container.firstChild).toMatchSnapshot()
   })
 
-  it('should handel bounds', () => {
+  it('should handle bounds', () => {
     render(<MeasureWith bounds />, container)
     expect(container.firstChild).toMatchSnapshot()
 
     resizeObserver.callback()
     jest.runAllTimers()
 
-    expect(defaultChildrenFn).toHaveBeenCalledTimes(2)
+    expect(defaultChildrenFn).toHaveBeenCalledTimes(1)
     expect(container.firstChild).toMatchSnapshot()
   })
 
@@ -62,7 +62,7 @@ describe('Measure', () => {
       render(<MeasureWith />, container)
       expect(resizeObserver.observe).toHaveBeenCalledTimes(1)
     })
-    it('should always un observer before observing next one', () => {
+    it('should always unobserve before observing next one', () => {
       const ref = createRef()
 
       render(<MeasureWith innerRef={ref} children={() => null} />, container)
@@ -101,7 +101,7 @@ describe('Measure', () => {
       resizeObserver.callback()
       jest.runAllTimers()
 
-      expect(onResize).toHaveBeenCalledTimes(2)
+      expect(onResize).toHaveBeenCalledTimes(1)
     })
   })
 })
