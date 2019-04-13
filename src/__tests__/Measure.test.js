@@ -89,6 +89,11 @@ describe('Measure', () => {
 
       expect(ref.current.id).toBe('child2')
     })
+    it('should trigger onResize when componentDidMount is called', () => {
+      const onResize = jest.fn()
+      render(<MeasureWith onResize={onResize} />, container)
+      expect(onResize).toHaveBeenCalledTimes(1)
+    })
     it('should trigger onResize when resizeObserver callback is called', () => {
       const onResize = jest.fn()
 
@@ -96,7 +101,7 @@ describe('Measure', () => {
       resizeObserver.callback()
       jest.runAllTimers()
 
-      expect(onResize).toHaveBeenCalledTimes(1)
+      expect(onResize).toHaveBeenCalledTimes(2)
     })
   })
 })
