@@ -1,5 +1,11 @@
 ## CHANGELOG
 
+### 2.3.0
+
+Fix regression with `contentRect.bounds` not getting called properly
+
+Note that `onResize` will get called twice when first mounting now
+
 ### 2.2.6
 
 Fix initial `onResize` delay caused by `requestAnimationFrame` [#135](https://github.com/souporserious/react-measure/pull/135)
