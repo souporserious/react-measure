@@ -78,8 +78,7 @@ Use this to access the internal component `ref`.
 
 #### `onResize`: PropTypes.func
 
-Callback invoked when either element width or height have changed. Note that
-this will be called on mount to get the initial values.
+Callback invoked when either element width or height have changed. Note that this will be called twice on mount to get the initial values. The first call will come from `componentDidMount` while the second call will come from the `ResizeObserver`.
 
 #### `children`: PropTypes.func
 

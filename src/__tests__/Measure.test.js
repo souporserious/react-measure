@@ -42,7 +42,7 @@ describe('Measure', () => {
     ])
     jest.runAllTimers()
 
-    expect(defaultChildrenFn).toHaveBeenCalledTimes(1)
+    expect(defaultChildrenFn).toHaveBeenCalledTimes(2)
     expect(container.firstChild).toMatchSnapshot()
   })
 
@@ -53,7 +53,7 @@ describe('Measure', () => {
     resizeObserver.callback()
     jest.runAllTimers()
 
-    expect(defaultChildrenFn).toHaveBeenCalledTimes(1)
+    expect(defaultChildrenFn).toHaveBeenCalledTimes(2)
     expect(container.firstChild).toMatchSnapshot()
   })
 
@@ -101,7 +101,7 @@ describe('Measure', () => {
       resizeObserver.callback()
       jest.runAllTimers()
 
-      expect(onResize).toHaveBeenCalledTimes(1)
+      expect(onResize).toHaveBeenCalledTimes(2)
     })
   })
 })

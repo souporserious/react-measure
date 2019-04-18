@@ -19,12 +19,14 @@ exports[`Measure should handle bounds 2`] = `
 <div>
   {
   "contentRect": {
-    "entry": {},
-    "client": {},
-    "offset": {},
-    "scroll": {},
-    "bounds": {},
-    "margin": {}
+    "bounds": {
+      "top": 0,
+      "right": 0,
+      "bottom": 0,
+      "left": 0,
+      "width": 0,
+      "height": 0
+    }
   }
 }
 </div>
@@ -49,12 +51,10 @@ exports[`Measure should handle entry 2`] = `
 <div>
   {
   "contentRect": {
-    "entry": {},
-    "client": {},
-    "offset": {},
-    "scroll": {},
-    "bounds": {},
-    "margin": {}
+    "entry": {
+      "width": 0,
+      "height": 0
+    }
   }
 }
 </div>

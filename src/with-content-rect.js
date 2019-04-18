@@ -35,8 +35,6 @@ function withContentRect(types) {
 
       _node = null
 
-      _firstResize = true
-
       componentDidMount() {
         this._resizeObserver = new ResizeObserver(this.measure)
         if (this._node !== null) {
@@ -69,13 +67,12 @@ function withContentRect(types) {
         }
 
         this._animationFrameID = window.requestAnimationFrame(() => {
-          if (this._resizeObserver !== null && !this._firstResize) {
+          if (this._resizeObserver !== null) {
             this.setState({ contentRect })
             if (typeof this.props.onResize === 'function') {
               this.props.onResize(contentRect)
             }
           }
-          this._firstResize = false
         })
       }
 
