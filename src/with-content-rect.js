@@ -83,10 +83,6 @@ function withContentRect(types) {
 
         this._node = node
 
-        if (this._resizeObserver !== null && this._node !== null) {
-          this._resizeObserver.observe(this._node)
-        }
-
         const { innerRef } = this.props
         if (innerRef) {
           if (typeof innerRef === 'function') {
@@ -94,6 +90,10 @@ function withContentRect(types) {
           } else {
             innerRef.current = this._node
           }
+        }
+
+        if (this._resizeObserver !== null && this._node !== null) {
+          this._resizeObserver.observe(this._node)
         }
       }
 
