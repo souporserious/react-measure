@@ -1,10 +1,12 @@
 {
   "presets": [
-    "es2015",
-    "stage-0",
-    "react"
+    ["@babel/preset-env", { "loose": true, "modules": false }],
+    ["@babel/preset-react", { "useBuiltIns": true }]
   ],
-  "plugins": [
-    "add-module-exports"
-  ]
+  "plugins": [["@babel/plugin-proposal-class-properties", { "loose": true }]],
+  "env": {
+    "test": {
+      "plugins": ["@babel/transform-modules-commonjs"]
+    }
+  }
 }
