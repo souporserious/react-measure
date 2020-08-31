@@ -89,6 +89,22 @@ describe('Measure', () => {
 
       expect(ref.current.id).toBe('child2')
     })
+    it('should trigger onResize after setting innerRef', () => {
+      const ref = createRef()
+
+      let refOnResize = undefined;
+      const onResize = () => refOnResize = ref.current
+      render(
+        <MeasureWith
+          onResize={onResize}
+          innerRef={ref}
+          children={({ measureRef }) => <div id={'child'} ref={measureRef} />}
+        />,
+        container
+      )
+      expect(refOnResize).not.toBe(null)
+      expect(refOnResize.id).toBe('child')
+    })
     it('should trigger onResize when componentDidMount is called', () => {
       const onResize = jest.fn()
       render(<MeasureWith onResize={onResize} />, container)
