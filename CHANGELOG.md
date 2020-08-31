@@ -1,5 +1,13 @@
 ## CHANGELOG
 
+### 2.5.0
+
+Set `innerRef` before observing [#140](https://github.com/souporserious/react-measure/pull/140)
+
+### 2.4.0
+
+Use the local `window` object of the observed node [#146](https://github.com/souporserious/react-measure/pull/146)
+
 ### 2.3.0
 
 Fix regression with `contentRect.bounds` not getting called properly
