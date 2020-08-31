@@ -4,6 +4,7 @@ import ResizeObserver from 'resize-observer-polyfill'
 
 import getTypes from './get-types'
 import getContentRect from './get-content-rect'
+import getWindowOf from './get-window-of'
 
 function withContentRect(types) {
   return WrappedComponent =>
@@ -35,6 +36,8 @@ function withContentRect(types) {
 
       _node = null
 
+      _window = null
+
       componentDidMount() {
         this._resizeObserver = new ResizeObserver(this.measure)
         if (this._node !== null) {
@@ -49,11 +52,14 @@ function withContentRect(types) {
       }
 
       componentWillUnmount() {
+        if (this._window !== null) {
+          this._window.cancelAnimationFrame(this._animationFrameID)
+        }
+
         if (this._resizeObserver !== null) {
           this._resizeObserver.disconnect()
           this._resizeObserver = null
         }
-        window.cancelAnimationFrame(this._animationFrameID)
       }
 
       measure = entries => {
@@ -66,7 +72,7 @@ function withContentRect(types) {
           contentRect.entry = entries[0].contentRect
         }
 
-        this._animationFrameID = window.requestAnimationFrame(() => {
+        this._animationFrameID = this._window.requestAnimationFrame(() => {
           if (this._resizeObserver !== null) {
             this.setState({ contentRect })
             if (typeof this.props.onResize === 'function') {
@@ -82,6 +88,7 @@ function withContentRect(types) {
         }
 
         this._node = node
+        this._window = getWindowOf(this._node)
 
         if (this._resizeObserver !== null && this._node !== null) {
           this._resizeObserver.observe(this._node)
