@@ -1,5 +1,9 @@
 ## CHANGELOG
 
+### 2.5.1
+
+Use `ResizeObserver` of local `window` object #147
+
 ### 2.5.0
 
 Set `innerRef` before observing [#140](https://github.com/souporserious/react-measure/pull/140)
