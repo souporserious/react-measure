@@ -39,7 +39,7 @@ function withContentRect(types) {
       _window = null
 
       componentDidMount() {
-        this._resizeObserver = this.window !== null
+        this._resizeObserver = (this._window !== null && this._window.ResizeObserver)
           ? new this._window.ResizeObserver(this.measure)
           : new ResizeObserver(this.measure);
         if (this._node !== null) {
