@@ -1,5 +1,9 @@
 ## CHANGELOG
 
+### 2.5.2
+
+Default to global (possibly polyfilled) ResizeObserver if the local window does not have ResizeObserver #148
+
 ### 2.5.1
 
 Use `ResizeObserver` of local `window` object #147
